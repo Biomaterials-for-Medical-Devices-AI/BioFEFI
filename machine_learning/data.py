@@ -25,20 +25,6 @@ class DataBuilder:
         """
         Load data from a csv file
 
-        Parameters
-        ----------
-        path: str
-            The path to the csv file
-
-        data_split_type: str
-            The type of data split to use
-
-        random_state: int
-            The random state to use for reproducibility
-
-        logger: object
-            The logger to use for logging
-
         Returns
         -------
         Dict[str, pd.DataFrame]
