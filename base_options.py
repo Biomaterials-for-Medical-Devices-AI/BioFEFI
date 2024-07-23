@@ -60,6 +60,14 @@ class BaseOptions:
             required=False,
         ),
 
+        self.parser.add_argument(
+            "--dependent_variable",
+            type=str,
+            default=None,
+            help="Target column: the column containing the dependent variable. Defaults to the last column",
+            required=False,
+        ),
+
         self.initialized = True
 
     def parse(self):
