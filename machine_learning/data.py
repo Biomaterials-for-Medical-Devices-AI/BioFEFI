@@ -31,19 +31,8 @@ class DataBuilder:
             The data loaded from the csv file
         """
         df = pd.read_csv(self._path)
-        if self._dependent_variable is not None:
-            independent_variables = list(df.columns)
-            try:
-                independent_variables.remove(self._dependent_variable)
-                X = df.loc[:, independent_variables]
-                y = df.loc[:, self._dependent_variable]
-            except ValueError as e:
-                self._logger.error(f"Column '{self._dependent_variable}' not found")
-                raise e
-        else:
-            # default to last column for dependent variable
-            X = df.iloc[:, :-1]
-            y = df.iloc[:, -1]
+        X = df.iloc[:, :-1]
+        y = df.iloc[:, -1]
         X_train_list, X_test_list, y_train_list, y_test_list = [], [], [], []
 
         for i in range(self._n_bootstraps):
