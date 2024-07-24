@@ -10,11 +10,7 @@ from machine_learning.ml_options import MLOptions
 from utils.logging_utils import Logger, close_logger
 from utils.utils import set_seed
 import streamlit as st
-from pydantic import BaseModel
 
-
-# Set seed for reproducibility
-set_seed(seed)
 
 #def display_option(option)
 
@@ -39,89 +35,92 @@ set_seed(seed)
 #close_logger(fuzzy_logger_instance, fuzzy_logger)
 import pandas as pd
 
-def main():
-    st.image("ui/bioFEFI header.png")
-    # Sidebar
-    with st.sidebar:
-        st.header("Options")
-        st.checkbox("Feature Engineering")
 
-        # Machine Learning Options
-        with st.expander("Machine Learning Options"")
-            ml_on = st.checkbox("Machine Learning"):
-            st.subheader("Machine Learning Options")
-            data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
-            num_bootstraps = st.number_input("Number of bootstraps", min_value=1, value=10)
-            save_plots = st.checkbox("Save actual or predicted plots")
-        
-            st.write("Model types to use:")
-            use_linear = st.checkbox("Linear Model")
-            use_rf = st.checkbox("Random Forest")
-            use_xgb = st.checkbox("XGBoost")
-        
-            normalization = st.checkbox("Normalization")
+st.image("ui/bioFEFI header.png")
+# Sidebar
+with st.sidebar:
+    st.header("Options")
+    st.checkbox("Feature Engineering")
 
-        # Feature Importance Options
-        with st.expander("Feature importance options")
-            fi_on = st.checkbox("Feature Importance"):
-            st.write("Global feature importance methods:")
-            use_permutation = st.checkbox("Permutation Importance")
-            use_shap = st.checkbox("SHAP")
+    # Machine Learning Options
+    with st.expander("Machine Learning Options"):
+        ml_on = st.checkbox("Machine Learning")
+        st.subheader("Machine Learning Options")
+        data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
+        num_bootstraps = st.number_input("Number of bootstraps", min_value=1, value=10)
+        save_plots = st.checkbox("Save actual or predicted plots")
         
-            st.write("Feature importance ensemble methods:")
-            use_mean = st.checkbox("Mean")
-            use_majority = st.checkbox("Majority vote")
+        st.write("Model types to use:")
+        use_linear = st.checkbox("Linear Model")
+        use_rf = st.checkbox("Random Forest")
+        use_xgb = st.checkbox("XGBoost")
         
-            st.write("Local feature importance methods:")
-            use_lime = st.checkbox("LIME")
-            use_local_shap = st.checkbox("Local SHAP")
-        
-            num_important_features = st.number_input("Number of most important features to plot", min_value=1, value=10)
-            scoring_function = st.selectbox("Scoring function for permutation importance", ["accuracy", "f1", "roc_auc"])
-            num_repetitions = st.number_input("Number of repetitions for permutation importance", min_value=1, value=5)
-            shap_data_percentage = st.slider("Percentage of data to consider for SHAP", 0, 100, 100)
+        normalization = st.checkbox("Normalization")
 
-        # Fuzzy Options
-            st.subheader("Fuzzy Options")
-            fuzzy_feature_selection = st.checkbox("Fuzzy feature selection")
-            num_fuzzy_features = st.number_input("Number of features for fuzzy interpretation", min_value=1, value=5)
-            granular_features = st.checkbox("Granular features")
-            num_clusters = st.number_input("Number of clusters for target variable", min_value=2, value=3)
-            cluster_names = st.text_input("Names of clusters (comma-separated)")
-            num_top_rules = st.number_input("Number of top occurring rules for fuzzy synergy analysis", min_value=1, value=10)
-        st.number_input("Random seed", value=1221)
-    # Main body
-    st.header("Data Upload")
-    st.text_input("Name of the experiment")
-    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    # Feature Importance Options
+    with st.expander("Feature importance options"):
+        fi_on = st.checkbox("Feature Importance")
+        st.write("Global feature importance methods:")
+        use_permutation = st.checkbox("Permutation Importance")
+        use_shap = st.checkbox("SHAP")
+        
+        st.write("Feature importance ensemble methods:")
+        use_mean = st.checkbox("Mean")
+        use_majority = st.checkbox("Majority vote")
+        
+        st.write("Local feature importance methods:")
+        use_lime = st.checkbox("LIME")
+        use_local_shap = st.checkbox("Local SHAP")
+        
+        num_important_features = st.number_input("Number of most important features to plot", min_value=1, value=10)
+        scoring_function = st.selectbox("Scoring function for permutation importance", ["accuracy", "f1", "roc_auc"])
+        num_repetitions = st.number_input("Number of repetitions for permutation importance", min_value=1, value=5)
+        shap_data_percentage = st.slider("Percentage of data to consider for SHAP", 0, 100, 100)
+
+    # Fuzzy Options
+        st.subheader("Fuzzy Options")
+        fuzzy_feature_selection = st.checkbox("Fuzzy feature selection")
+        num_fuzzy_features = st.number_input("Number of features for fuzzy interpretation", min_value=1, value=5)
+        granular_features = st.checkbox("Granular features")
+        num_clusters = st.number_input("Number of clusters for target variable", min_value=2, value=3)
+        cluster_names = st.text_input("Names of clusters (comma-separated)")
+        num_top_rules = st.number_input("Number of top occurring rules for fuzzy synergy analysis", min_value=1, value=10)
+    seed = st.number_input("Random seed", value=1221, min_value=0)
+# Main body
+st.header("Data Upload")
+st.text_input("Name of the experiment")
+uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
     
-    if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
-        st.write("Columns:", df.columns.tolist())
-        st.write("Target variable:", df.columns[-1])
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.write("Columns:", df.columns.tolist())
+    st.write("Target variable:", df.columns[-1])
 
-        # Model training status
-        st.header("Model Training Status")
-        if use_linear:
-            st.checkbox("Linear Model", value=False, disabled=True)
-        if use_rf:
-            st.checkbox("Random Forest", value=False, disabled=True)
-        if use_xgb:
-            st.checkbox("XGBoost", value=False, disabled=True)
+    # Model training status
+    st.header("Model Training Status")
+    if use_linear:
+        st.checkbox("Linear Model", value=False, disabled=True)
+    if use_rf:
+        st.checkbox("Random Forest", value=False, disabled=True)
+    if use_xgb:
+        st.checkbox("XGBoost", value=False, disabled=True)
 
-        # Plot selection
-        st.header("Plots")
-        plot_options = ["Metric values across bootstrap samples", "Feature importance plots"]
-        selected_plots = st.multiselect("Select plots to display", plot_options)
+    # Plot selection
+    st.header("Plots")
+    plot_options = ["Metric values across bootstrap samples", "Feature importance plots"]
+    selected_plots = st.multiselect("Select plots to display", plot_options)
 
-        for plot in selected_plots:
-            st.subheader(plot)
-            st.write("Placeholder for", plot)
+    for plot in selected_plots:
+        st.subheader(plot)
+        st.write("Placeholder for", plot)
 
-        # Feature importance description
-        st.header("Feature Importance Description")
-        if st.button("Generate Feature Importance Description"):
-            st.write("Placeholder for feature importance description")
+    # Feature importance description
+    st.header("Feature Importance Description")
+    if st.button("Generate Feature Importance Description"):
+        st.write("Placeholder for feature importance description")
+
+# Set seed for reproducibility
+set_seed(seed)
 
 # Pass the UI options into the Namespaces
 ## Instantiate a FuzzyOptions
@@ -167,5 +166,3 @@ seed = ml_opt.random_state
 ml_logger_instance = Logger(ml_opt.ml_log_dir, ml_opt.experiment_name)
 ml_logger = ml_logger_instance.make_logger()
 
-if __name__ == "__main__":
-    main()
