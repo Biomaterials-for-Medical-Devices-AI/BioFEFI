@@ -64,7 +64,7 @@ class BaseOptions:
             "--dependent_variable",
             type=str,
             default=None,
-            help="Target column: the column containing the dependent variable. Defaults to the last column",
+            help="Dependent variable: the name to use for reporting the dependent variable",
             required=False,
         ),
 
