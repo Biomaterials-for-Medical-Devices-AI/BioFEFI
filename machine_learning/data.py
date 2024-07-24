@@ -19,7 +19,6 @@ class DataBuilder:
         self._normalization = opt.normalization
         self._numerical_cols = 'all'
         self._n_bootstraps = opt.n_bootstraps
-        self._dependent_variable = opt.dependent_variable
 
     def _load_data(self) -> Dict[str, pd.DataFrame]:
         """
