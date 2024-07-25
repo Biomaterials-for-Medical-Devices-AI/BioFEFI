@@ -68,6 +68,7 @@ with st.sidebar:
 # Main body
 st.header("Data Upload")
 st.text_input("Name of the experiment")
+dependent_variable = st.text_input("Name of the dependent variable")
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
     
 if uploaded_file is not None:
@@ -115,7 +116,8 @@ fuzzy_opt.parser.set_defaults(
     granular_features= granular_features,
     num_clusters= num_clusters,
     cluster_names= cluster_names,
-    num_top_rules= 1
+    num_top_rules= 1,
+    dependent_variable=dependent_variable
 )
 ### Then parse loads the options
 fuzzy_opt = fuzzy_opt.parse()
@@ -127,7 +129,8 @@ fi_opt.parser.set_defaults(
     num_features_to_plot = num_important_features,
     permutation_importance_scoring = scoring_function,
     permutation_importance_repeat = num_repetitions,
-    shap_reduce_data = shap_data_percentage
+    shap_reduce_data = shap_data_percentage,
+    dependent_variable=dependent_variable
 )
 fi_opt = fi_opt.parse()
 
@@ -137,7 +140,8 @@ ml_opt.parser.set_defaults(
     n_bootstraps=num_bootstraps,
     save_actual_pred_plots=save_actual_pred_plots,
     #not sure how to do model_types either
-    normalization=normalization
+    normalization=normalization,
+    dependent_variable=dependent_variable
 )
 ml_opt = ml_opt.parse()
 
