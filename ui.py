@@ -10,10 +10,25 @@ from machine_learning.data import DataBuilder
 from machine_learning.ml_options import MLOptions
 from utils.logging_utils import Logger, close_logger
 from utils.utils import set_seed
+from pathlib import Path
 import streamlit as st
+import os
 
 
 import pandas as pd
+
+
+@st.cache_data
+def uploaded_file_path(file_name: str) -> str:
+    return Path.home() / "BioFEFIUploads" / file_name
+
+
+def save_upload(file_to_upload, content):
+    base_dir = os.path.dirname(file_to_upload)
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+    with open(file_to_upload, "w") as f:
+        f.write(content)
 
 
 def execute_pipeline():
@@ -165,10 +180,12 @@ st.header("Data Upload")
 st.text_input("Name of the experiment")
 dependent_variable = st.text_input("Name of the dependent variable")
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-run_button = st.button("Run", on_click=execute_pipeline)
+run_button = st.button("Run")
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+if uploaded_file is not None and run_button:
+    upload_path = uploaded_file_path(uploaded_file.name)
+    save_upload(upload_path, uploaded_file.read().decode("utf-8"))
+    df = pd.read_csv(upload_path)
     st.write("Columns:", df.columns.tolist())
     st.write("Target variable:", df.columns[-1])
 
