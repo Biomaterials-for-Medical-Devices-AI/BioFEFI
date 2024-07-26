@@ -1,3 +1,5 @@
+from argparse import Namespace
+from multiprocessing import Process
 from numba.cuda import initialize
 from feature_importance import feature_importance, fuzzy_interpretation
 from feature_importance.feature_importance_options import FeatureImportanceOptions
@@ -12,6 +14,84 @@ import streamlit as st
 
 
 import pandas as pd
+
+
+def execute_pipeline():
+    """Execute the pipeline in a separate process."""
+
+    fuzzy_opt = FuzzyOptions()
+    fuzzy_opt.initialize()
+    fuzzy_opt.parser.set_defaults(
+        fuzzy_feature_selection=fuzzy_feature_selection,
+        num_fuzzy_features=num_fuzzy_features,
+        granular_features=granular_features,
+        num_clusters=num_clusters,
+        cluster_names=cluster_names,
+        num_top_rules=1,
+        dependent_variable=dependent_variable,
+    )
+    fuzzy_opt = fuzzy_opt.parse()
+
+    fi_opt = FeatureImportanceOptions()
+    fi_opt.initialize()
+    fi_opt.parser.set_defaults(
+        num_features_to_plot=num_important_features,
+        permutation_importance_scoring=scoring_function,
+        permutation_importance_repeat=num_repetitions,
+        shap_reduce_data=shap_data_percentage,
+        dependent_variable=dependent_variable,
+    )
+    fi_opt = fi_opt.parse()
+
+    ml_opt = MLOptions()
+    ml_opt.initialize()
+    ml_opt.parser.set_defaults(
+        n_bootstraps=num_bootstraps,
+        save_actual_pred_plots=save_actual_pred_plots,
+        normalization=normalization,
+        dependent_variable=dependent_variable,
+    )
+    ml_opt = ml_opt.parse()
+
+    process = Process(target=_pipeline, args=(fuzzy_opt, fi_opt, ml_opt), daemon=True)
+    process.start()
+
+
+def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
+    """This function actually performs the steps of the pipeline. It can be wrapped
+    in a process it doesn't block the UI.
+
+    Args:
+        fuzzy_opts (Namespace): _description_
+        fi_opts (Namespace): _description_
+        ml_opts (Namespace): _description_
+    """
+    seed = ml_opts.random_state
+    set_seed(seed)
+    ml_logger_instance = Logger(ml_opts.ml_log_dir, ml_opts.experiment_name)
+    ml_logger = ml_logger_instance.make_logger()
+
+    data = DataBuilder(ml_opts, ml_logger).ingest()
+
+    # Machine learning
+    trained_models = train.run(ml_opts, data, ml_logger)
+    close_logger(ml_logger_instance, ml_logger)
+
+    # Feature importance
+    fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
+    fi_logger = fi_logger_instance.make_logger()
+    gloabl_importance_results, local_importance_results, ensemble_results = (
+        feature_importance.run(fi_opts, data, trained_models, fi_logger)
+    )
+    close_logger(fi_logger_instance, fi_logger)
+
+    # Fuzzy interpretation
+    fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
+    fuzzy_logger = fuzzy_logger_instance.make_logger()
+    fuzzy_rules = fuzzy_interpretation.run(
+        fuzzy_opts, data, trained_models, ensemble_results, fuzzy_logger
+    )
+    close_logger(fuzzy_logger_instance, fuzzy_logger)
 
 
 st.image("ui/bioFEFI header.png")
@@ -117,52 +197,52 @@ if uploaded_file is not None:
     if st.button("Generate Feature Importance Description"):
         st.write("Placeholder for feature importance description")
 
-# Set seed for reproducibility
-set_seed(seed)
+# # Set seed for reproducibility
+# set_seed(seed)
 
-# Pass the UI options into the Namespaces
-## Instantiate a FuzzyOptions
-fuzzy_opt = FuzzyOptions()
-### initialize it to load the args
-fuzzy_opt.initialize()
-### use set_defaults to override the relevant options
-### In Llettuce, I used a pydantic model to hold the options, then wrote a method to update a BaseOptions with the model's values. It's not necessary, just a matter of taste maybe?
-### It might be better to get the options first, then only set the options if the relevant checkbox is clicked ¯\_(ツ)_/¯
-fuzzy_opt.parser.set_defaults(
-    fuzzy_feature_selection=fuzzy_feature_selection,
-    num_fuzzy_features=num_fuzzy_features,
-    granular_features=granular_features,
-    num_clusters=num_clusters,
-    cluster_names=cluster_names,
-    num_top_rules=1,
-    dependent_variable=dependent_variable,
-)
-### Then parse loads the options
-fuzzy_opt = fuzzy_opt.parse()
-## repeat for other ..Options
-fi_opt = FeatureImportanceOptions()
-fi_opt.initialize()
-fi_opt.parser.set_defaults(
-    # I'm not sure how to set the global_importance_methods, feature_importance_ensemble, and local_importance_methods. Do you have to call ast.literal_eval("Permutation Importance")?
-    num_features_to_plot=num_important_features,
-    permutation_importance_scoring=scoring_function,
-    permutation_importance_repeat=num_repetitions,
-    shap_reduce_data=shap_data_percentage,
-    dependent_variable=dependent_variable,
-)
-fi_opt = fi_opt.parse()
+# # Pass the UI options into the Namespaces
+# ## Instantiate a FuzzyOptions
+# fuzzy_opt = FuzzyOptions()
+# ### initialize it to load the args
+# fuzzy_opt.initialize()
+# ### use set_defaults to override the relevant options
+# ### In Llettuce, I used a pydantic model to hold the options, then wrote a method to update a BaseOptions with the model's values. It's not necessary, just a matter of taste maybe?
+# ### It might be better to get the options first, then only set the options if the relevant checkbox is clicked ¯\_(ツ)_/¯
+# fuzzy_opt.parser.set_defaults(
+#     fuzzy_feature_selection=fuzzy_feature_selection,
+#     num_fuzzy_features=num_fuzzy_features,
+#     granular_features=granular_features,
+#     num_clusters=num_clusters,
+#     cluster_names=cluster_names,
+#     num_top_rules=1,
+#     dependent_variable=dependent_variable,
+# )
+# ### Then parse loads the options
+# fuzzy_opt = fuzzy_opt.parse()
+# ## repeat for other ..Options
+# fi_opt = FeatureImportanceOptions()
+# fi_opt.initialize()
+# fi_opt.parser.set_defaults(
+#     # I'm not sure how to set the global_importance_methods, feature_importance_ensemble, and local_importance_methods. Do you have to call ast.literal_eval("Permutation Importance")?
+#     num_features_to_plot=num_important_features,
+#     permutation_importance_scoring=scoring_function,
+#     permutation_importance_repeat=num_repetitions,
+#     shap_reduce_data=shap_data_percentage,
+#     dependent_variable=dependent_variable,
+# )
+# fi_opt = fi_opt.parse()
 
-ml_opt = MLOptions()
-ml_opt.initialize()
-ml_opt.parser.set_defaults(
-    n_bootstraps=num_bootstraps,
-    save_actual_pred_plots=save_actual_pred_plots,
-    # not sure how to do model_types either
-    normalization=normalization,
-    dependent_variable=dependent_variable,
-)
-ml_opt = ml_opt.parse()
+# ml_opt = MLOptions()
+# ml_opt.initialize()
+# ml_opt.parser.set_defaults(
+#     n_bootstraps=num_bootstraps,
+#     save_actual_pred_plots=save_actual_pred_plots,
+#     # not sure how to do model_types either
+#     normalization=normalization,
+#     dependent_variable=dependent_variable,
+# )
+# ml_opt = ml_opt.parse()
 
-seed = ml_opt.random_state
-ml_logger_instance = Logger(ml_opt.ml_log_dir, ml_opt.experiment_name)
-ml_logger = ml_logger_instance.make_logger()
+# seed = ml_opt.random_state
+# ml_logger_instance = Logger(ml_opt.ml_log_dir, ml_opt.experiment_name)
+# ml_logger = ml_logger_instance.make_logger()
