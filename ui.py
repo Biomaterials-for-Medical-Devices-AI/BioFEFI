@@ -35,6 +35,7 @@ def build_configuration(
     normalization,
     data_path,
     experiment_name,
+    problem_type,
     num_top_rules = 1
 ) -> tuple[argparse.Namespace]:
 
@@ -49,6 +50,7 @@ def build_configuration(
         num_top_rules=num_top_rules,
         dependent_variable=dependent_variable,
         experiment_name=experiment_name,
+        problem_type=problem_type,
     )
     fuzzy_opt = fuzzy_opt.parse()
 
@@ -60,7 +62,8 @@ def build_configuration(
         permutation_importance_repeat=permutation_importance_repeat,
         shap_reduce_data=shap_reduce_data,
         dependent_variable=dependent_variable,
-        experiment_name=experiment_name
+        experiment_name=experiment_name,
+        problem_type=problem_type,
     )
     fi_opt = fi_opt.parse()
 
@@ -73,6 +76,7 @@ def build_configuration(
         dependent_variable=dependent_variable,
         experiment_name=experiment_name,
         data_path=data_path,
+        problem_type=problem_type,
     )
     ml_opt = ml_opt.parse()
 
@@ -113,20 +117,20 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     close_logger(ml_logger_instance, ml_logger)
 
     # Feature importance
-    fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
-    fi_logger = fi_logger_instance.make_logger()
-    gloabl_importance_results, local_importance_results, ensemble_results = (
-        feature_importance.run(fi_opts, data, trained_models, fi_logger)
-    )
-    close_logger(fi_logger_instance, fi_logger)
+    # fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
+    # fi_logger = fi_logger_instance.make_logger()
+    # gloabl_importance_results, local_importance_results, ensemble_results = (
+    #     feature_importance.run(fi_opts, data, trained_models, fi_logger)
+    # )
+    # close_logger(fi_logger_instance, fi_logger)
 
     # Fuzzy interpretation
-    fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
-    fuzzy_logger = fuzzy_logger_instance.make_logger()
-    fuzzy_rules = fuzzy_interpretation.run(
-        fuzzy_opts, data, trained_models, ensemble_results, fuzzy_logger
-    )
-    close_logger(fuzzy_logger_instance, fuzzy_logger)
+    # fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
+    # fuzzy_logger = fuzzy_logger_instance.make_logger()
+    # fuzzy_rules = fuzzy_interpretation.run(
+    #     fuzzy_opts, data, trained_models, ensemble_results, fuzzy_logger
+    # )
+    # close_logger(fuzzy_logger_instance, fuzzy_logger)
 
 
 st.image("ui/bioFEFI header.png")
@@ -139,6 +143,7 @@ with st.sidebar:
     with st.expander("Machine Learning Options"):
         ml_on = st.checkbox("Machine Learning")
         st.subheader("Machine Learning Options")
+        problem_type = st.selectbox("Problem type", ["Classification", "Regression"]).lower()
         data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
         num_bootstraps = st.number_input("Number of bootstraps", min_value=1, value=10)
         save_plots = st.checkbox("Save actual or predicted plots")
@@ -148,7 +153,7 @@ with st.sidebar:
         use_rf = st.checkbox("Random Forest")
         use_xgb = st.checkbox("XGBoost")
 
-        normalization = st.checkbox("Normalization")
+        normalization = st.selectbox("Normalization", ["Standardization", "MinMax", "None"])
 
     # Feature Importance Options
     with st.expander("Feature importance options"):
@@ -222,6 +227,7 @@ if uploaded_file is not None and run_button:
         normalization=normalization,
         data_path=upload_path,
         experiment_name=experiment_name,
+        problem_type=problem_type,
     )
     process = Process(target=_pipeline, args=config, daemon=True)
     process.start()
