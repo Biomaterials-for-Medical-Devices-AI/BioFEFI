@@ -1,4 +1,5 @@
 from argparse import Namespace
+import argparse
 from multiprocessing import Process
 from numba.cuda import initialize
 from feature_importance import feature_importance, fuzzy_interpretation
@@ -18,6 +19,66 @@ import os
 import pandas as pd
 
 
+def build_configuration(
+    fuzzy_feature_selection,
+    num_fuzzy_features,
+    granular_features,
+    num_clusters,
+    cluster_names,
+    dependent_variable,
+    num_features_to_plot,
+    permutation_importance_scoring,
+    permutation_importance_repeat,
+    shap_reduce_data,
+    n_bootstraps,
+    save_actual_pred_plots,
+    normalization,
+    data_path,
+    experiment_name,
+    num_top_rules = 1
+) -> tuple[argparse.Namespace]:
+
+    fuzzy_opt = FuzzyOptions()
+    fuzzy_opt.initialize()
+    fuzzy_opt.parser.set_defaults(
+        fuzzy_feature_selection=fuzzy_feature_selection,
+        num_fuzzy_features=num_fuzzy_features,
+        granular_features=granular_features,
+        num_clusters=num_clusters,
+        cluster_names=cluster_names,
+        num_top_rules=num_top_rules,
+        dependent_variable=dependent_variable,
+        experiment_name=experiment_name,
+    )
+    fuzzy_opt = fuzzy_opt.parse()
+
+    fi_opt = FeatureImportanceOptions()
+    fi_opt.initialize()
+    fi_opt.parser.set_defaults(
+        num_features_to_plot=num_features_to_plot,
+        permutation_importance_scoring=permutation_importance_scoring,
+        permutation_importance_repeat=permutation_importance_repeat,
+        shap_reduce_data=shap_reduce_data,
+        dependent_variable=dependent_variable,
+        experiment_name=experiment_name
+    )
+    fi_opt = fi_opt.parse()
+
+    ml_opt = MLOptions()
+    ml_opt.initialize()
+    ml_opt.parser.set_defaults(
+        n_bootstraps=n_bootstraps,
+        save_actual_pred_plots=save_actual_pred_plots,
+        normalization=normalization,
+        dependent_variable=dependent_variable,
+        experiment_name=experiment_name,
+        data_path=data_path,
+    )
+    ml_opt = ml_opt.parse()
+
+    return fuzzy_opt, fi_opt, ml_opt
+
+
 @st.cache_data
 def uploaded_file_path(file_name: str) -> str:
     return Path.home() / "BioFEFIUploads" / file_name
@@ -29,47 +90,6 @@ def save_upload(file_to_upload, content):
         os.makedirs(base_dir)
     with open(file_to_upload, "w") as f:
         f.write(content)
-
-
-def execute_pipeline():
-    """Execute the pipeline in a separate process."""
-
-    fuzzy_opt = FuzzyOptions()
-    fuzzy_opt.initialize()
-    fuzzy_opt.parser.set_defaults(
-        fuzzy_feature_selection=fuzzy_feature_selection,
-        num_fuzzy_features=num_fuzzy_features,
-        granular_features=granular_features,
-        num_clusters=num_clusters,
-        cluster_names=cluster_names,
-        num_top_rules=1,
-        dependent_variable=dependent_variable,
-    )
-    fuzzy_opt = fuzzy_opt.parse()
-
-    fi_opt = FeatureImportanceOptions()
-    fi_opt.initialize()
-    fi_opt.parser.set_defaults(
-        num_features_to_plot=num_important_features,
-        permutation_importance_scoring=scoring_function,
-        permutation_importance_repeat=num_repetitions,
-        shap_reduce_data=shap_data_percentage,
-        dependent_variable=dependent_variable,
-    )
-    fi_opt = fi_opt.parse()
-
-    ml_opt = MLOptions()
-    ml_opt.initialize()
-    ml_opt.parser.set_defaults(
-        n_bootstraps=num_bootstraps,
-        save_actual_pred_plots=save_actual_pred_plots,
-        normalization=normalization,
-        dependent_variable=dependent_variable,
-    )
-    ml_opt = ml_opt.parse()
-
-    process = Process(target=_pipeline, args=(fuzzy_opt, fi_opt, ml_opt), daemon=True)
-    process.start()
 
 
 def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
@@ -177,14 +197,34 @@ with st.sidebar:
     seed = st.number_input("Random seed", value=1221, min_value=0)
 # Main body
 st.header("Data Upload")
-st.text_input("Name of the experiment")
+experiment_name = st.text_input("Name of the experiment")
 dependent_variable = st.text_input("Name of the dependent variable")
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 run_button = st.button("Run")
 
+
 if uploaded_file is not None and run_button:
     upload_path = uploaded_file_path(uploaded_file.name)
     save_upload(upload_path, uploaded_file.read().decode("utf-8"))
+    config = build_configuration(
+        fuzzy_feature_selection=fuzzy_feature_selection,
+        num_fuzzy_features=num_fuzzy_features,
+        granular_features=granular_features,
+        num_clusters=num_clusters,
+        cluster_names=cluster_names,
+        dependent_variable=dependent_variable,
+        num_features_to_plot=num_important_features,
+        permutation_importance_scoring=scoring_function,
+        permutation_importance_repeat=num_repetitions,
+        shap_reduce_data=shap_data_percentage,
+        n_bootstraps=num_bootstraps,
+        save_actual_pred_plots=save_actual_pred_plots,
+        normalization=normalization,
+        data_path=upload_path,
+        experiment_name=experiment_name,
+    )
+    process = Process(target=_pipeline, args=config, daemon=True)
+    process.start()
     df = pd.read_csv(upload_path)
     st.write("Columns:", df.columns.tolist())
     st.write("Target variable:", df.columns[-1])
