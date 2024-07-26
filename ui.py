@@ -165,6 +165,7 @@ st.header("Data Upload")
 st.text_input("Name of the experiment")
 dependent_variable = st.text_input("Name of the dependent variable")
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+run_button = st.button("Run", on_click=execute_pipeline)
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
