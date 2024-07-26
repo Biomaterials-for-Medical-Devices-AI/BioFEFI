@@ -117,12 +117,12 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     close_logger(ml_logger_instance, ml_logger)
 
     # Feature importance
-    # fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
-    # fi_logger = fi_logger_instance.make_logger()
-    # gloabl_importance_results, local_importance_results, ensemble_results = (
-    #     feature_importance.run(fi_opts, data, trained_models, fi_logger)
-    # )
-    # close_logger(fi_logger_instance, fi_logger)
+    fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
+    fi_logger = fi_logger_instance.make_logger()
+    gloabl_importance_results, local_importance_results, ensemble_results = (
+        feature_importance.run(fi_opts, data, trained_models, fi_logger)
+    )
+    close_logger(fi_logger_instance, fi_logger)
 
     # Fuzzy interpretation
     # fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
@@ -174,7 +174,7 @@ with st.sidebar:
             "Number of most important features to plot", min_value=1, value=10
         )
         scoring_function = st.selectbox(
-            "Scoring function for permutation importance", ["accuracy", "f1", "roc_auc"]
+            "Scoring function for permutation importance", ['neg_mean_absolute_error', 'neg_root_mean_squared_error', 'accuracy', 'f1']
         )
         num_repetitions = st.number_input(
             "Number of repetitions for permutation importance", min_value=1, value=5
