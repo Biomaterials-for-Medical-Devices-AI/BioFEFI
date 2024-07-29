@@ -38,7 +38,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        problem_type=st.session_state[ConfigStateKeys.ProblemType],
+        problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
     )
     fuzzy_opt = fuzzy_opt.parse()
 
@@ -51,7 +51,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        problem_type=st.session_state[ConfigStateKeys.ProblemType],
+        problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
     )
     fi_opt = fi_opt.parse()
 
@@ -65,7 +65,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         data_path=path_to_data,
-        problem_type=st.session_state[ConfigStateKeys.ProblemType],
+        problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
     )
     ml_opt = ml_opt.parse()
 
@@ -167,7 +167,7 @@ with st.sidebar:
         use_rf = st.checkbox("Random Forest", key=ConfigStateKeys.UseRandomForest)
         use_xgb = st.checkbox("XGBoost", key=ConfigStateKeys.UseXGBoost)
 
-        normalization = st.selectbox("Normalization", ["Standardization", "MinMax", "None"])
+        normalization = st.selectbox("Normalization", ["Standardization", "MinMax", "None"], key=ConfigStateKeys.Normalization)
 
     # Feature Importance Options
     with st.expander("Feature importance options"):
