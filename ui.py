@@ -38,6 +38,30 @@ def build_configuration(
     problem_type,
     num_top_rules = 1
 ) -> tuple[argparse.Namespace]:
+    """Build the configuration objects for the pipeline.
+
+    Args:
+        fuzzy_feature_selection (_type_): _description_
+        num_fuzzy_features (_type_): _description_
+        granular_features (_type_): _description_
+        num_clusters (_type_): _description_
+        cluster_names (_type_): _description_
+        dependent_variable (_type_): _description_
+        num_features_to_plot (_type_): _description_
+        permutation_importance_scoring (_type_): _description_
+        permutation_importance_repeat (_type_): _description_
+        shap_reduce_data (_type_): _description_
+        n_bootstraps (_type_): _description_
+        save_actual_pred_plots (_type_): _description_
+        normalization (_type_): _description_
+        data_path (_type_): _description_
+        experiment_name (_type_): _description_
+        problem_type (_type_): _description_
+        num_top_rules (int, optional): _description_. Defaults to 1.
+
+    Returns:
+        tuple[argparse.Namespace]: The configuration for fuzzy, FI and ML pipelines.
+    """
 
     fuzzy_opt = FuzzyOptions()
     fuzzy_opt.initialize()
@@ -85,10 +109,24 @@ def build_configuration(
 
 @st.cache_data
 def uploaded_file_path(file_name: str) -> str:
+    """Create the full upload path for data file uploads.
+
+    Args:
+        file_name (str): The name of the file.
+
+    Returns:
+        str: The full upload path for the file.
+    """
     return Path.home() / "BioFEFIUploads" / file_name
 
 
-def save_upload(file_to_upload, content):
+def save_upload(file_to_upload: str, content: str):
+    """Save a file given to the UI to disk.
+
+    Args:
+        file_to_upload (str): The name of the file to save.
+        content (str): The contents to save to the file.
+    """
     base_dir = os.path.dirname(file_to_upload)
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
@@ -101,9 +139,9 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     in a process it doesn't block the UI.
 
     Args:
-        fuzzy_opts (Namespace): _description_
-        fi_opts (Namespace): _description_
-        ml_opts (Namespace): _description_
+        fuzzy_opts (Namespace): Options for fuzzy feature importance.
+        fi_opts (Namespace): Options for feature importance.
+        ml_opts (Namespace): Options for machine learning.
     """
     seed = ml_opts.random_state
     set_seed(seed)
