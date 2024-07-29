@@ -250,7 +250,7 @@ with st.sidebar:
             value=10,
             key=ConfigStateKeys.NumberOfTopRules
         )
-    seed = st.number_input("Random seed", value=1221, min_value=0)
+    seed = st.number_input("Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed)
 # Main body
 st.header("Data Upload")
 experiment_name = st.text_input("Name of the experiment", key=ConfigStateKeys.ExperimentName)
