@@ -66,6 +66,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         data_path=path_to_data,
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
+        random_state=st.session_state[ConfigStateKeys.RandomSeed]
     )
     ml_opt = ml_opt.parse()
 
