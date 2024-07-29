@@ -20,45 +20,8 @@ import os
 import pandas as pd
 
 
-def build_configuration(
-    fuzzy_feature_selection,
-    num_fuzzy_features,
-    granular_features,
-    num_clusters,
-    cluster_names,
-    dependent_variable,
-    num_features_to_plot,
-    permutation_importance_scoring,
-    permutation_importance_repeat,
-    shap_reduce_data,
-    n_bootstraps,
-    save_actual_pred_plots,
-    normalization,
-    data_path,
-    experiment_name,
-    problem_type,
-    num_top_rules = 1
-) -> tuple[argparse.Namespace]:
+def build_configuration() -> tuple[argparse.Namespace]:
     """Build the configuration objects for the pipeline.
-
-    Args:
-        fuzzy_feature_selection (_type_): _description_
-        num_fuzzy_features (_type_): _description_
-        granular_features (_type_): _description_
-        num_clusters (_type_): _description_
-        cluster_names (_type_): _description_
-        dependent_variable (_type_): _description_
-        num_features_to_plot (_type_): _description_
-        permutation_importance_scoring (_type_): _description_
-        permutation_importance_repeat (_type_): _description_
-        shap_reduce_data (_type_): _description_
-        n_bootstraps (_type_): _description_
-        save_actual_pred_plots (_type_): _description_
-        normalization (_type_): _description_
-        data_path (_type_): _description_
-        experiment_name (_type_): _description_
-        problem_type (_type_): _description_
-        num_top_rules (int, optional): _description_. Defaults to 1.
 
     Returns:
         tuple[argparse.Namespace]: The configuration for fuzzy, FI and ML pipelines.
@@ -67,41 +30,42 @@ def build_configuration(
     fuzzy_opt = FuzzyOptions()
     fuzzy_opt.initialize()
     fuzzy_opt.parser.set_defaults(
-        fuzzy_feature_selection=fuzzy_feature_selection,
-        num_fuzzy_features=num_fuzzy_features,
-        granular_features=granular_features,
-        num_clusters=num_clusters,
-        cluster_names=cluster_names,
-        num_top_rules=num_top_rules,
-        dependent_variable=dependent_variable,
-        experiment_name=experiment_name,
-        problem_type=problem_type,
+        fuzzy_feature_selection=st.session_state[ConfigStateKeys.FuzzyFeatureSelection],
+        num_fuzzy_features=st.session_state[ConfigStateKeys.NumberOfFuzzyFeatures],
+        granular_features=st.session_state[ConfigStateKeys.GranularFeatures],
+        num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
+        cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
+        num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+        problem_type=st.session_state[ConfigStateKeys.ProblemType],
     )
     fuzzy_opt = fuzzy_opt.parse()
 
     fi_opt = FeatureImportanceOptions()
     fi_opt.initialize()
     fi_opt.parser.set_defaults(
-        num_features_to_plot=num_features_to_plot,
-        permutation_importance_scoring=permutation_importance_scoring,
-        permutation_importance_repeat=permutation_importance_repeat,
-        shap_reduce_data=shap_reduce_data,
-        dependent_variable=dependent_variable,
-        experiment_name=experiment_name,
-        problem_type=problem_type,
+        num_features_to_plot=st.session_state[ConfigStateKeys.NumberOfImportantFeatures],
+        permutation_importance_scoring=st.session_state[ConfigStateKeys.ScoringFunction],
+        permutation_importance_repeat=st.session_state[ConfigStateKeys.NumberOfRepetitions],
+        shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+        problem_type=st.session_state[ConfigStateKeys.ProblemType],
     )
     fi_opt = fi_opt.parse()
 
     ml_opt = MLOptions()
     ml_opt.initialize()
+    path_to_data = uploaded_file_path(st.session_state[ConfigStateKeys.UploadedFileName].name)
     ml_opt.parser.set_defaults(
-        n_bootstraps=n_bootstraps,
+        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
         save_actual_pred_plots=save_actual_pred_plots,
-        normalization=normalization,
-        dependent_variable=dependent_variable,
-        experiment_name=experiment_name,
-        data_path=data_path,
-        problem_type=problem_type,
+        normalization=st.session_state[ConfigStateKeys.Normalization],
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+        data_path=path_to_data,
+        problem_type=st.session_state[ConfigStateKeys.ProblemType],
     )
     ml_opt = ml_opt.parse()
 
@@ -262,24 +226,7 @@ run_button = st.button("Run")
 if uploaded_file is not None and run_button:
     upload_path = uploaded_file_path(uploaded_file.name)
     save_upload(upload_path, uploaded_file.read().decode("utf-8"))
-    config = build_configuration(
-        fuzzy_feature_selection=fuzzy_feature_selection,
-        num_fuzzy_features=num_fuzzy_features,
-        granular_features=granular_features,
-        num_clusters=num_clusters,
-        cluster_names=cluster_names,
-        dependent_variable=dependent_variable,
-        num_features_to_plot=num_important_features,
-        permutation_importance_scoring=scoring_function,
-        permutation_importance_repeat=num_repetitions,
-        shap_reduce_data=shap_data_percentage,
-        n_bootstraps=num_bootstraps,
-        save_actual_pred_plots=save_actual_pred_plots,
-        normalization=normalization,
-        data_path=upload_path,
-        experiment_name=experiment_name,
-        problem_type=problem_type,
-    )
+    config = build_configuration()
     process = Process(target=_pipeline, args=config, daemon=True)
     process.start()
     cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
