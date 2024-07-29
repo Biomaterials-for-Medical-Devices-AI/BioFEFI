@@ -133,6 +133,17 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     close_logger(fuzzy_logger_instance, fuzzy_logger)
 
 
+def cancel_pipeline(p: Process):
+    """Cancel a running pipeline.
+
+    Args:
+        p (Process): the process running the pipeline to cancel.
+    """
+    if p.is_alive():
+        print("Cancelling pipeline run")
+        p.terminate()
+
+
 st.image("ui/bioFEFI header.png")
 # Sidebar
 with st.sidebar:
@@ -231,6 +242,7 @@ if uploaded_file is not None and run_button:
     )
     process = Process(target=_pipeline, args=config, daemon=True)
     process.start()
+    cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
     df = pd.read_csv(upload_path)
     st.write("Columns:", df.columns.tolist())
     st.write("Target variable:", df.columns[-1])
