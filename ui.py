@@ -62,8 +62,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
         is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
         # fi_log_dir=
-        # angle_rotate_xaxis_labels=
-        # angle_rotate_yaxis_labels=
+        angle_rotate_xaxis_labels=st.session_state[ConfigStateKeys.RotateXAxis],
+        angle_rotate_yaxis_labels=st.session_state[ConfigStateKeys.RotateYAxis],
         # save_feature_importance_plots=
         # save_feature_importance_options=
         # save_feature_importance_results=
