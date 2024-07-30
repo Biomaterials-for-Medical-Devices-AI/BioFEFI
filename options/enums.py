@@ -33,6 +33,7 @@ class ConfigStateKeys(StrEnum):
     NumberOfClusters = "num_clusters"
     ClusterNames = "cluster_names"
     NumberOfTopRules = "num_top_rules"
+    SaveFuzzySetPlots = "save_fuzzy_set_plots"
     # Base options
     ExperimentName = "experiment_name"
     DependentVariableName = "dependent_variable_name"

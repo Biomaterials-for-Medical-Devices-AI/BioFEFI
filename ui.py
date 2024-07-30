@@ -36,6 +36,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
         num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
         cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
         num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
+        save_fuzzy_set_plots=st.session_state[ConfigStateKeys.SaveFuzzySetPlots],
+        # fuzzy_log_dir=
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
@@ -58,6 +60,17 @@ def build_configuration() -> tuple[argparse.Namespace]:
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
+        is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
+        # fi_log_dir=
+        # angle_rotate_xaxis_labels=
+        # angle_rotate_yaxis_labels=
+        # save_feature_importance_plots=
+        # save_feature_importance_options=
+        # save_feature_importance_results=
+        # save_feature_importance_results=
+        # local_importance_methods=
+        # feature_importance_ensemble=
+        # global_importance_methods=
     )
     fi_opt = fi_opt.parse()
 
@@ -73,8 +86,12 @@ def build_configuration() -> tuple[argparse.Namespace]:
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         data_path=path_to_data,
+        # data_split=
+        # model_types=
+        # ml_log_dir=
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
+        is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning]
     )
     ml_opt = ml_opt.parse()
 
@@ -272,6 +289,8 @@ with st.sidebar:
             value=10,
             key=ConfigStateKeys.NumberOfTopRules,
         )
+        save_fuzzy_set_plots = st.checkbox("Save fuzzy set plots", key=ConfigStateKeys.SaveFuzzySetPlots)
+
     seed = st.number_input(
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
     )
