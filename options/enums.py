@@ -27,6 +27,7 @@ class ConfigStateKeys(StrEnum):
     SaveFeatureImportanceOptions = "save_feature_importance_options"
     SaveFeatureImportanceResults = "save_feature_importance_results"
     LocalImportanceFeatures = "local_importance_methods"
+    EnsembleMethods = "ensemble_methods"
     # Fuzzy options
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"

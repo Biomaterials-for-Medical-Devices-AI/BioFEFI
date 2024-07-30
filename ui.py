@@ -67,8 +67,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
         save_feature_importance_plots=st.session_state[ConfigStateKeys.SaveFeatureImportancePlots],
         save_feature_importance_options=st.session_state[ConfigStateKeys.SaveFeatureImportanceOptions],
         save_feature_importance_results=st.session_state[ConfigStateKeys.SaveFeatureImportanceResults],
-        local_importance_methods=st.session_state[ConfigStateKeys.LocalImportanceFeatures]
-        # feature_importance_ensemble=
+        local_importance_methods=st.session_state[ConfigStateKeys.LocalImportanceFeatures],
+        feature_importance_ensemble=st.session_state[ConfigStateKeys.EnsembleMethods]
         # global_importance_methods=
     )
     fi_opt = fi_opt.parse()
@@ -286,8 +286,12 @@ with st.sidebar:
         use_shap = st.checkbox("SHAP")
 
         st.write("Feature importance ensemble methods:")
+        ensemble_methods = {}
         use_mean = st.checkbox("Mean")
+        ensemble_methods["Mean"] = use_mean
         use_majority = st.checkbox("Majority vote")
+        ensemble_methods["Majority Vote"] = use_majority
+        st.session_state[ConfigStateKeys.EnsembleMethods] = ensemble_methods
 
         st.write("Local feature importance methods:")
         local_importance_methods = {}
