@@ -140,7 +140,7 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
     fuzzy_logger = fuzzy_logger_instance.make_logger()
     fuzzy_rules = fuzzy_interpretation.run(
-        fuzzy_opts, data, trained_models, ensemble_results, fuzzy_logger
+        fuzzy_opts, ml_opts, data, trained_models, ensemble_results, fuzzy_logger
     )
     close_logger(fuzzy_logger_instance, fuzzy_logger)
 
