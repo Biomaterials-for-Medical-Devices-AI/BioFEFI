@@ -197,7 +197,7 @@ with st.sidebar:
                 max_value=1.0,
                 value=0.2,
             )
-            st.session_state[ConfigStateKeys.DataSplit] = {"type": "holdout", "n_splits": split_size}
+            st.session_state[ConfigStateKeys.DataSplit] = {"type": "holdout", "test_size": split_size}
         elif data_split == "K-Fold":
             split_size = st.number_input(
                 "n splits",
