@@ -85,7 +85,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         data_path=path_to_data,
-        # data_split=
+        data_split=st.session_state[ConfigStateKeys.DataSplit],
         # model_types=
         # ml_log_dir=
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
@@ -189,9 +189,24 @@ with st.sidebar:
             ["Classification", "Regression"],
             key=ConfigStateKeys.ProblemType,
         ).lower()
-        data_split = st.selectbox(
-            "Data split method", ["Holdout", "K-Fold"], key=ConfigStateKeys.DataSplit
-        )
+        data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
+        if data_split == "Holdout":
+            split_size = st.number_input(
+                "Test split",
+                min_value=0.0,
+                max_value=1.0,
+                value=0.2,
+            )
+            st.session_state[ConfigStateKeys.DataSplit] = {"type": "holdout", "n_splits": split_size}
+        elif data_split == "K-Fold":
+            split_size = st.number_input(
+                "n splits",
+                min_value=0,
+                value=5,
+            )
+            st.session_state[ConfigStateKeys.DataSplit] = {"type": "kfold", "n_splits": split_size}
+        else:
+            split_size = None
         num_bootstraps = st.number_input(
             "Number of bootstraps",
             min_value=1,
