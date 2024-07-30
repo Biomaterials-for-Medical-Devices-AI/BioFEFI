@@ -62,8 +62,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
         is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
         # fi_log_dir=
-        angle_rotate_xaxis_labels=st.session_state[ConfigStateKeys.RotateXAxis],
-        angle_rotate_yaxis_labels=st.session_state[ConfigStateKeys.RotateYAxis],
+        angle_rotate_xaxis_labels=st.session_state[ConfigStateKeys.RotateXAxisLabels],
+        angle_rotate_yaxis_labels=st.session_state[ConfigStateKeys.RotateYAxisLabels],
         # save_feature_importance_plots=
         # save_feature_importance_options=
         # save_feature_importance_results=
@@ -264,14 +264,14 @@ with st.sidebar:
             min_value=0,
             max_value=360,
             value=10,
-            key=ConfigStateKeys.RotateXAxis,
+            key=ConfigStateKeys.RotateXAxisLabels,
         )
         angle_rotate_yaxis_labels = st.number_input(
             "Angle to rotate Y-axis labels",
             min_value=0,
             max_value=306,
             value=60,
-            key=ConfigStateKeys.RotateYAxis,
+            key=ConfigStateKeys.RotateYAxisLabels,
         )
 
         # Fuzzy Options
