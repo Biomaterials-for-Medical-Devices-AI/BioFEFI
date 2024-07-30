@@ -28,6 +28,9 @@ class ConfigStateKeys(StrEnum):
     ShapDataPercentage = "shap_data_percentage"
     RotateXAxisLabels = "angle_rotate_xaxis_labels"
     RotateYAxisLabels = "angle_rotate_yaxis_labels"
+    SaveFeatureImportancePlots = "save_feature_importance_plots"
+    SaveFeatureImportanceOptions = "save_feature_importance_options"
+    SaveFeatureImportanceResults = "save_feature_importance_results"
     # Fuzzy options
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"

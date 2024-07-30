@@ -64,9 +64,9 @@ def build_configuration() -> tuple[argparse.Namespace]:
         # fi_log_dir=
         angle_rotate_xaxis_labels=st.session_state[ConfigStateKeys.RotateXAxisLabels],
         angle_rotate_yaxis_labels=st.session_state[ConfigStateKeys.RotateYAxisLabels],
-        # save_feature_importance_plots=
-        # save_feature_importance_options=
-        # save_feature_importance_results=
+        save_feature_importance_plots=st.session_state[ConfigStateKeys.SaveFeatureImportancePlots],
+        save_feature_importance_options=st.session_state[ConfigStateKeys.SaveFeatureImportanceOptions],
+        save_feature_importance_results=st.session_state[ConfigStateKeys.SaveFeatureImportanceResults]
         # local_importance_methods=
         # feature_importance_ensemble=
         # global_importance_methods=
@@ -271,6 +271,18 @@ with st.sidebar:
             max_value=90,
             value=60,
             key=ConfigStateKeys.RotateYAxisLabels,
+        )
+        save_feature_importance_plots = st.checkbox(
+            "Save feature importance plots",
+            key=ConfigStateKeys.SaveFeatureImportancePlots
+        )
+        save_feature_importance_options = st.checkbox(
+            "Save feature importance options",
+            key=ConfigStateKeys.SaveFeatureImportanceOptions
+        )
+        save_feature_importance_results = st.checkbox(
+            "Save feature importance results",
+            key=ConfigStateKeys.SaveFeatureImportanceResults
         )
 
         # Fuzzy Options
