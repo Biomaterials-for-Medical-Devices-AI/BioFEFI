@@ -64,12 +64,22 @@ def build_configuration() -> tuple[argparse.Namespace]:
         # fi_log_dir=
         angle_rotate_xaxis_labels=st.session_state[ConfigStateKeys.RotateXAxisLabels],
         angle_rotate_yaxis_labels=st.session_state[ConfigStateKeys.RotateYAxisLabels],
-        save_feature_importance_plots=st.session_state[ConfigStateKeys.SaveFeatureImportancePlots],
-        save_feature_importance_options=st.session_state[ConfigStateKeys.SaveFeatureImportanceOptions],
-        save_feature_importance_results=st.session_state[ConfigStateKeys.SaveFeatureImportanceResults],
-        local_importance_methods=st.session_state[ConfigStateKeys.LocalImportanceFeatures],
+        save_feature_importance_plots=st.session_state[
+            ConfigStateKeys.SaveFeatureImportancePlots
+        ],
+        save_feature_importance_options=st.session_state[
+            ConfigStateKeys.SaveFeatureImportanceOptions
+        ],
+        save_feature_importance_results=st.session_state[
+            ConfigStateKeys.SaveFeatureImportanceResults
+        ],
+        local_importance_methods=st.session_state[
+            ConfigStateKeys.LocalImportanceFeatures
+        ],
         feature_importance_ensemble=st.session_state[ConfigStateKeys.EnsembleMethods],
-        global_importance_methods=st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods],
+        global_importance_methods=st.session_state[
+            ConfigStateKeys.GlobalFeatureImportanceMethods
+        ],
     )
     fi_opt = fi_opt.parse()
 
@@ -90,7 +100,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         # ml_log_dir=
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
-        is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning]
+        is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning],
     )
     ml_opt = ml_opt.parse()
 
@@ -156,7 +166,9 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
 
     # Fuzzy interpretation
     if fuzzy_opts.fuzzy_feature_selection:
-        fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
+        fuzzy_logger_instance = Logger(
+            fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name
+        )
         fuzzy_logger = fuzzy_logger_instance.make_logger()
         fuzzy_rules = fuzzy_interpretation.run(
             fuzzy_opts, ml_opts, data, trained_models, ensemble_results, fuzzy_logger
@@ -197,14 +209,20 @@ with st.sidebar:
                 max_value=1.0,
                 value=0.2,
             )
-            st.session_state[ConfigStateKeys.DataSplit] = {"type": "holdout", "test_size": split_size}
+            st.session_state[ConfigStateKeys.DataSplit] = {
+                "type": "holdout",
+                "test_size": split_size,
+            }
         elif data_split == "K-Fold":
             split_size = st.number_input(
                 "n splits",
                 min_value=0,
                 value=5,
             )
-            st.session_state[ConfigStateKeys.DataSplit] = {"type": "kfold", "n_splits": split_size}
+            st.session_state[ConfigStateKeys.DataSplit] = {
+                "type": "kfold",
+                "n_splits": split_size,
+            }
         else:
             split_size = None
         num_bootstraps = st.number_input(
@@ -227,14 +245,16 @@ with st.sidebar:
                 "use": use_linear,
                 "params": {
                     "fit_intercept": fit_intercept,
-                }
+                },
             }
             st.divider()
 
         use_rf = st.checkbox("Random Forest", value=True)
         if use_rf:
             st.write("Options:")
-            n_estimators_rf = st.number_input("Number of estimators", value=300, key="n_estimators_rf")
+            n_estimators_rf = st.number_input(
+                "Number of estimators", value=300, key="n_estimators_rf"
+            )
             min_samples_split = st.number_input("Minimum samples split", value=2)
             min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
             max_depth_rf = st.number_input("Maximum depth", value=6, key="max_depth_rf")
@@ -245,15 +265,19 @@ with st.sidebar:
                     "min_samples_split": min_samples_split,
                     "min_samples_leaf": min_samples_leaf,
                     "max_depth": max_depth_rf,
-                }
+                },
             }
             st.divider()
 
         use_xgb = st.checkbox("XGBoost", value=True)
         if use_xgb:
             st.write("Options:")
-            n_estimators_xgb = st.number_input("Number of estimators", value=300, key="n_estimators_xgb")
-            max_depth_xbg = st.number_input("Maximum depth", value=6, key="max_depth_xgb")
+            n_estimators_xgb = st.number_input(
+                "Number of estimators", value=300, key="n_estimators_xgb"
+            )
+            max_depth_xbg = st.number_input(
+                "Maximum depth", value=6, key="max_depth_xgb"
+            )
             learning_rate = st.number_input("Learning rate", value=0.01)
             subsample = st.number_input("Subsample size", value=0.5)
             model_types["XGBoost"] = {
@@ -265,7 +289,7 @@ with st.sidebar:
                         "learning_rate": learning_rate,
                         "subsample": subsample,
                     }
-                }
+                },
             }
             st.divider()
         st.session_state[ConfigStateKeys.ModelTypes] = model_types
@@ -284,10 +308,15 @@ with st.sidebar:
         st.write("Global feature importance methods:")
         global_methods = {}
         use_permutation = st.checkbox("Permutation Importance")
-        global_methods["Permutation Importance"] = {'type': 'global', 'value': use_permutation}
+        global_methods["Permutation Importance"] = {
+            "type": "global",
+            "value": use_permutation,
+        }
         use_shap = st.checkbox("SHAP")
-        global_methods["SHAP"] = {'type': 'global', 'value': use_shap}
-        st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods] = global_methods
+        global_methods["SHAP"] = {"type": "global", "value": use_shap}
+        st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods] = (
+            global_methods
+        )
 
         st.write("Feature importance ensemble methods:")
         ensemble_methods = {}
@@ -300,10 +329,12 @@ with st.sidebar:
         st.write("Local feature importance methods:")
         local_importance_methods = {}
         use_lime = st.checkbox("LIME")
-        local_importance_methods["LIME"] = {'type': 'local', 'value': use_lime}
+        local_importance_methods["LIME"] = {"type": "local", "value": use_lime}
         use_local_shap = st.checkbox("Local SHAP")
-        local_importance_methods["SHAP"] = {'type': 'local', 'value': use_local_shap}
-        st.session_state[ConfigStateKeys.LocalImportanceFeatures] = local_importance_methods
+        local_importance_methods["SHAP"] = {"type": "local", "value": use_local_shap}
+        st.session_state[ConfigStateKeys.LocalImportanceFeatures] = (
+            local_importance_methods
+        )
 
         num_important_features = st.number_input(
             "Number of most important features to plot",
@@ -350,15 +381,15 @@ with st.sidebar:
         )
         save_feature_importance_plots = st.checkbox(
             "Save feature importance plots",
-            key=ConfigStateKeys.SaveFeatureImportancePlots
+            key=ConfigStateKeys.SaveFeatureImportancePlots,
         )
         save_feature_importance_options = st.checkbox(
             "Save feature importance options",
-            key=ConfigStateKeys.SaveFeatureImportanceOptions
+            key=ConfigStateKeys.SaveFeatureImportanceOptions,
         )
         save_feature_importance_results = st.checkbox(
             "Save feature importance results",
-            key=ConfigStateKeys.SaveFeatureImportanceResults
+            key=ConfigStateKeys.SaveFeatureImportanceResults,
         )
 
         # Fuzzy Options
@@ -390,7 +421,9 @@ with st.sidebar:
             value=10,
             key=ConfigStateKeys.NumberOfTopRules,
         )
-        save_fuzzy_set_plots = st.checkbox("Save fuzzy set plots", key=ConfigStateKeys.SaveFuzzySetPlots)
+        save_fuzzy_set_plots = st.checkbox(
+            "Save fuzzy set plots", key=ConfigStateKeys.SaveFuzzySetPlots
+        )
 
     seed = st.number_input(
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
