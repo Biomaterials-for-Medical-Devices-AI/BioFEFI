@@ -282,18 +282,16 @@ with st.sidebar:
             "Feature Importance", key=ConfigStateKeys.IsFeatureImportance
         )
         st.write("Global feature importance methods:")
-        use_permutation = st.checkbox(
-            "Permutation Importance", key=ConfigStateKeys.UsePermutation
-        )
-        use_shap = st.checkbox("SHAP", key=ConfigStateKeys.UseShap)
+        use_permutation = st.checkbox("Permutation Importance")
+        use_shap = st.checkbox("SHAP")
 
         st.write("Feature importance ensemble methods:")
-        use_mean = st.checkbox("Mean", key=ConfigStateKeys.UseMean)
-        use_majority = st.checkbox("Majority vote", key=ConfigStateKeys.UseMajorityVote)
+        use_mean = st.checkbox("Mean")
+        use_majority = st.checkbox("Majority vote")
 
         st.write("Local feature importance methods:")
-        use_lime = st.checkbox("LIME", key=ConfigStateKeys.UseLime)
-        use_local_shap = st.checkbox("Local SHAP", key=ConfigStateKeys.UseLocalShap)
+        use_lime = st.checkbox("LIME")
+        use_local_shap = st.checkbox("Local SHAP")
 
         num_important_features = st.number_input(
             "Number of most important features to plot",

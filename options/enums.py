@@ -17,12 +17,6 @@ class ConfigStateKeys(StrEnum):
     ModelTypes = "model_types"
     # Feature Importance options
     IsFeatureImportance = "is_feature_importance"
-    UsePermutation = "use_permutation"
-    UseShap = "use_shap"
-    UseMean = "use_mean"
-    UseMajorityVote = "use_majority_vote"
-    UseLime = "use_lime"
-    UseLocalShap = "use_local_shap"
     NumberOfImportantFeatures = "num_important_features"
     ScoringFunction = "scoring_function"
     NumberOfRepetitions = "num_repetitions"
