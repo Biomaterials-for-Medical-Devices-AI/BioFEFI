@@ -26,6 +26,8 @@ class ConfigStateKeys(StrEnum):
     ScoringFunction = "scoring_function"
     NumberOfRepetitions = "num_repetitions"
     ShapDataPercentage = "shap_data_percentage"
+    RotateXAxis = "angle_rotate_xaxis_labels"
+    RotateYAxis = "angle_rotate_yaxis_labels"
     # Fuzzy options
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"

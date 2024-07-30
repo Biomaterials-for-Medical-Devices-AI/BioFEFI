@@ -259,6 +259,20 @@ with st.sidebar:
             100,
             key=ConfigStateKeys.ShapDataPercentage,
         )
+        angle_rotate_xaxis_labels = st.number_input(
+            "Angle to rotate X-axis labels",
+            min_value=0,
+            max_value=360,
+            value=10,
+            key=ConfigStateKeys.RotateXAxis,
+        )
+        angle_rotate_yaxis_labels = st.number_input(
+            "Angle to rotate Y-axis labels",
+            min_value=0,
+            max_value=306,
+            value=60,
+            key=ConfigStateKeys.RotateYAxis,
+        )
 
         # Fuzzy Options
         st.subheader("Fuzzy Options")
