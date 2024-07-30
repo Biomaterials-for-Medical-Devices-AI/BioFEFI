@@ -152,7 +152,6 @@ def cancel_pipeline(p: Process):
         p (Process): the process running the pipeline to cancel.
     """
     if p.is_alive():
-        print("Cancelling pipeline run")
         p.terminate()
 
 
