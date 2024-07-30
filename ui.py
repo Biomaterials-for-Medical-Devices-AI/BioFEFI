@@ -141,24 +141,27 @@ def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     data = DataBuilder(ml_opts, ml_logger).ingest()
 
     # Machine learning
-    trained_models = train.run(ml_opts, data, ml_logger)
-    close_logger(ml_logger_instance, ml_logger)
+    if ml_opts.is_machine_learning:
+        trained_models = train.run(ml_opts, data, ml_logger)
+        close_logger(ml_logger_instance, ml_logger)
 
     # Feature importance
-    fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
-    fi_logger = fi_logger_instance.make_logger()
-    gloabl_importance_results, local_importance_results, ensemble_results = (
-        feature_importance.run(fi_opts, data, trained_models, fi_logger)
-    )
-    close_logger(fi_logger_instance, fi_logger)
+    if fi_opts.is_feature_importance:
+        fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
+        fi_logger = fi_logger_instance.make_logger()
+        gloabl_importance_results, local_importance_results, ensemble_results = (
+            feature_importance.run(fi_opts, data, trained_models, fi_logger)
+        )
+        close_logger(fi_logger_instance, fi_logger)
 
     # Fuzzy interpretation
-    fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
-    fuzzy_logger = fuzzy_logger_instance.make_logger()
-    fuzzy_rules = fuzzy_interpretation.run(
-        fuzzy_opts, ml_opts, data, trained_models, ensemble_results, fuzzy_logger
-    )
-    close_logger(fuzzy_logger_instance, fuzzy_logger)
+    if fuzzy_opts.fuzzy_feature_selection:
+        fuzzy_logger_instance = Logger(fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name)
+        fuzzy_logger = fuzzy_logger_instance.make_logger()
+        fuzzy_rules = fuzzy_interpretation.run(
+            fuzzy_opts, ml_opts, data, trained_models, ensemble_results, fuzzy_logger
+        )
+        close_logger(fuzzy_logger_instance, fuzzy_logger)
 
 
 def cancel_pipeline(p: Process):
