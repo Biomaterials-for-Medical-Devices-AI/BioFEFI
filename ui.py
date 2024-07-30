@@ -66,8 +66,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
         angle_rotate_yaxis_labels=st.session_state[ConfigStateKeys.RotateYAxisLabels],
         save_feature_importance_plots=st.session_state[ConfigStateKeys.SaveFeatureImportancePlots],
         save_feature_importance_options=st.session_state[ConfigStateKeys.SaveFeatureImportanceOptions],
-        save_feature_importance_results=st.session_state[ConfigStateKeys.SaveFeatureImportanceResults]
-        # local_importance_methods=
+        save_feature_importance_results=st.session_state[ConfigStateKeys.SaveFeatureImportanceResults],
+        local_importance_methods=st.session_state[ConfigStateKeys.LocalImportanceFeatures]
         # feature_importance_ensemble=
         # global_importance_methods=
     )
@@ -290,8 +290,14 @@ with st.sidebar:
         use_majority = st.checkbox("Majority vote")
 
         st.write("Local feature importance methods:")
+        local_importance_methods = {}
         use_lime = st.checkbox("LIME")
+        if use_lime:
+            local_importance_methods["LIME"] = {'type': 'local', 'value': use_lime}
         use_local_shap = st.checkbox("Local SHAP")
+        if use_local_shap:
+            local_importance_methods["SHAP"] = {'type': 'local', 'value': use_local_shap}
+        st.session_state[ConfigStateKeys.LocalImportanceFeatures] = local_importance_methods
 
         num_important_features = st.number_input(
             "Number of most important features to plot",

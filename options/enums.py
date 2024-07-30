@@ -26,6 +26,7 @@ class ConfigStateKeys(StrEnum):
     SaveFeatureImportancePlots = "save_feature_importance_plots"
     SaveFeatureImportanceOptions = "save_feature_importance_options"
     SaveFeatureImportanceResults = "save_feature_importance_results"
+    LocalImportanceFeatures = "local_importance_methods"
     # Fuzzy options
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"
