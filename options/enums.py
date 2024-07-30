@@ -14,6 +14,7 @@ class ConfigStateKeys(StrEnum):
     UseRandomForest = "use_rf"
     UseXGBoost = "use_xgb"
     Normalization = "normalization"
+    ModelTypes = "model_types"
     # Feature Importance options
     IsFeatureImportance = "is_feature_importance"
     UsePermutation = "use_permutation"

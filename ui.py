@@ -86,7 +86,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         data_path=path_to_data,
         data_split=st.session_state[ConfigStateKeys.DataSplit],
-        # model_types=
+        model_types=st.session_state[ConfigStateKeys.ModelTypes],
         # ml_log_dir=
         problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
@@ -218,9 +218,57 @@ with st.sidebar:
         )
 
         st.write("Model types to use:")
-        use_linear = st.checkbox("Linear Model", key=ConfigStateKeys.UseLinear)
-        use_rf = st.checkbox("Random Forest", key=ConfigStateKeys.UseRandomForest)
-        use_xgb = st.checkbox("XGBoost", key=ConfigStateKeys.UseXGBoost)
+        model_types = {}
+        use_linear = st.checkbox("Linear Model", value=True)
+        if use_linear:
+            st.write("Options:")
+            fit_intercept = st.checkbox("Fit intercept")
+            model_types["Linear Model"] = {
+                "use": use_linear,
+                "params": {
+                    "fit_intercept": fit_intercept,
+                }
+            }
+            st.divider()
+
+        use_rf = st.checkbox("Random Forest", value=True)
+        if use_rf:
+            st.write("Options:")
+            n_estimators_rf = st.number_input("Number of estimators", value=300, key="n_estimators_rf")
+            min_samples_split = st.number_input("Minimum samples split", value=2)
+            min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
+            max_depth_rf = st.number_input("Maximum depth", value=6, key="max_depth_rf")
+            model_types["Random Forest"] = {
+                "use": use_rf,
+                "params": {
+                    "n_estimators": n_estimators_rf,
+                    "min_samples_split": min_samples_split,
+                    "min_samples_leaf": min_samples_leaf,
+                    "max_depth": max_depth_rf,
+                }
+            }
+            st.divider()
+
+        use_xgb = st.checkbox("XGBoost", value=True)
+        if use_xgb:
+            st.write("Options:")
+            n_estimators_xgb = st.number_input("Number of estimators", value=300, key="n_estimators_xgb")
+            max_depth_xbg = st.number_input("Maximum depth", value=6, key="max_depth_xgb")
+            learning_rate = st.number_input("Learning rate", value=0.01)
+            subsample = st.number_input("Subsample size", value=0.5)
+            model_types["XGBoost"] = {
+                "use": use_xgb,
+                "params": {
+                    "kwargs": {
+                        "n_estimators": n_estimators_xgb,
+                        "max_depth": max_depth_xbg,
+                        "learning_rate": learning_rate,
+                        "subsample": subsample,
+                    }
+                }
+            }
+            st.divider()
+        st.session_state[ConfigStateKeys.ModelTypes] = model_types
 
         normalization = st.selectbox(
             "Normalization",
