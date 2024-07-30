@@ -68,8 +68,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
         save_feature_importance_options=st.session_state[ConfigStateKeys.SaveFeatureImportanceOptions],
         save_feature_importance_results=st.session_state[ConfigStateKeys.SaveFeatureImportanceResults],
         local_importance_methods=st.session_state[ConfigStateKeys.LocalImportanceFeatures],
-        feature_importance_ensemble=st.session_state[ConfigStateKeys.EnsembleMethods]
-        # global_importance_methods=
+        feature_importance_ensemble=st.session_state[ConfigStateKeys.EnsembleMethods],
+        global_importance_methods=st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods],
     )
     fi_opt = fi_opt.parse()
 
@@ -282,8 +282,12 @@ with st.sidebar:
             "Feature Importance", key=ConfigStateKeys.IsFeatureImportance
         )
         st.write("Global feature importance methods:")
+        global_methods = {}
         use_permutation = st.checkbox("Permutation Importance")
+        global_methods["Permutation Importance"] = {'type': 'global', 'value': use_permutation}
         use_shap = st.checkbox("SHAP")
+        global_methods["SHAP"] = {'type': 'global', 'value': use_shap}
+        st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods] = global_methods
 
         st.write("Feature importance ensemble methods:")
         ensemble_methods = {}
@@ -296,11 +300,9 @@ with st.sidebar:
         st.write("Local feature importance methods:")
         local_importance_methods = {}
         use_lime = st.checkbox("LIME")
-        if use_lime:
-            local_importance_methods["LIME"] = {'type': 'local', 'value': use_lime}
+        local_importance_methods["LIME"] = {'type': 'local', 'value': use_lime}
         use_local_shap = st.checkbox("Local SHAP")
-        if use_local_shap:
-            local_importance_methods["SHAP"] = {'type': 'local', 'value': use_local_shap}
+        local_importance_methods["SHAP"] = {'type': 'local', 'value': use_local_shap}
         st.session_state[ConfigStateKeys.LocalImportanceFeatures] = local_importance_methods
 
         num_important_features = st.number_input(
