@@ -67,7 +67,6 @@ def build_configuration() -> tuple[argparse.Namespace]:
         # save_feature_importance_plots=
         # save_feature_importance_options=
         # save_feature_importance_results=
-        # save_feature_importance_results=
         # local_importance_methods=
         # feature_importance_ensemble=
         # global_importance_methods=
@@ -262,14 +261,14 @@ with st.sidebar:
         angle_rotate_xaxis_labels = st.number_input(
             "Angle to rotate X-axis labels",
             min_value=0,
-            max_value=360,
+            max_value=90,
             value=10,
             key=ConfigStateKeys.RotateXAxisLabels,
         )
         angle_rotate_yaxis_labels = st.number_input(
             "Angle to rotate Y-axis labels",
             min_value=0,
-            max_value=306,
+            max_value=90,
             value=60,
             key=ConfigStateKeys.RotateYAxisLabels,
         )
