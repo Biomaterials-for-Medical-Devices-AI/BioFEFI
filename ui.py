@@ -190,7 +190,7 @@ st.image("ui/bioFEFI header.png")
 # Sidebar
 with st.sidebar:
     st.header("Options")
-    st.checkbox("Feature Engineering", key=ConfigStateKeys.IsFeatureEngineering)
+    # st.checkbox("Feature Engineering", key=ConfigStateKeys.IsFeatureEngineering)
 
     # Machine Learning Options
     ml_on = st.checkbox("Machine Learning", key=ConfigStateKeys.IsMachineLearning)
