@@ -134,7 +134,7 @@ def save_upload(file_to_upload: str, content: str):
         f.write(content)
 
 
-def _pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
+def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     """This function actually performs the steps of the pipeline. It can be wrapped
     in a process it doesn't block the UI.
 
@@ -446,7 +446,7 @@ if uploaded_file is not None and run_button:
     upload_path = uploaded_file_path(uploaded_file.name)
     save_upload(upload_path, uploaded_file.read().decode("utf-8"))
     config = build_configuration()
-    process = Process(target=_pipeline, args=config, daemon=True)
+    process = Process(target=pipeline, args=config, daemon=True)
     process.start()
     cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
     df = pd.read_csv(upload_path)
