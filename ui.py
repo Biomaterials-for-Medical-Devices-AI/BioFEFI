@@ -11,10 +11,9 @@ from machine_learning.call_methods import save_actual_pred_plots
 from machine_learning.data import DataBuilder
 from machine_learning.ml_options import MLOptions
 from options.enums import ConfigStateKeys
-from options.file_paths import uploaded_file_path
+from options.file_paths import uploaded_file_path, log_dir
 from utils.logging_utils import Logger, close_logger
 from utils.utils import set_seed
-from pathlib import Path
 import streamlit as st
 import os
 
@@ -134,15 +133,14 @@ def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
     """
     seed = ml_opts.random_state
     set_seed(seed)
-    ml_logger_instance = Logger(ml_opts.ml_log_dir, ml_opts.experiment_name)
-    ml_logger = ml_logger_instance.make_logger()
+    logger_instance = Logger(log_dir(st.session_state[ConfigStateKeys.ExperimentName]))
+    logger = logger_instance.make_logger()
 
-    data = DataBuilder(ml_opts, ml_logger).ingest()
+    data = DataBuilder(ml_opts, logger).ingest()
 
     # Machine learning
     if ml_opts.is_machine_learning:
-        trained_models = train.run(ml_opts, data, ml_logger)
-        close_logger(ml_logger_instance, ml_logger)
+        trained_models = train.run(ml_opts, data, logger)
 
     # Feature importance
     if fi_opts.is_feature_importance:
@@ -151,7 +149,6 @@ def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
         gloabl_importance_results, local_importance_results, ensemble_results = (
             feature_importance.run(fi_opts, data, trained_models, fi_logger)
         )
-        close_logger(fi_logger_instance, fi_logger)
 
     # Fuzzy interpretation
     if fuzzy_opts.fuzzy_feature_selection:
@@ -162,7 +159,9 @@ def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
         fuzzy_rules = fuzzy_interpretation.run(
             fuzzy_opts, ml_opts, data, trained_models, ensemble_results, fuzzy_logger
         )
-        close_logger(fuzzy_logger_instance, fuzzy_logger)
+
+    # Close the logger
+    close_logger(logger_instance, logger)
 
 
 def cancel_pipeline(p: Process):
