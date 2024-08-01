@@ -1,13 +1,15 @@
 from pathlib import Path
 
 
-def uploaded_file_path(file_name: str) -> str:
+def uploaded_file_path(file_name: str, exeperiment_name: str) -> Path:
     """Create the full upload path for data file uploads.
 
     Args:
         file_name (str): The name of the file.
+        exeperiment_name (str): The name of the experiment. This will be used
+        to create a subdirectory with the this value.
 
     Returns:
-        str: The full upload path for the file.
+        Path: The full upload path for the file.
     """
-    return Path.home() / ".BioFEFIUploads" / file_name
+    return Path.home() / ".BioFEFIUploads" / exeperiment_name / file_name

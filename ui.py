@@ -440,7 +440,7 @@ run_button = st.button("Run")
 
 
 if uploaded_file is not None and run_button:
-    upload_path = uploaded_file_path(uploaded_file.name)
+    upload_path = uploaded_file_path(uploaded_file.name, experiment_name)
     save_upload(upload_path, uploaded_file.read().decode("utf-8"))
     config = build_configuration()
     process = Process(target=pipeline, args=config, daemon=True)
