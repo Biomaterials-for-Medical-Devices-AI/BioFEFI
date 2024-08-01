@@ -18,15 +18,14 @@ def uploaded_file_path(file_name: str, exeperiment_name: str) -> Path:
     return BASE_DIR / exeperiment_name / file_name
 
 
-def log_file(file_name: str, exeperiment_name: str) -> Path:
+def log_dir(exeperiment_name: str) -> Path:
     """Create the full upload path for experiment log files.
 
     Args:
-        file_name (str): The name of the file.
         exeperiment_name (str): The name of the experiment. This will be used
         to create a subdirectory with the this value.
 
     Returns:
         Path: The full upload path for the file.
     """
-    return BASE_DIR / exeperiment_name / "logs" / file_name
+    return BASE_DIR / exeperiment_name / "logs"
