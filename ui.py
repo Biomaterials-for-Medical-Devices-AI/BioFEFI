@@ -11,6 +11,7 @@ from machine_learning.call_methods import save_actual_pred_plots
 from machine_learning.data import DataBuilder
 from machine_learning.ml_options import MLOptions
 from options.enums import ConfigStateKeys
+from options.file_paths import uploaded_file_path
 from utils.logging_utils import Logger, close_logger
 from utils.utils import set_seed
 from pathlib import Path
@@ -106,19 +107,6 @@ def build_configuration() -> tuple[argparse.Namespace]:
     ml_opt = ml_opt.parse()
 
     return fuzzy_opt, fi_opt, ml_opt
-
-
-@st.cache_data
-def uploaded_file_path(file_name: str) -> str:
-    """Create the full upload path for data file uploads.
-
-    Args:
-        file_name (str): The name of the file.
-
-    Returns:
-        str: The full upload path for the file.
-    """
-    return Path.home() / "BioFEFIUploads" / file_name
 
 
 def save_upload(file_to_upload: str, content: str):
@@ -260,7 +248,9 @@ with st.sidebar:
                 )
                 min_samples_split = st.number_input("Minimum samples split", value=2)
                 min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
-                max_depth_rf = st.number_input("Maximum depth", value=6, key="max_depth_rf")
+                max_depth_rf = st.number_input(
+                    "Maximum depth", value=6, key="max_depth_rf"
+                )
                 model_types["Random Forest"] = {
                     "use": use_rf,
                     "params": {
@@ -304,9 +294,7 @@ with st.sidebar:
             )
 
     # Feature Importance Options
-    fi_on = st.checkbox(
-        "Feature Importance", key=ConfigStateKeys.IsFeatureImportance
-    )
+    fi_on = st.checkbox("Feature Importance", key=ConfigStateKeys.IsFeatureImportance)
     if fi_on:
         with st.expander("Feature importance options"):
             st.write("Global feature importance methods:")
@@ -335,7 +323,10 @@ with st.sidebar:
             use_lime = st.checkbox("LIME")
             local_importance_methods["LIME"] = {"type": "local", "value": use_lime}
             use_local_shap = st.checkbox("Local SHAP")
-            local_importance_methods["SHAP"] = {"type": "local", "value": use_local_shap}
+            local_importance_methods["SHAP"] = {
+                "type": "local",
+                "value": use_local_shap,
+            }
             st.session_state[ConfigStateKeys.LocalImportanceFeatures] = (
                 local_importance_methods
             )
@@ -418,7 +409,8 @@ with st.sidebar:
                     key=ConfigStateKeys.NumberOfClusters,
                 )
                 cluster_names = st.text_input(
-                    "Names of clusters (comma-separated)", key=ConfigStateKeys.ClusterNames
+                    "Names of clusters (comma-separated)",
+                    key=ConfigStateKeys.ClusterNames,
                 )
                 num_top_rules = st.number_input(
                     "Number of top occurring rules for fuzzy synergy analysis",
