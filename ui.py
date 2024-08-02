@@ -1,5 +1,6 @@
 from argparse import Namespace
 from multiprocessing import Process
+from pathlib import Path
 from numba.cuda import initialize
 from components.images.logos import header_logo, sidebar_logo
 from components.logs import log_box
@@ -172,6 +173,33 @@ def cancel_pipeline(p: Process):
     """
     if p.is_alive():
         p.terminate()
+
+
+def get_logs(log_dir: Path) -> str:
+    """Get the latest log file for the latest run to display.
+
+    Args:
+        log_dir (Path): The directory to search for the latest logs.
+
+    Raises:
+        NotADirectoryError: `log_dir` does not point to a directory.
+
+    Returns:
+        str: The text of the latest log file.
+    """
+    if not log_dir.is_dir():
+        raise NotADirectoryError(f"{log_dir} is not a directory")
+
+    files = list(log_dir.iterdir())
+    ctimes = [os.path.getctime(f) for f in files]
+    most_recent = max(ctimes)
+    index_most_recent = ctimes.index(most_recent)
+
+    with open(files[index_most_recent], "r") as log:
+        text = log.read()
+        print(f"The text is: {text}")
+
+    return text
 
 
 header_logo()
@@ -449,8 +477,7 @@ if uploaded_file is not None and run_button:
     st.write("Columns:", df.columns.tolist())
     st.write("Target variable:", df.columns[-1])
 
-    log_text = ""
-    lox_box = log_box(value=log_text)
+    log_box()
 
     # Model training status
     st.header("Model Training Status")
