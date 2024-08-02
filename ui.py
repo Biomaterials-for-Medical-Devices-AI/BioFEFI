@@ -1,5 +1,4 @@
 from argparse import Namespace
-import argparse
 from multiprocessing import Process
 from numba.cuda import initialize
 from components.images.logos import header_logo, sidebar_logo
@@ -21,11 +20,12 @@ import os
 import pandas as pd
 
 
-def build_configuration() -> tuple[argparse.Namespace]:
+def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
     """Build the configuration objects for the pipeline.
 
     Returns:
-        tuple[argparse.Namespace]: The configuration for fuzzy, FI and ML pipelines.
+        tuple[Namespace, Namespace, Namespace, str]: The configuration for fuzzy, FI and ML pipelines,
+        and the experiment name.
     """
 
     fuzzy_opt = FuzzyOptions()
@@ -87,7 +87,8 @@ def build_configuration() -> tuple[argparse.Namespace]:
     ml_opt = MLOptions()
     ml_opt.initialize()
     path_to_data = uploaded_file_path(
-        st.session_state[ConfigStateKeys.UploadedFileName].name
+        st.session_state[ConfigStateKeys.UploadedFileName].name,
+        st.session_state[ConfigStateKeys.ExperimentName],
     )
     ml_opt.parser.set_defaults(
         n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
@@ -105,7 +106,7 @@ def build_configuration() -> tuple[argparse.Namespace]:
     )
     ml_opt = ml_opt.parse()
 
-    return fuzzy_opt, fi_opt, ml_opt
+    return fuzzy_opt, fi_opt, ml_opt, st.session_state[ConfigStateKeys.ExperimentName]
 
 
 def save_upload(file_to_upload: str, content: str):
@@ -122,7 +123,9 @@ def save_upload(file_to_upload: str, content: str):
         f.write(content)
 
 
-def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
+def pipeline(
+    fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace, experiment_name: str
+):
     """This function actually performs the steps of the pipeline. It can be wrapped
     in a process it doesn't block the UI.
 
@@ -130,10 +133,11 @@ def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
         fuzzy_opts (Namespace): Options for fuzzy feature importance.
         fi_opts (Namespace): Options for feature importance.
         ml_opts (Namespace): Options for machine learning.
+        experiment_name (str): The name of the experiment.
     """
     seed = ml_opts.random_state
     set_seed(seed)
-    logger_instance = Logger(log_dir(st.session_state[ConfigStateKeys.ExperimentName]))
+    logger_instance = Logger(log_dir(experiment_name))
     logger = logger_instance.make_logger()
 
     data = DataBuilder(ml_opts, logger).ingest()
@@ -144,20 +148,14 @@ def pipeline(fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace):
 
     # Feature importance
     if fi_opts.is_feature_importance:
-        fi_logger_instance = Logger(fi_opts.fi_log_dir, fi_opts.experiment_name)
-        fi_logger = fi_logger_instance.make_logger()
         gloabl_importance_results, local_importance_results, ensemble_results = (
-            feature_importance.run(fi_opts, data, trained_models, fi_logger)
+            feature_importance.run(fi_opts, data, trained_models, logger)
         )
 
     # Fuzzy interpretation
     if fuzzy_opts.fuzzy_feature_selection:
-        fuzzy_logger_instance = Logger(
-            fuzzy_opts.fuzzy_log_dir, fuzzy_opts.experiment_name
-        )
-        fuzzy_logger = fuzzy_logger_instance.make_logger()
         fuzzy_rules = fuzzy_interpretation.run(
-            fuzzy_opts, ml_opts, data, trained_models, ensemble_results, fuzzy_logger
+            fuzzy_opts, ml_opts, data, trained_models, ensemble_results, logger
         )
 
     # Close the logger
