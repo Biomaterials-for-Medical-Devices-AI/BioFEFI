@@ -2,6 +2,7 @@ from argparse import Namespace
 from multiprocessing import Process
 from numba.cuda import initialize
 from components.images.logos import header_logo, sidebar_logo
+from components.logs import log_box
 from feature_importance import feature_importance, fuzzy_interpretation
 from feature_importance.feature_importance_options import FeatureImportanceOptions
 from feature_importance.fuzzy_options import FuzzyOptions
@@ -447,6 +448,9 @@ if uploaded_file is not None and run_button:
     df = pd.read_csv(upload_path)
     st.write("Columns:", df.columns.tolist())
     st.write("Target variable:", df.columns[-1])
+
+    log_text = ""
+    lox_box = log_box(value=log_text)
 
     # Model training status
     st.header("Model Training Status")
