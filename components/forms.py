@@ -1,6 +1,6 @@
 import streamlit as st
 
-from options.enums import ConfigStateKeys
+from options.enums import ConfigStateKeys, ExecutionStateKeys
 
 
 def data_upload_form():
@@ -12,4 +12,4 @@ def data_upload_form():
     st.file_uploader(
         "Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName
     )
-    st.button("Run", key=ConfigStateKeys.RunPipeline)
+    st.button("Run", key=ExecutionStateKeys.RunPipeline)
