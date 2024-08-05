@@ -10,6 +10,6 @@ def log_box() -> str:
     """
     return st.text_area(
         "Logs",
-        # value=st.session_state.get(ConfigStateKeys.LogBox, ""),
+        value=st.session_state.get(ConfigStateKeys.LogBox, ""),
         key=ConfigStateKeys.LogBox,
     )
