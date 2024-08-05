@@ -48,5 +48,3 @@ class ConfigStateKeys(StrEnum):
 
 class ExecutionStateKeys(StrEnum):
     RunPipeline = "run_pipeline"
-    RunComplete = "run_complete"
-    PipelineProcess = "pipeline_process"
