@@ -12,4 +12,5 @@ def log_box() -> str:
         "Logs",
         value=st.session_state.get(ConfigStateKeys.LogBox, ""),
         key=ConfigStateKeys.LogBox,
+        height=200,
     )
