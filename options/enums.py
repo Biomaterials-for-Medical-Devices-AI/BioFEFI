@@ -44,3 +44,4 @@ class ConfigStateKeys(StrEnum):
     UploadedFileName = "uploaded_file_name"
     RandomSeed = "random_seed"
     LogBox = "log_box"
+    RunPipeline = "run_pipeline"

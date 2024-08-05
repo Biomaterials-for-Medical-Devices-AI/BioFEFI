@@ -4,6 +4,7 @@ from pathlib import Path
 from numba.cuda import initialize
 from components.images.logos import header_logo, sidebar_logo
 from components.logs import log_box
+from components.forms import data_upload_form
 from feature_importance import feature_importance, fuzzy_interpretation
 from feature_importance.feature_importance_options import FeatureImportanceOptions
 from feature_importance.fuzzy_options import FuzzyOptions
@@ -453,20 +454,13 @@ with st.sidebar:
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
     )
 # Main body
-st.header("Data Upload")
-experiment_name = st.text_input(
-    "Name of the experiment", key=ConfigStateKeys.ExperimentName
-)
-dependent_variable = st.text_input(
-    "Name of the dependent variable", key=ConfigStateKeys.DependentVariableName
-)
-uploaded_file = st.file_uploader(
-    "Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName
-)
-run_button = st.button("Run")
+data_upload_form()
 
 
-if uploaded_file is not None and run_button:
+if (
+    uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
+) and st.session_state.get(ConfigStateKeys.RunPipeline, False):
+    experiment_name = st.session_state.get(ConfigStateKeys.ExperimentName)
     upload_path = uploaded_file_path(uploaded_file.name, experiment_name)
     save_upload(upload_path, uploaded_file.read().decode("utf-8"))
     config = build_configuration()
