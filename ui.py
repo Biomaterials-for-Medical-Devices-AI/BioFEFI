@@ -1,10 +1,9 @@
 from argparse import Namespace
 from multiprocessing import Process
-from pathlib import Path
-from numba.cuda import initialize
 from components.images.logos import header_logo, sidebar_logo
 from components.logs import log_box
 from components.forms import data_upload_form
+from services.logs import get_logs
 from feature_importance import feature_importance, fuzzy_interpretation
 from feature_importance.feature_importance_options import FeatureImportanceOptions
 from feature_importance.fuzzy_options import FuzzyOptions
@@ -12,15 +11,12 @@ from machine_learning import train
 from machine_learning.call_methods import save_actual_pred_plots
 from machine_learning.data import DataBuilder
 from machine_learning.ml_options import MLOptions
-from options.enums import ConfigStateKeys
+from options.enums import ConfigStateKeys, ExecutionStateKeys
 from options.file_paths import uploaded_file_path, log_dir
 from utils.logging_utils import Logger, close_logger
 from utils.utils import set_seed
 import streamlit as st
 import os
-
-
-import pandas as pd
 
 
 def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
@@ -176,35 +172,8 @@ def cancel_pipeline(p: Process):
         p.terminate()
 
 
-def get_logs(log_dir: Path) -> str:
-    """Get the latest log file for the latest run to display.
-
-    Args:
-        log_dir (Path): The directory to search for the latest logs.
-
-    Raises:
-        NotADirectoryError: `log_dir` does not point to a directory.
-
-    Returns:
-        str: The text of the latest log file.
-    """
-    if not log_dir.is_dir():
-        raise NotADirectoryError(f"{log_dir} is not a directory")
-
-    files = list(log_dir.iterdir())
-    ctimes = [os.path.getctime(f) for f in files]
-    most_recent = max(ctimes)
-    index_most_recent = ctimes.index(most_recent)
-
-    with open(files[index_most_recent], "r") as log:
-        text = log.read()
-        print(f"The text is: {text}")
-
-    return text
-
-
+## Page contents
 header_logo()
-# Sidebar
 sidebar_logo()
 with st.sidebar:
     st.header("Options")
@@ -453,13 +422,13 @@ with st.sidebar:
     seed = st.number_input(
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
     )
-# Main body
 data_upload_form()
 
 
+# If the user has uploaded a file and pressed the run button, run the pipeline
 if (
     uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
-) and st.session_state.get(ConfigStateKeys.RunPipeline, False):
+) and st.session_state.get(ExecutionStateKeys.RunPipeline, False):
     experiment_name = st.session_state.get(ConfigStateKeys.ExperimentName)
     upload_path = uploaded_file_path(uploaded_file.name, experiment_name)
     save_upload(upload_path, uploaded_file.read().decode("utf-8"))
@@ -467,34 +436,8 @@ if (
     process = Process(target=pipeline, args=config, daemon=True)
     process.start()
     cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
-    df = pd.read_csv(upload_path)
-    st.write("Columns:", df.columns.tolist())
-    st.write("Target variable:", df.columns[-1])
-
+    with st.spinner("Running pipeline..."):
+        # wait for the process to finish or be cancelled
+        process.join()
+    st.session_state[ConfigStateKeys.LogBox] = get_logs(log_dir(experiment_name))
     log_box()
-
-    # # Model training status
-    # st.header("Model Training Status")
-    # if use_linear:
-    #     st.checkbox("Linear Model", value=False, disabled=True)
-    # if use_rf:
-    #     st.checkbox("Random Forest", value=False, disabled=True)
-    # if use_xgb:
-    #     st.checkbox("XGBoost", value=False, disabled=True)
-
-    # # Plot selection
-    # st.header("Plots")
-    # plot_options = [
-    #     "Metric values across bootstrap samples",
-    #     "Feature importance plots",
-    # ]
-    # selected_plots = st.multiselect("Select plots to display", plot_options)
-
-    # for plot in selected_plots:
-    #     st.subheader(plot)
-    #     st.write("Placeholder for", plot)
-
-    # # Feature importance description
-    # st.header("Feature Importance Description")
-    # if st.button("Generate Feature Importance Description"):
-    #     st.write("Placeholder for feature importance description")
