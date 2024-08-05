@@ -473,28 +473,28 @@ if (
 
     log_box()
 
-    # Model training status
-    st.header("Model Training Status")
-    if use_linear:
-        st.checkbox("Linear Model", value=False, disabled=True)
-    if use_rf:
-        st.checkbox("Random Forest", value=False, disabled=True)
-    if use_xgb:
-        st.checkbox("XGBoost", value=False, disabled=True)
+    # # Model training status
+    # st.header("Model Training Status")
+    # if use_linear:
+    #     st.checkbox("Linear Model", value=False, disabled=True)
+    # if use_rf:
+    #     st.checkbox("Random Forest", value=False, disabled=True)
+    # if use_xgb:
+    #     st.checkbox("XGBoost", value=False, disabled=True)
 
-    # Plot selection
-    st.header("Plots")
-    plot_options = [
-        "Metric values across bootstrap samples",
-        "Feature importance plots",
-    ]
-    selected_plots = st.multiselect("Select plots to display", plot_options)
+    # # Plot selection
+    # st.header("Plots")
+    # plot_options = [
+    #     "Metric values across bootstrap samples",
+    #     "Feature importance plots",
+    # ]
+    # selected_plots = st.multiselect("Select plots to display", plot_options)
 
-    for plot in selected_plots:
-        st.subheader(plot)
-        st.write("Placeholder for", plot)
+    # for plot in selected_plots:
+    #     st.subheader(plot)
+    #     st.write("Placeholder for", plot)
 
-    # Feature importance description
-    st.header("Feature Importance Description")
-    if st.button("Generate Feature Importance Description"):
-        st.write("Placeholder for feature importance description")
+    # # Feature importance description
+    # st.header("Feature Importance Description")
+    # if st.button("Generate Feature Importance Description"):
+    #     st.write("Placeholder for feature importance description")
