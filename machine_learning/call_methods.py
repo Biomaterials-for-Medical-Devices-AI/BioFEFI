@@ -41,6 +41,6 @@ def save_actual_pred_plots(data, results, opt: argparse.Namespace, logger) -> No
                 plt.title(f"Test Sets - {model_name}")
                 plt.xlabel("Predicted")
                 plt.ylabel("Actual")
-                plt.savefig(f"{directory}{model_name}.png")
+                plt.savefig(f"{directory}/{model_name}.png")
                 # plt.show()
                 plt.close()
