@@ -3,6 +3,7 @@ from multiprocessing import Process
 from components.images.logos import header_logo, sidebar_logo
 from components.logs import log_box
 from components.forms import data_upload_form
+from components.plots import ml_plots
 from services.logs import get_logs
 from feature_importance import feature_importance, fuzzy_interpretation
 from feature_importance.feature_importance_options import FeatureImportanceOptions
@@ -452,3 +453,4 @@ if (
         process.join()
     st.session_state[ConfigStateKeys.LogBox] = get_logs(log_dir(experiment_name))
     log_box()
+    ml_plots(ml_plot_dir(experiment_name))
