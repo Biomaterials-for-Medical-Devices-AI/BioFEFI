@@ -6,20 +6,31 @@ import numpy as np
 
 
 def plot_scatter(y, yp, r2, set_name, dependent_variable, model_name, directory):
+    
+    # Create a scatter plot using Seaborn
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(x=y, y=yp)
 
-    # Plotting the dataset
-    fig, ax = plt.subplots()
-    ax.scatter(y, yp)
-    ax.plot([y.min(), y.max()], [y.min(), y.max()], "k--", lw=4)
-    ax.set_xlabel("Measured " + dependent_variable, fontsize=13)
-    ax.set_ylabel("Predicted " + dependent_variable, fontsize=13)
+    # Add the best fit line
+    plt.plot([y.min(), y.max()], [y.min(), y.max()], "k--", lw=4)
+
+    # Set labels and title
+    plt.xlabel("Measured " + dependent_variable, fontsize=13)
+    plt.ylabel("Predicted " + dependent_variable, fontsize=13)
     figure_title = "Prediction Error for " + model_name + " - " + set_name
     plt.title(figure_title, fontsize=13)
+
+    # Add legend
     legend = "R2: " + str(float("{0:.2f}".format(r2["value"])))
     plt.legend(["Best fit", legend], loc="upper left", fontsize=13)
+
+    # Add grid
     plt.grid(axis="both")
+
+    # Save the figure
     plt.savefig(f"{directory}/{model_name}-{set_name}.png")
     plt.close()
+
 
 
 def save_actual_pred_plots(
