@@ -115,6 +115,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             problem_type=st.session_state[ConfigStateKeys.ProblemType].lower(),
             random_state=st.session_state[ConfigStateKeys.RandomSeed],
             is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning],
+            save_models=st.session_state[ConfigStateKeys.SaveModels],
         )
     ml_opt = ml_opt.parse()
 
