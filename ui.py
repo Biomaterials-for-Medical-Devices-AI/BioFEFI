@@ -6,6 +6,7 @@ from components.forms import data_upload_form
 from components.plots import ml_plots
 from components.configuration import ml_options
 from services.logs import get_logs
+from services.ml_models import save_model
 from feature_importance import feature_importance, fuzzy_interpretation
 from feature_importance.feature_importance_options import FeatureImportanceOptions
 from feature_importance.fuzzy_options import FuzzyOptions
@@ -13,7 +14,7 @@ from machine_learning import train
 from machine_learning.data import DataBuilder
 from machine_learning.ml_options import MLOptions
 from options.enums import ConfigStateKeys, ExecutionStateKeys
-from options.file_paths import uploaded_file_path, log_dir, ml_plot_dir
+from options.file_paths import uploaded_file_path, log_dir, ml_plot_dir, ml_model_dir
 from utils.logging_utils import Logger, close_logger
 from utils.utils import set_seed
 import streamlit as st
@@ -157,6 +158,11 @@ def pipeline(
     if ml_opts.is_machine_learning:
         data = DataBuilder(ml_opts, logger).ingest()
         trained_models = train.run(ml_opts, data, logger)
+        if ml_opts.save_models:
+            for model_name in trained_models:
+                for i, model in enumerate(trained_models[model_name]):
+                    save_path = ml_model_dir(experiment_name) / f"{model_name}-{i}.pkl"
+                    save_model(model, save_path)
 
         # Feature importance
         if fi_opts.is_feature_importance:
