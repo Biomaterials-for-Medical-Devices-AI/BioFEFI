@@ -3,9 +3,9 @@ import streamlit as st
 
 
 def ml_options():
-    ml_on = True
-    st.session_state[ConfigStateKeys.IsMachineLearning] = ml_on
-    # ml_on = st.checkbox("Machine Learning", key=ConfigStateKeys.IsMachineLearning)
+    ml_on = st.checkbox(
+        "Machine Learning", key=ConfigStateKeys.IsMachineLearning, value=True
+    )
     if ml_on:
         with st.expander("Machine Learning Options"):
             st.subheader("Machine Learning Options")
@@ -13,7 +13,7 @@ def ml_options():
                 "Problem type",
                 ["Classification", "Regression"],
                 key=ConfigStateKeys.ProblemType,
-            ).lower()
+            )
             data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
             if data_split == "Holdout":
                 split_size = st.number_input(
