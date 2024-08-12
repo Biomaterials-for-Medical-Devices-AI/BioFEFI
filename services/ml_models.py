@@ -1,5 +1,5 @@
 from pathlib import Path
-from pickle import dump, load
+from pickle import UnpicklingError, dump, load
 
 
 def save_model(model, path: Path):
@@ -25,12 +25,15 @@ def load_models(path: Path) -> dict[str, list]:
     """
     models: dict[str, list] = dict()
     for file_name in path.iterdir():
-        with open(file_name, "rb") as file:
-            model = load(file)
-            model_name = model.__class__.__name__
-            if model_name in models:
-                models[model_name].append(model)
-            else:
-                models[model_name] = [model_name]
+        try:
+            with open(file_name, "rb") as file:
+                model = load(file)
+                model_name = model.__class__.__name__
+                if model_name in models:
+                    models[model_name].append(model)
+                else:
+                    models[model_name] = [model_name]
+        except UnpicklingError:
+            pass  # ignore bad files
 
     return models
