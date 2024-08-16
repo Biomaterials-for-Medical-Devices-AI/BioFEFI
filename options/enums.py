@@ -70,3 +70,10 @@ class Normalisations(StrEnum):
     Standardization = "standardization"
     MinMax = "minmax"
     NoNormalisation = "none"  # field name can't be None
+
+
+class ModelNames(StrEnum):
+    LinearModel = "linear model"
+    RandomForest = "random forest"
+    XGBoost = "xgboost"
+    SVM = "svm"
