@@ -115,4 +115,4 @@ def ml_options():
         st.checkbox(
             "Save actual or predicted plots", key=ConfigStateKeys.SavePlots, value=True
         )
-        st.checkbox("Save models", key=ConfigStateKeys.SaveModels, value=True)
+        st.checkbox("Save models", key=ConfigStateKeys.SaveModels)
