@@ -41,7 +41,21 @@ class DataBuilder:
         y = df.iloc[:, -1]
         return X, y
 
-    def _generate_data_splits(self, X, y) -> Dict[str, List[pd.DataFrame]]:
+    def _generate_data_splits(
+        self, X: pd.DataFrame, y: pd.DataFrame
+    ) -> Dict[str, List[pd.DataFrame]]:
+        """Generate data splits for bootstrapping.
+
+        Args:
+            X (pd.DataFrame): The training data.
+            y (pd.DataFrame): The prediction targets.
+
+        Raises:
+            NotImplementedError: Tried to use an unimplemented data split method.
+
+        Returns:
+            Dict[str, List[pd.DataFrame]]: The bootstrapped data.
+        """
         X_train_list, X_test_list, y_train_list, y_test_list = [], [], [], []
 
         if self._data_split["type"].lower() == DataSplitMethods.Holdout:
