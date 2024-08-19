@@ -33,8 +33,8 @@ class DataBuilder:
 
         Returns
         -------
-        Dict[str, pd.DataFrame]
-            The data loaded from the csv file
+        Tuple[pd.DataFrame, pd.DataFrame]
+            The training data (X) and the targets (y)
         """
         df = pd.read_csv(self._path)
         X = df.iloc[:, :-1]
@@ -71,33 +71,17 @@ class DataBuilder:
             "y_test": y_test_list,
         }
 
-    def normalise_data(
+    def _normalise_data(
         self,
-        X_train: pd.DataFrame,
-        X_test: pd.DataFrame,
+        data: pd.DataFrame,
     ) -> pd.DataFrame:
         """
         Normalise data using MinMaxScaler
 
         Parameters
         ----------
-        X_train : pd.DataFrame
-            Train data to normalise
-        X_test : pd.DataFrame
-            Test data to normalise
-        normalization : str
-            Normalization method to use
-            Options:
-            'standardization' : Standardize features by removing the mean and scaling to unit variance
-            'minmax' : Scales features to 0-1
-        numerical_cols : str or list
-            List of numerical columns to normalise
-            Options:
-                'all' : Normalise all columns
-                list : Normalise only the columns in the list
-                'none' : Do not normalise any columns
-        logger : object
-            The logger to use for logging
+        data : pd.DataFrame
+            The data to normalise
 
         Returns
         -------
@@ -105,7 +89,7 @@ class DataBuilder:
             Dataframe of normalised data
         """
         if self._normalization.lower() == Normalisations.NoNormalisation:
-            return X_train, X_test, None
+            return data
 
         self._logger.info(f"Normalising data using {self._normalization}...")
 
@@ -117,32 +101,24 @@ class DataBuilder:
             )
 
         if isinstance(self._numerical_cols, str) and self._numerical_cols == "all":
-            self._numerical_cols = X_train.columns
+            self._numerical_cols = data.columns
         elif type(self._numerical_cols) == pd.Index:
             pass
         else:
             raise TypeError("numerical_cols must be a list of columns or 'all'.")
-        X_train[self._numerical_cols] = scaler.fit_transform(
-            X_train[self._numerical_cols]
-        )
-        X_test[self._numerical_cols] = scaler.transform(X_test[self._numerical_cols])
-        return X_train, X_test, scaler
+        data[self._numerical_cols] = scaler.fit_transform(data[self._numerical_cols])
+        return data
 
     def ingest(self):
-        data = self._load_data()
-        data_scaler = {"scaler": []}
-        for i in range(self._n_bootstraps):
-            data["X_train"][i], data["X_test"][i], scaler = self.normalise_data(
-                data["X_train"][i], data["X_test"][i]
-            )
-            data_scaler["scaler"].append(scaler)
+        X, y = self._load_data()
+        X_norm = self._normalise_data(X)
+        data = self._generate_data_splits(X_norm, y)
 
         return TabularData(
             X_train=data["X_train"],
             X_test=data["X_test"],
             y_train=data["y_train"],
             y_test=data["y_test"],
-            scaler=data_scaler["scaler"],
         )
 
 
@@ -153,4 +129,3 @@ class TabularData:
     X_test: list[pd.DataFrame]
     y_train: list[pd.DataFrame]
     y_test: list[pd.DataFrame]
-    scaler: list[object]
