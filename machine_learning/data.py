@@ -113,6 +113,7 @@ class DataBuilder:
                 f"Normalization {self._normalization} is not available. "
                 f"Choices are {self._normalization_dict.keys()}"
             )
+        scaler = scaler()  # create the scaler object
 
         if isinstance(self._numerical_cols, str) and self._numerical_cols == "all":
             self._numerical_cols = data.columns
