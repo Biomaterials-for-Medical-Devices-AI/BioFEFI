@@ -1,16 +1,22 @@
 import argparse
 from dataclasses import dataclass
-from typing import Dict
-from typing import Dict, List, Any
-import numpy as np
+from typing import Dict, List, Tuple
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+from options.enums import DataSplitMethods, Normalisations
 
 
 class DataBuilder:
     """
     Data builder class
     """
+
+    _normalization_dict = {
+        Normalisations.MinMax: MinMaxScaler,
+        Normalisations.Standardization: StandardScaler,
+    }
 
     def __init__(self, opt: argparse.Namespace, logger: object = None) -> None:
         self._path = opt.data_path
@@ -21,7 +27,7 @@ class DataBuilder:
         self._numerical_cols = "all"
         self._n_bootstraps = opt.n_bootstraps
 
-    def _load_data(self) -> Dict[str, pd.DataFrame]:
+    def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Load data from a csv file
 
@@ -33,10 +39,13 @@ class DataBuilder:
         df = pd.read_csv(self._path)
         X = df.iloc[:, :-1]
         y = df.iloc[:, -1]
+        return X, y
+
+    def _generate_data_splits(self, X, y) -> Dict[str, List[pd.DataFrame]]:
         X_train_list, X_test_list, y_train_list, y_test_list = [], [], [], []
 
-        for i in range(self._n_bootstraps):
-            if self._data_split["type"].lower() == "holdout":
+        if self._data_split["type"].lower() == DataSplitMethods.Holdout:
+            for i in range(self._n_bootstraps):
                 self._logger.info(
                     f"Using holdout data split with test size {self._data_split['test_size']} for bootstrap {i+1}"
                 )
@@ -50,10 +59,10 @@ class DataBuilder:
                 X_test_list.append(X_test)
                 y_train_list.append(y_train)
                 y_test_list.append(y_test)
-            else:
-                raise NotImplementedError(
-                    f"Data split type {self._data_split['type']} is not implemented"
-                )
+        else:
+            raise NotImplementedError(
+                f"Data split type {self._data_split['type']} is not implemented"
+            )
 
         return {
             "X_train": X_train_list,
@@ -95,22 +104,16 @@ class DataBuilder:
         X : pd.DataFrame
             Dataframe of normalised data
         """
-        if self._normalization.lower() == "none":
+        if self._normalization.lower() == Normalisations.NoNormalisation:
             return X_train, X_test, None
 
         self._logger.info(f"Normalising data using {self._normalization}...")
 
-        if self._normalization.lower() == "standardization":
-            from sklearn.preprocessing import StandardScaler
-
-            scaler = StandardScaler()
-        elif self._normalization.lower() == "minmax":
-            from sklearn.preprocessing import MinMaxScaler
-
-            scaler = MinMaxScaler()
-        else:
+        scaler = self._normalization_dict.get(self._normalization.lower())
+        if not scaler:
             raise ValueError(
-                "normalization must be either'Standardization' or'MinMax'."
+                f"Normalization {self._normalization} is not available. "
+                f"Choices are {self._normalization_dict.keys()}"
             )
 
         if isinstance(self._numerical_cols, str) and self._numerical_cols == "all":
