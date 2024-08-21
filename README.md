@@ -76,110 +76,31 @@ On the "Data Upload" form, there are 3 fields, or 4 if you choose not to train n
 
 When you're happy with your input and configuration, press "Run" to start the pipeline. A "Cancel" button will appear underneath which will allow you stop the run at any point. A spinner will appear under the buttons to show the pipeline is working. Once complete, logs for the latest run of your experiment will appear and so will any plots generated.
 
-## Pipelines
+### Training new models
+Click the box that says "Machine Learning Options" under the "Train new models" checkbox to reveal the options for training new models.
 
-### 1. Feature Importance Options
-- **Initialization**: 
-  ```python
-  fi_opt = FeatureImportanceOptions().parse()
-  ```
+First you will select whether your problem is a Classification or a Regression problem. There are 4 model types currently available in `BioFEFI` with a classifier and regressor variant for each:
 
-### 2. Fuzzy Options
-- **Initialization**: 
-  ```python
-  fuzzy_opt = FuzzyOptions().parse()
-  ```
+- Linear models
+  - LogisticRegression (classifier)
+  - LinearRegression (regressor)
+- Random Forest models
+  - RandomForestClassifier (classifier)
+  - RandomForestRegressor (regressor)
+- XGBoost models
+  - XGBClassifier (classifier)
+  - XGBRegressor (regressor)
+- Support Vector Machine (SVM) models
+  - SVC (classifier)
+  - SVR (regressor)
 
-### 3. Machine Learning Options
-- **Initialization**: 
-  ```python
-  ml_opt = MLOptions().parse()
-  ```
+You may leave all model types checked (they're on by default), or you can uncheck the model types you don't want. For each model type, there are some hyperparameters which you can alter. For the explanations of the hyperparameters see the following links:
 
-### 4. Set Seed for Reproducibility
-- **Setting the Seed**: 
-  ```python
-  seed = ml_opt.random_state
-  set_seed(seed)
-  ```
-
-### 5. Logger Setup
-- **Machine Learning Logger**: 
-  ```python
-  ml_logger_instance = Logger(ml_opt.ml_log_dir, ml_opt.experiment_name)
-  ml_logger = ml_logger_instance.make_logger()
-  ```
-- **Feature Importance Logger**: 
-  ```python
-  fi_logger_instance = Logger(fi_opt.fi_log_dir, fi_opt.experiment_name)
-  fi_logger = fi_logger_instance.make_logger()
-  ```
-- **Fuzzy Interpretation Logger**: 
-  ```python
-  fuzzy_logger_instance = Logger(fuzzy_opt.fuzzy_log_dir, fuzzy_opt.experiment_name)
-  fuzzy_logger = fuzzy_logger_instance.make_logger()
-  ```
-
-### 6. Data Ingestion
-- **Data Ingestion**: 
-  ```python
-  data = DataBuilder(ml_opt, ml_logger).ingest()
-  ```
-
-### 7. Machine Learning
-- **Training Models**: 
-  ```python
-  trained_models = train.run(ml_opt, data, ml_logger)
-  ```
-- **Close Logger**: 
-  ```python
-  close_logger(ml_logger_instance, ml_logger)
-  ```
-
-### 8. Feature Importance
-- **Running Feature Importance**: 
-  ```python
-  gloabl_importance_results, local_importance_results, ensemble_results = feature_importance.run(fi_opt, data, trained_models, fi_logger)
-  ```
-- **Close Logger**: 
-  ```python
-  close_logger(fi_logger_instance, fi_logger)
-  ```
-
-### 9. Fuzzy Interpretation
-- **Running Fuzzy Interpretation**: 
-  ```python
-  fuzzy_rules = fuzzy_interpretation.run(fuzzy_opt, ml_opt, data, trained_models, ensemble_results, fuzzy_logger)
-  ```
-- **Close Logger**: 
-  ```python
-  close_logger(fuzzy_logger_instance, fuzzy_logger)
-  ```
-
-## Usage
-
-1. **Set Up Options**: Configure your feature importance, fuzzy options, and machine learning options.
-2. **Initialize Logger**: Set up logging for machine learning, feature importance, and fuzzy interpretation.
-3. **Ingest Data**: Use the `DataBuilder` to ingest and prepare your data.
-4. **Train Models**: Train your machine learning models using the configured options.
-5. **Evaluate Feature Importance**: Run the feature importance analysis on the trained models.
-6. **Fuzzy Interpretation**: Generate fuzzy logic rules based on the model and feature importance results.
-7. **Close Loggers**: Ensure all loggers are properly closed after execution.
-
-## Installation
-
-1. Python --version: Python 3.12.4
-
-2. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   ```
-3. Install the required packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-
-
----
-
+- [LogisticRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html)
+- [LinearRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html)
+- [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
+- [RandomForestRegressor](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html)
+- [XGBClassifier](https://xgboost.readthedocs.io/en/stable/python/python_api.html#xgboost.XGBClassifier)
+- [XGBRegressor](https://xgboost.readthedocs.io/en/stable/python/python_api.html#xgboost.XGBRegressor)
+- [SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [SVR](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html)
