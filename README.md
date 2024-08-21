@@ -63,14 +63,18 @@ Remember to activate the virtual environment before running the app, if you have
 You will see the following screen:
 ![main screen](static/main-screen.png)
 
-## Configuration
+## Usage
 
-Users can customize the pipeline configurations in the following files:
+On the left hand side of the screen, you will see the options for running the `BioFEFI` toolkit. By default it will train new machine learning models, but you can uncheck the checkbox that says "Train new models" and a new field will appear on the "Data Upload" form which will allow you to upload your own models. These models must be compatible with [scikit-learn](https://scikit-learn.org/stable/index.html). 
 
-- **machine_learning/ml_options.py**: Configure all machine learning settings, including selecting ML algorithms, feature scaling, data splitting, specifying the ML logging directory, and setting the `data_path`.
-- **feature_importance/feature_importance_options.py**: Select methods for global, local, and ensemble feature importance, and set feature importance flags.
-- **feature_importance/fuzzy_options.py**: Configure fuzzy feature selection, fuzzy granularity, the number of features to select, the number of target categories, and other fuzzy interpretation flags.
-- **base_options.py**: Define the type of machine learning problem.
+When training new models, you may select the "Feature Importance" checkbox and configure how to evaluate feature importance once the new models are trained.
+If you choose to upload your own models, click the "Feature Importance" checkbox in order to evaluate your models.
+
+Under "Feature Importance" there is a checkbox called "Fuzzy feature selection". Check this box to configure fuzzy feature selection.
+
+On the "Data Upload" form, there are 3 fields, or 4 if you choose not to train new models. In the first field, you will enter the name of your experiment. Enter the name of the dependent variable in the second field. This will tell `BioFEFI` what to put on the plots in the output - the last (rightmost) column is used as the dependent varaible when actually running the pipeline. The third column is where you upload your training data, in the form of a CSV (`.csv`) file. If you unchecked the "Train new models" checkbox, the fourth field lets you upload multiple machine learning models as pickled objects (`.pkl`) (https://scikit-learn.org/stable/model_persistence.html#pickle-joblib-and-cloudpickle).
+
+When you're happy with your input and configuration, press "Run" to start the pipeline. A "Cancel" button will appear underneath which will allow you stop the run at any point. A spinner will appear under the buttons to show the pipeline is working. Once complete, logs for the latest run of your experiment will appear and so will any plots generated.
 
 ## Pipelines
 
