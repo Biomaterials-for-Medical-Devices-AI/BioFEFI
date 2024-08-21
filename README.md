@@ -12,6 +12,16 @@ This toolkit provides a streamlined workflow for machine learning model training
 
 The data should be in a format where all columns except the last one are input features, and the last column is the target variable.
 
+## Installation
+
+You can obtain a copy of the latest code by downloading it from Github. You can do this by donwloading the ZIP file using the button shown below:
+![Download ZIP](static/download-zip.png)
+
+Or by using the git command in the terminal:
+```bash
+git clone https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+```
+
 ## Configuration
 
 Users can customize the pipeline configurations in the following files:
