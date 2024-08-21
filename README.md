@@ -104,3 +104,12 @@ You may leave all model types checked (they're on by default), or you can unchec
 - [XGBRegressor](https://xgboost.readthedocs.io/en/stable/python/python_api.html#xgboost.XGBRegressor)
 - [SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
 - [SVR](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html)
+
+Next you can select the method of normalisation. The current choices are:
+- [Standardization](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+- [MinMax](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html)
+- None
+
+You can then set the holdout size, a fraction between 0 and 1 to reserve some of the training data for testing the models.
+
+And finally, choose a number of bootstraps. The pipeline generate a model for each bootstrap. If you have more than one model type configured, the pipeline will train `m * n` models, where `m` is the number of selected model types and `n` is the number of bootstraps.
