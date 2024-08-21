@@ -50,6 +50,19 @@ pip install -r requirements.txt
 
 **NB:** if `python` doesn't work, try using `python3` instead.
 
+## Running the app
+
+If everything the installation was successful, you should be able to run the app. In the `BioFEFI` directory run the following command:
+
+```bash
+streamlit run ui.py
+```
+
+Remember to activate the virtual environment before running the app, if you haven't already (see [Installation](#installation)). The app will open in your web browser. Or you can follow follow this link to view your app http://localhost:8501.
+
+You will see the following screen:
+![main screen](static/main-screen.png)
+
 ## Configuration
 
 Users can customize the pipeline configurations in the following files:
