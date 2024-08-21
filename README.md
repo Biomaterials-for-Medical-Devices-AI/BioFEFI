@@ -22,6 +22,34 @@ Or by using the git command in the terminal:
 git clone https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
+You then need to set up a Python virtual environment. In the `BioFEFI` directory that you downloaded, use the following command in the terminal:
+
+For MacOS / Linux
+```bash
+# create a virtual environment
+python -m venv .venv
+
+# activate the virtual environment
+source .venv/bin/activate
+
+# install the code and its dependencies in the virtual environment
+pip install -r requirements.txt
+```
+
+For Windows
+```powershell
+# create a virtual environment
+python -m venv .venv
+
+# activate the virtual environment
+source .venv\Scripts\activate
+
+# install the code and its dependencies in the virtual environment
+pip install -r requirements.txt
+```
+
+**NB:** if `python` doesn't work, try using `python3` instead.
+
 ## Configuration
 
 Users can customize the pipeline configurations in the following files:
