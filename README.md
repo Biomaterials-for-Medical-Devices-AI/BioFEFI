@@ -65,6 +65,8 @@ You will see the following screen:
 
 ## Usage
 
+### Overview
+
 On the left hand side of the screen, you will see the options for running the `BioFEFI` toolkit. By default it will train new machine learning models, but you can uncheck the checkbox that says "Train new models" and a new field will appear on the "Data Upload" form which will allow you to upload your own models. These models must be compatible with [scikit-learn](https://scikit-learn.org/stable/index.html). 
 
 When training new models, you may select the "Feature Importance" checkbox and configure how to evaluate feature importance once the new models are trained.
@@ -75,6 +77,19 @@ Under "Feature Importance" there is a checkbox called "Fuzzy feature selection".
 On the "Data Upload" form, there are 3 fields, or 4 if you choose not to train new models. In the first field, you will enter the name of your experiment. Enter the name of the dependent variable in the second field. This will tell `BioFEFI` what to put on the plots in the output - the last (rightmost) column is used as the dependent varaible when actually running the pipeline. The third column is where you upload your training data, in the form of a CSV (`.csv`) file. If you unchecked the "Train new models" checkbox, the fourth field lets you upload multiple machine learning models as pickled objects (`.pkl`) (https://scikit-learn.org/stable/model_persistence.html#pickle-joblib-and-cloudpickle).
 
 When you're happy with your input and configuration, press "Run" to start the pipeline. A "Cancel" button will appear underneath which will allow you stop the run at any point. A spinner will appear under the buttons to show the pipeline is working. Once complete, logs for the latest run of your experiment will appear and so will any plots generated.
+
+### Finding your outputs
+Currently by default, `BioFEFI` saves all outputs to your home directory under the `.BioFEFI` directory. On Linux this path looks like: `/home/myuser/.BioFEFI`, on MacOS, `/Users/myuser/.BioFEFI` and on Windows `C:\\Users\myuser\.BioFEFI`.
+
+In this directory you will find subdirectories named after your experiments. Within each experiment, you will find:
+- the training data
+- a subdirectory called `logs`
+- a subdirectory called `plots`
+
+To change the directory to save all the outputs, run the app using the following command:
+```bash
+BASE_DIR=<insert desired path here> streamlit run ui.py
+```
 
 ### Training new models
 Click the box that says "Machine Learning Options" under the "Train new models" checkbox to reveal the options for training new models.
