@@ -124,11 +124,9 @@ def save_fuzzy_sets_plots(
     # Plot the membership functions
     if opt.save_fuzzy_set_plots:
         logger.info(f"Saving fuzzy set plots ...")
-        directory = (
-            f"./log/{opt.experiment_name}/{opt.fuzzy_log_dir}/results/fuzzy sets/"
-        )
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        save_dir = fuzzy_plot_dir(opt.experiment_name)
+        if not save_dir.exists():
+            save_dir.mkdir(exist_ok=True, parents=True)
 
         for feature in x_cols:
             plt.figure(figsize=(5, 5))
@@ -152,7 +150,7 @@ def save_fuzzy_sets_plots(
             )
             plt.title(f"{feature} Membership Functions")
             plt.legend()
-            plt.savefig(f"{directory}{feature}.png")
+            plt.savefig(save_dir / f"{feature}.png")
         plt.close()
 
 
@@ -160,13 +158,13 @@ def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):
     # Plot the target clusters
     if opt.save_fuzzy_set_plots:
         logger.info(f"Saving target clusters plot ...")
-        directory = f"./log/{opt.experiment_name}/{opt.fuzzy_log_dir}/results/"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        save_dir = fuzzy_plot_dir(opt.experiment_name)
+        if not save_dir.exists():
+            save_dir.mkdir(exist_ok=True, parents=True)
 
         # Plot boxplot of the target (continuous values) and target clusters (categories) using seaborn
         plt.figure(figsize=(5, 5))
         sns.boxplot(data=df_cluster, x="cluster", y="target")
         plt.title("Target Clusters")
-        plt.savefig(f"{directory}target_clusters.png")
+        plt.savefig(save_dir / f"target_clusters.png")
         plt.close()
