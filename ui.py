@@ -16,6 +16,7 @@ from machine_learning.ml_options import MLOptions
 from options.enums import ConfigStateKeys, ExecutionStateKeys, ProblemTypes
 from options.file_paths import (
     fi_plot_dir,
+    fuzzy_plot_dir,
     uploaded_file_path,
     log_dir,
     ml_plot_dir,
@@ -380,3 +381,6 @@ if (
     fi_plots = fi_plot_dir(experiment_name)
     if fi_plots.exists():
         plot_box(fi_plots, "Feature importance plots")
+    fuzzy_plots = fuzzy_plot_dir(experiment_name)
+    if fuzzy_plots.exists():
+        plot_box(fuzzy_plots, "Fuzzy plots")
