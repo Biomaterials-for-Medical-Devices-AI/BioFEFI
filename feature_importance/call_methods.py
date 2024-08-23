@@ -4,6 +4,7 @@ import os
 import sys
 import matplotlib.pyplot as plt
 import seaborn as sns
+from options.file_paths import fi_plot_dir
 from utils.utils import log_options
 import shap
 
@@ -66,6 +67,7 @@ def save_importance_results(
 
     # Save plots when the flag is set to True and importance type is not fuzzy
     if opt.save_feature_importance_plots and importance_type != "fuzzy":
+        save_dir = fi_plot_dir(opt.experiment_name)
         # Plot bar plot - sort values in descending order and plot top n features
         # rotate x-axis labels for better readability
         feature_importance_df.sort_values(by=0, ascending=False).head(
@@ -75,7 +77,7 @@ def save_importance_results(
         plt.xticks(rotation=opt.angle_rotate_xaxis_labels)
         plt.title(f"{feature_importance_type} - {model_type}")
         plt.ylabel("Importance")
-        plt.savefig(f"{directory}bar.png")
+        plt.savefig(save_dir / "bar.png")
         # plt.show()
         plt.close()
 
@@ -85,7 +87,7 @@ def save_importance_results(
                 shap_values, max_display=opt.num_features_to_plot, show=False
             )
             plt.yticks(rotation=opt.angle_rotate_yaxis_labels)
-            plt.savefig(f"{directory}beeswarm.png")
+            plt.savefig(save_dir / "beeswarm.png")
             # plt.show()
 
     if opt.save_feature_importance_plots and importance_type == "fuzzy":
