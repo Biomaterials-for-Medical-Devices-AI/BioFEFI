@@ -68,6 +68,8 @@ def save_importance_results(
     # Save plots when the flag is set to True and importance type is not fuzzy
     if opt.save_feature_importance_plots and importance_type != "fuzzy":
         save_dir = fi_plot_dir(opt.experiment_name)
+        if not save_dir.exists():
+            save_dir.mkdir(exist_ok=True)
         # Plot bar plot - sort values in descending order and plot top n features
         # rotate x-axis labels for better readability
         feature_importance_df.sort_values(by=0, ascending=False).head(
