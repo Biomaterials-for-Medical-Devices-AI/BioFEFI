@@ -79,7 +79,7 @@ def save_importance_results(
         plt.xticks(rotation=opt.angle_rotate_xaxis_labels)
         plt.title(f"{feature_importance_type} - {model_type}")
         plt.ylabel("Importance")
-        plt.savefig(save_dir / "bar.png")
+        plt.savefig(save_dir / f"{model_type}-bar.png")
         # plt.show()
         plt.close()
 
@@ -89,7 +89,7 @@ def save_importance_results(
                 shap_values, max_display=opt.num_features_to_plot, show=False
             )
             plt.yticks(rotation=opt.angle_rotate_yaxis_labels)
-            plt.savefig(save_dir / "beeswarm.png")
+            plt.savefig(save_dir / f"{model_type}-beeswarm.png")
             # plt.show()
 
     if opt.save_feature_importance_plots and importance_type == "fuzzy":
