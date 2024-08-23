@@ -84,3 +84,29 @@ def fi_result_dir(experiment_name: str) -> Path:
         Path: The full path for the Feature Importance result directory.
     """
     return BASE_DIR / experiment_name / "results" / "fi"
+
+
+def fuzzy_plot_dir(experiment_name: str) -> Path:
+    """Create the full path to the directory to save Fuzzy plots.
+
+    Args:
+        experiment_name (str): The name of the experiment. This will be used
+        to create a subdirectory with the this value.
+
+    Returns:
+        Path: The full path for the Fuzzy plot directory.
+    """
+    return BASE_DIR / experiment_name / "plots" / "fuzzy"
+
+
+def fuzzy_result_dir(experiment_name: str) -> Path:
+    """Create the full path to the directory to save Fuzzy results.
+
+    Args:
+        experiment_name (str): The name of the experiment. This will be used
+        to create a subdirectory with the this value.
+
+    Returns:
+        Path: The full path for the Fuzzy result directory.
+    """
+    return BASE_DIR / experiment_name / "results" / "fuzzy"
