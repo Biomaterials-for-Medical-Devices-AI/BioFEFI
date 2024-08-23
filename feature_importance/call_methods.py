@@ -97,14 +97,14 @@ def save_importance_results(
         raise NotImplementedError(f"Plotting fuzzy sets not implemented yet")
 
     # Save the results to a CSV file - create folders if they don't exist
-    if opt.save_feature_importance_results and importance_type != "fuzzy":
+    if opt.save_feature_importance_results:
         save_dir = fi_result_dir(opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         feature_importance_df.to_csv(save_dir / f"{feature_importance_type}.csv")
 
-    if opt.save_feature_importance_results and importance_type == "fuzzy":
-        feature_importance_df.to_csv(f"{directory}{feature_importance_type}.csv")
+    # if opt.save_feature_importance_results and importance_type == "fuzzy":
+    #     feature_importance_df.to_csv(f"{directory}{feature_importance_type}.csv")
 
     # Save the metrics to a log file
     if opt.save_feature_importance_options:
