@@ -4,7 +4,7 @@ from components.images.logos import header_logo, sidebar_logo
 from components.logs import log_box
 from components.forms import data_upload_form
 from components.plots import plot_box
-from components.configuration import ml_options
+from components.configuration import ml_options, plot_options_box
 from services.logs import get_logs
 from services.ml_models import save_model, load_models
 from feature_importance import feature_importance, fuzzy_interpretation
@@ -13,7 +13,12 @@ from feature_importance.fuzzy_options import FuzzyOptions
 from machine_learning import train
 from machine_learning.data import DataBuilder
 from machine_learning.ml_options import MLOptions
-from options.enums import ConfigStateKeys, ExecutionStateKeys, ProblemTypes
+from options.enums import (
+    ConfigStateKeys,
+    ExecutionStateKeys,
+    ProblemTypes,
+    PlotOptionKeys,
+)
 from options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
@@ -287,24 +292,24 @@ with st.sidebar:
                 100,
                 key=ConfigStateKeys.ShapDataPercentage,
             )
-            angle_rotate_xaxis_labels = st.number_input(
-                "Angle to rotate X-axis labels",
-                min_value=0,
-                max_value=90,
-                value=10,
-                key=ConfigStateKeys.RotateXAxisLabels,
-            )
-            angle_rotate_yaxis_labels = st.number_input(
-                "Angle to rotate Y-axis labels",
-                min_value=0,
-                max_value=90,
-                value=60,
-                key=ConfigStateKeys.RotateYAxisLabels,
-            )
-            save_feature_importance_plots = st.checkbox(
-                "Save feature importance plots",
-                key=ConfigStateKeys.SaveFeatureImportancePlots,
-            )
+            # angle_rotate_xaxis_labels = st.number_input(
+            #     "Angle to rotate X-axis labels",
+            #     min_value=0,
+            #     max_value=90,
+            #     value=10,
+            #     key=ConfigStateKeys.RotateXAxisLabels,
+            # )
+            # angle_rotate_yaxis_labels = st.number_input(
+            #     "Angle to rotate Y-axis labels",
+            #     min_value=0,
+            #     max_value=90,
+            #     value=60,
+            #     key=ConfigStateKeys.RotateYAxisLabels,
+            # )
+            # save_feature_importance_plots = st.checkbox(
+            #     "Save feature importance plots",
+            #     key=ConfigStateKeys.SaveFeatureImportancePlots,
+            # )
             save_feature_importance_options = st.checkbox(
                 "Save feature importance options",
                 key=ConfigStateKeys.SaveFeatureImportanceOptions,
@@ -345,10 +350,10 @@ with st.sidebar:
                     value=10,
                     key=ConfigStateKeys.NumberOfTopRules,
                 )
-                save_fuzzy_set_plots = st.checkbox(
-                    "Save fuzzy set plots", key=ConfigStateKeys.SaveFuzzySetPlots
-                )
-
+                # save_fuzzy_set_plots = st.checkbox(
+                #     "Save fuzzy set plots", key=ConfigStateKeys.SaveFuzzySetPlots
+                # )
+    plot_options_box()
     seed = st.number_input(
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
     )
