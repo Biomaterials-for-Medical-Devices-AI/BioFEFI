@@ -129,9 +129,6 @@ def ml_options():
             value=10,
             key=ConfigStateKeys.NumberOfBootstraps,
         )
-        # st.checkbox(
-        #     "Save actual or predicted plots", key=ConfigStateKeys.SavePlots, value=True
-        # )
         st.checkbox("Save models", key=ConfigStateKeys.SaveModels)
 
 

@@ -53,7 +53,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
             cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
-            save_fuzzy_set_plots=st.session_state[ConfigStateKeys.SaveFuzzySetPlots],
+            save_fuzzy_set_plots=st.session_state[PlotOptionKeys.SavePlots],
             # fuzzy_log_dir=
             dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
             experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
@@ -86,14 +86,12 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
             # fi_log_dir=
             angle_rotate_xaxis_labels=st.session_state[
-                ConfigStateKeys.RotateXAxisLabels
+                PlotOptionKeys.RotateXAxisLabels
             ],
             angle_rotate_yaxis_labels=st.session_state[
-                ConfigStateKeys.RotateYAxisLabels
+                PlotOptionKeys.RotateYAxisLabels
             ],
-            save_feature_importance_plots=st.session_state[
-                ConfigStateKeys.SaveFeatureImportancePlots
-            ],
+            save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
             save_feature_importance_options=st.session_state[
                 ConfigStateKeys.SaveFeatureImportanceOptions
             ],
@@ -120,7 +118,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
     )
     ml_opt.parser.set_defaults(
         n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
-        save_actual_pred_plots=st.session_state[ConfigStateKeys.SavePlots],
+        save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
         normalization=st.session_state[ConfigStateKeys.Normalization],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
@@ -292,24 +290,6 @@ with st.sidebar:
                 100,
                 key=ConfigStateKeys.ShapDataPercentage,
             )
-            # angle_rotate_xaxis_labels = st.number_input(
-            #     "Angle to rotate X-axis labels",
-            #     min_value=0,
-            #     max_value=90,
-            #     value=10,
-            #     key=ConfigStateKeys.RotateXAxisLabels,
-            # )
-            # angle_rotate_yaxis_labels = st.number_input(
-            #     "Angle to rotate Y-axis labels",
-            #     min_value=0,
-            #     max_value=90,
-            #     value=60,
-            #     key=ConfigStateKeys.RotateYAxisLabels,
-            # )
-            # save_feature_importance_plots = st.checkbox(
-            #     "Save feature importance plots",
-            #     key=ConfigStateKeys.SaveFeatureImportancePlots,
-            # )
             save_feature_importance_options = st.checkbox(
                 "Save feature importance options",
                 key=ConfigStateKeys.SaveFeatureImportanceOptions,
@@ -350,9 +330,6 @@ with st.sidebar:
                     value=10,
                     key=ConfigStateKeys.NumberOfTopRules,
                 )
-                # save_fuzzy_set_plots = st.checkbox(
-                #     "Save fuzzy set plots", key=ConfigStateKeys.SaveFuzzySetPlots
-                # )
     plot_options_box()
     seed = st.number_input(
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
