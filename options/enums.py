@@ -82,3 +82,9 @@ class ModelNames(StrEnum):
 class DataSplitMethods(StrEnum):
     Holdout = "holdout"
     KFold = "k-fold"
+
+
+class PlotOptionKeys(StrEnum):
+    RotateXAxisLabels = "angle_rotate_xaxis_labels"
+    RotateYAxisLabels = "angle_rotate_yaxis_labels"
+    SavePlots = "save_plots"
