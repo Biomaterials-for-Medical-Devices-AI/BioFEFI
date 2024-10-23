@@ -152,4 +152,5 @@ def plot_options_box():
         st.checkbox(
             "Save all plots",
             key=PlotOptionKeys.SavePlots,
+            value=True,
         )
