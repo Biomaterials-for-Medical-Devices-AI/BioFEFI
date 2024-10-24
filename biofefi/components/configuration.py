@@ -1,5 +1,5 @@
-from options.choices import SVM_KERNELS, PROBLEM_TYPES, NORMALISATIONS
-from options.enums import ConfigStateKeys, PlotOptionKeys
+from biofefi.options.choices import SVM_KERNELS, PROBLEM_TYPES, NORMALISATIONS
+from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 import streamlit as st
 
 
