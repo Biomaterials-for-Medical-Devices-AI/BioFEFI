@@ -1,7 +1,7 @@
 from pathlib import Path
 import streamlit as st
 
-from options.enums import ConfigStateKeys, ExecutionStateKeys
+from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys
 
 
 def data_upload_form():
