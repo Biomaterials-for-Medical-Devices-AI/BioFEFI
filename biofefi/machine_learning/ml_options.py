@@ -2,7 +2,7 @@ import ast
 import os
 import sys
 
-from base_options import BaseOptions
+from biofefi.base_options import BaseOptions
 
 
 class MLOptions(BaseOptions):
