@@ -1,5 +1,5 @@
 import streamlit as st
-from options.enums import ConfigStateKeys
+from biofefi.options.enums import ConfigStateKeys
 
 
 def log_box():

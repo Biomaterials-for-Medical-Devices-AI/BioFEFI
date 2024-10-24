@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-from options.enums import ProblemTypes
+from biofefi.options.enums import ProblemTypes
 
 
 def plot_scatter(y, yp, r2, set_name, dependent_variable, model_name, directory):

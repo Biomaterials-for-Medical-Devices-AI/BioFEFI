@@ -3,13 +3,13 @@ import pickle
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
-from options.file_paths import (
+from biofefi.options.file_paths import (
     fi_plot_dir,
     fi_result_dir,
     fuzzy_plot_dir,
     fuzzy_result_dir,
 )
-from utils.utils import log_options
+from biofefi.utils.utils import log_options
 import shap
 
 

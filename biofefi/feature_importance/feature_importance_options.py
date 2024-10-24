@@ -1,6 +1,6 @@
 import ast
 
-from machine_learning.ml_options import MLOptions
+from biofefi.machine_learning.ml_options import MLOptions
 
 
 class FeatureImportanceOptions(MLOptions):

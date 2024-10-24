@@ -1,8 +1,8 @@
 import ast
-import os
-import sys
 
-from feature_importance.feature_importance_options import FeatureImportanceOptions
+from biofefi.feature_importance.feature_importance_options import (
+    FeatureImportanceOptions,
+)
 
 
 class FuzzyOptions(FeatureImportanceOptions):

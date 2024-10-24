@@ -1,6 +1,4 @@
 import ast
-import os
-import sys
 
 from biofefi.base_options import BaseOptions
 

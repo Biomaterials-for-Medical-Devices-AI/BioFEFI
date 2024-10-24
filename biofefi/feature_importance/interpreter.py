@@ -1,11 +1,11 @@
 import argparse
 
-from feature_importance.call_methods import save_importance_results
-from feature_importance.ensemble_methods import (
+from biofefi.feature_importance.call_methods import save_importance_results
+from biofefi.feature_importance.ensemble_methods import (
     calculate_ensemble_majorityvote,
     calculate_ensemble_mean,
 )
-from feature_importance.feature_importance_methods import (
+from biofefi.feature_importance.feature_importance_methods import (
     calculate_permutation_importance,
     calculate_shap_values,
     calculate_lime_values,

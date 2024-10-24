@@ -1,18 +1,18 @@
 import argparse
 import pandas as pd
 
-from feature_importance.call_methods import save_importance_results
-from feature_importance.feature_importance_methods import (
+from biofefi.feature_importance.call_methods import save_importance_results
+from biofefi.feature_importance.feature_importance_methods import (
     calculate_shap_values,
     calculate_lime_values,
 )
-from machine_learning import train
-from feature_importance.call_methods import (
+from biofefi.machine_learning import train
+from biofefi.feature_importance.call_methods import (
     save_importance_results,
     save_fuzzy_sets_plots,
     save_target_clusters_plots,
 )
-from options.enums import ProblemTypes
+from biofefi.options.enums import ProblemTypes
 
 
 class Fuzzy:

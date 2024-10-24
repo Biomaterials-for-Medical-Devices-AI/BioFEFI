@@ -4,8 +4,8 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC, SVR
 from xgboost import XGBClassifier, XGBRegressor
 
-from options.enums import ProblemTypes, ModelNames
-from utils.utils import assert_model_param
+from biofefi.options.enums import ProblemTypes, ModelNames
+from biofefi.utils.utils import assert_model_param
 
 
 _MODEL_PROBLEM_DICT = {

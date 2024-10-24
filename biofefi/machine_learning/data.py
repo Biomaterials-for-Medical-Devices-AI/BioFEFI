@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-from options.enums import DataSplitMethods, Normalisations
+from biofefi.options.enums import DataSplitMethods, Normalisations
 
 
 class DataBuilder:

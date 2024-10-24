@@ -1,11 +1,13 @@
-from feature_importance import feature_importance, fuzzy_interpretation
-from feature_importance.feature_importance_options import FeatureImportanceOptions
-from feature_importance.fuzzy_options import FuzzyOptions
-from machine_learning import train
-from machine_learning.data import DataBuilder
-from machine_learning.ml_options import MLOptions
-from utils.logging_utils import Logger, close_logger
-from utils.utils import set_seed
+from biofefi.feature_importance import feature_importance, fuzzy_interpretation
+from biofefi.feature_importance.feature_importance_options import (
+    FeatureImportanceOptions,
+)
+from biofefi.feature_importance.fuzzy_options import FuzzyOptions
+from biofefi.machine_learning import train
+from biofefi.machine_learning.data import DataBuilder
+from biofefi.machine_learning.ml_options import MLOptions
+from biofefi.utils.logging_utils import Logger, close_logger
+from biofefi.utils.utils import set_seed
 
 fuzzy_opt = FuzzyOptions().parse()
 fi_opt = FeatureImportanceOptions().parse()

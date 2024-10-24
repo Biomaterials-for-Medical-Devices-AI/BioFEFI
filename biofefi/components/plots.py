@@ -1,8 +1,6 @@
 import streamlit as st
 from pathlib import Path
 
-from options.enums import PlotOptionKeys
-
 
 def plot_box(plot_dir: Path, box_title: str):
     """Display the plots in the given directory in the UI.

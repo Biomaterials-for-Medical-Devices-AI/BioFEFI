@@ -1,11 +1,10 @@
 import argparse
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 
 import numpy as np
-from tqdm import tqdm
 
-from machine_learning.get_models import get_models
-from machine_learning.metrics import get_metrics
+from biofefi.machine_learning.get_models import get_models
+from biofefi.machine_learning.metrics import get_metrics
 
 
 class Learner:
