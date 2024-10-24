@@ -4,7 +4,11 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-include = ["static", "ui", ".streamlit"]
+include = [
+    { path = "static", format = ["sdist", "wheel"] },
+    { path = "ui", format = ["sdist", "wheel"] },
+    { path = ".streamlit", format = ["sdist", "wheel"] },
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
