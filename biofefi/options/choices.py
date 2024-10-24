@@ -1,4 +1,4 @@
-from options.enums import ProblemTypes, SvmKernels, Normalisations
+from biofefi.options.enums import ProblemTypes, SvmKernels, Normalisations
 
 SVM_KERNELS = [
     SvmKernels.RBF.upper(),  # appear as RBF, not Rbf
