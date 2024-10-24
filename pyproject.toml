@@ -6,7 +6,6 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 include = [
     { path = "static", format = ["sdist", "wheel"] },
-    { path = "ui", format = ["sdist", "wheel"] },
     { path = ".streamlit", format = ["sdist", "wheel"] },
 ]
 
