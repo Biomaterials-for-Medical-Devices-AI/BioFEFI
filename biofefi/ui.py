@@ -1,25 +1,27 @@
 from argparse import Namespace
 from multiprocessing import Process
-from components.images.logos import header_logo, sidebar_logo
-from components.logs import log_box
-from components.forms import data_upload_form
-from components.plots import plot_box
-from components.configuration import ml_options, plot_options_box
-from services.logs import get_logs
-from services.ml_models import save_model, load_models
-from feature_importance import feature_importance, fuzzy_interpretation
-from feature_importance.feature_importance_options import FeatureImportanceOptions
-from feature_importance.fuzzy_options import FuzzyOptions
-from machine_learning import train
-from machine_learning.data import DataBuilder
-from machine_learning.ml_options import MLOptions
-from options.enums import (
+from biofefi.components.images.logos import header_logo, sidebar_logo
+from biofefi.components.logs import log_box
+from biofefi.components.forms import data_upload_form
+from biofefi.components.plots import plot_box
+from biofefi.components.configuration import ml_options, plot_options_box
+from biofefi.services.logs import get_logs
+from biofefi.services.ml_models import save_model, load_models
+from biofefi.feature_importance import feature_importance, fuzzy_interpretation
+from biofefi.feature_importance.feature_importance_options import (
+    FeatureImportanceOptions,
+)
+from biofefi.feature_importance.fuzzy_options import FuzzyOptions
+from biofefi.machine_learning import train
+from biofefi.machine_learning.data import DataBuilder
+from biofefi.machine_learning.ml_options import MLOptions
+from biofefi.options.enums import (
     ConfigStateKeys,
     ExecutionStateKeys,
     ProblemTypes,
     PlotOptionKeys,
 )
-from options.file_paths import (
+from biofefi.options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
     uploaded_file_path,
@@ -27,8 +29,8 @@ from options.file_paths import (
     ml_plot_dir,
     ml_model_dir,
 )
-from utils.logging_utils import Logger, close_logger
-from utils.utils import set_seed
+from biofefi.utils.logging_utils import Logger, close_logger
+from biofefi.utils.utils import set_seed
 import streamlit as st
 import os
 
