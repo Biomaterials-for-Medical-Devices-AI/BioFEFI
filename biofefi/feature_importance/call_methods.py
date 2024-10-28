@@ -66,7 +66,6 @@ def save_importance_results(
         # directory for individual model feature importance results
         directory = f"./log/{opt.experiment_name}/{opt.fi_log_dir}/results/{model_type}/global_feature_importances/{feature_importance_type}/"
 
-    print(f"Save directory is: {directory}")
     if not os.path.exists(directory):
         os.makedirs(directory)
 
