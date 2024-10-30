@@ -68,6 +68,14 @@ class BaseOptions:
             required=False,
         ),
 
+        self.parser.add_argument(
+            "--is_synthetic_data",
+            type=bool,
+            default=False,
+            help="Flag for creating synthetic data",
+            required=False,
+        ),
+
         self.initialized = True
 
     def parse(self):

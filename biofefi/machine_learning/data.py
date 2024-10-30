@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 from biofefi.options.enums import DataSplitMethods, Normalisations
+from biofefi.components.synthetic_data.create_data import SyntheticData
 
 
 class DataBuilder:
@@ -26,6 +27,7 @@ class DataBuilder:
         self._normalization = opt.normalization
         self._numerical_cols = "all"
         self._n_bootstraps = opt.n_bootstraps
+        self._create_synthetic_data = None
 
     def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
@@ -36,10 +38,28 @@ class DataBuilder:
         Tuple[pd.DataFrame, pd.DataFrame]
             The training data (X) and the targets (y)
         """
-        df = pd.read_csv(self._path)
-        X = df.iloc[:, :-1]
-        y = df.iloc[:, -1]
-        return X, y
+
+        if self._create_synthetic_data:
+            try:
+                synthetic_data_creator = SyntheticData(self._opt, self._logger)
+                X, y = synthetic_data_creator.create_data()
+
+                return X, y
+
+            except Exception as e:
+                raise ValueError(f"Error loading the synthetic data: {e}")
+
+        else:
+            self._logger.info(f"Loading data from {self._path}")
+            try:
+                df = pd.read_csv(self._path)
+                X = df.iloc[:, :-1]
+                y = df.iloc[:, -1]
+
+                return X, y
+
+            except Exception as e:
+                raise ValueError(f"Error loading the data through CSV file: {e}")
 
     def _generate_data_splits(
         self, X: pd.DataFrame, y: pd.DataFrame
