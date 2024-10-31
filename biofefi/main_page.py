@@ -1,5 +1,6 @@
 import streamlit as st
 from biofefi.components.images.logos import header_logo, sidebar_logo
+from biofefi.components.navigation import navbar
 
 st.set_page_config(
     page_title="BioFEFI",
@@ -7,6 +8,7 @@ st.set_page_config(
 )
 header_logo()
 sidebar_logo()
+navbar()
 
 st.write("# Welcome")
 st.write(
@@ -24,5 +26,7 @@ st.write(
     """
 )
 col1, col2 = st.columns(2)
-col1.button("New experiment", use_container_width=True, type="primary")
+col1.page_link(
+    "pages/new_experiment.py", label="New Experiment", use_container_width=True
+)
 col2.button("My experiments", use_container_width=True)
