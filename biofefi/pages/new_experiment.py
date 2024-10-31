@@ -47,7 +47,7 @@ st.write(
 )
 st.write(
     """
-    ### Create a new experiment
+    ### Create a new experiment ⚗️
 
     Give your experiment a name and click **Create**. If an experiment with the same name
     already exists you will not be able to create it again.

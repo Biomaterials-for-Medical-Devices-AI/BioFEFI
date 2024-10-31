@@ -103,7 +103,7 @@ def biofefi_experiments_base_dir() -> Path:
 
     This will be `/Users/<username>/BioFEFIExperiments` on MacOS,
     `/home/<username>/BioFEFIExperiments` on Linux, and
-    `C:\\Users\<username>\BioFEFIExperiments` on Windows.
+    `C:\\Users\\<username>\\BioFEFIExperiments` on Windows.
 
     Returns:
         Path: The path to the BioFEFI experiments base directory.

@@ -26,6 +26,6 @@ st.write(
 
     ### Using BioFEFI
 
-    In order to create a **new experiment**, go to the sidebar on the **left** and click **"New experiment"**.
+    In order to create a **new experiment** ⚗️, go to the sidebar on the **left** and click **"New experiment"**.
     """
 )
