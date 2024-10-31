@@ -23,10 +23,9 @@ st.write(
 
     Your models can then be evaluated by general measures, such as **accuracy**, and by individual feature metrics,
     such as **SHAP**.
+
+    ### Using BioFEFI
+
+    In order to create a **new experiment**, go to the sidebar on the **left** and click **"New experiment"**.
     """
 )
-col1, col2 = st.columns(2)
-col1.page_link(
-    "pages/new_experiment.py", label="New Experiment", use_container_width=True
-)
-col2.button("My experiments", use_container_width=True)
