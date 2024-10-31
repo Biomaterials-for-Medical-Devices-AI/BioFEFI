@@ -12,19 +12,23 @@ st.write(
     "These methods help in understanding overall feature impact."
 )
 
-use_permutation = st.checkbox("Permutation Importance", help="Evaluate feature importance by permuting feature values.")
+use_permutation = st.checkbox(
+    "Permutation Importance",
+    help="Evaluate feature importance by permuting feature values.",
+)
 
 global_methods["Permutation Importance"] = {
     "type": "global",
     "value": use_permutation,
 }
 
-use_shap = st.checkbox("SHAP", help="Apply SHAP (SHapley Additive exPlanations) for global interpretability.")
+use_shap = st.checkbox(
+    "SHAP",
+    help="Apply SHAP (SHapley Additive exPlanations) for global interpretability.",
+)
 global_methods["SHAP"] = {"type": "global", "value": use_shap}
 
-st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods] = (
-    global_methods
-)
+st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods] = global_methods
 
 st.write("## Feature Importance Ensemble Methods")
 st.write(
@@ -33,9 +37,13 @@ st.write(
 )
 
 ensemble_methods = {}
-use_mean = st.checkbox("Mean", help="Calculate the mean importance score across methods.")
+use_mean = st.checkbox(
+    "Mean", help="Calculate the mean importance score across methods."
+)
 ensemble_methods["Mean"] = use_mean
-use_majority = st.checkbox("Majority Vote", help="Use majority voting to identify important features.")
+use_majority = st.checkbox(
+    "Majority Vote", help="Use majority voting to identify important features."
+)
 ensemble_methods["Majority Vote"] = use_majority
 
 st.session_state[ConfigStateKeys.EnsembleMethods] = ensemble_methods
@@ -47,17 +55,20 @@ st.write(
 )
 
 local_importance_methods = {}
-use_lime = st.checkbox("LIME", help="Use LIME (Local Interpretable Model-Agnostic Explanations) for local interpretability.")
+use_lime = st.checkbox(
+    "LIME",
+    help="Use LIME (Local Interpretable Model-Agnostic Explanations) for local interpretability.",
+)
 local_importance_methods["LIME"] = {"type": "local", "value": use_lime}
-use_local_shap = st.checkbox("Local SHAP", help="Use SHAP for local feature importance at the instance level.")
+use_local_shap = st.checkbox(
+    "Local SHAP", help="Use SHAP for local feature importance at the instance level."
+)
 local_importance_methods["SHAP"] = {
     "type": "local",
     "value": use_local_shap,
 }
 
-st.session_state[ConfigStateKeys.LocalImportanceFeatures] = (
-    local_importance_methods
-)
+st.session_state[ConfigStateKeys.LocalImportanceFeatures] = local_importance_methods
 
 st.write("## Additional Configuration Options")
 
@@ -138,9 +149,11 @@ if fuzzy_feature_selection:
         key=ConfigStateKeys.NumberOfFuzzyFeatures,
     )
 
-    st.checkbox("Granular features", 
-                help="Divide features into granular categories for in-depth analysis.",
-                key=ConfigStateKeys.GranularFeatures)
+    st.checkbox(
+        "Granular features",
+        help="Divide features into granular categories for in-depth analysis.",
+        key=ConfigStateKeys.GranularFeatures,
+    )
 
     st.number_input(
         "Number of clusters for target variable",
