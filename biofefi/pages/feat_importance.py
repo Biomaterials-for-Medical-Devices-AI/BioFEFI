@@ -12,7 +12,7 @@ navbar()
 st.header("Feature Importance")
 st.write(
     """
-    This page provides options for exploring and customizing feature importance and interpretability methods in the trained machine learning models. 
+    This page provides options for exploring and customising feature importance and interpretability methods in the trained machine learning models. 
     You can configure global and local feature importance techniques, select ensemble approaches, and apply fuzzy feature selection. Options include tuning scoring functions, 
     setting data percentages for SHAP analysis, and configuring rules for fuzzy synergy analysis to gain deeper insights into model behavior.
     """
@@ -91,7 +91,7 @@ st.number_input(
     "Number of most important features to plot",
     min_value=1,
     value=10,
-    help="Select how many top features to visualize based on their importance score.",
+    help="Select how many top features to visualise based on their importance score.",
     key=ConfigStateKeys.NumberOfImportantFeatures,
 )
 
@@ -173,7 +173,7 @@ if fuzzy_feature_selection:
         "Number of clusters for target variable",
         min_value=2,
         value=3,
-        help="Set the number of clusters to categorize the target variable for fuzzy interpretation.",
+        help="Set the number of clusters to categorise the target variable for fuzzy interpretation.",
         key=ConfigStateKeys.NumberOfClusters,
     )
 
