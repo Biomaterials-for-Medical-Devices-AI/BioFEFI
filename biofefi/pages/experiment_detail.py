@@ -31,6 +31,9 @@ st.write(
     On this page, you can select a completed experiment to view.
 
     Select an experiment in the dropdown below to see your results.
+
+    If you have not run any analyses yet, your experiment will be empty.
+    Go to the sidebar on the **left** and select an analysis to run.
     """
 )
 
