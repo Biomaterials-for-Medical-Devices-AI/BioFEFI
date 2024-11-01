@@ -36,7 +36,7 @@ On Windows
 ```shell
 # Create a virtual environment with venv
 python -m venv <path\to\env>
-source <path/to/env>\Scripts\activate
+<path/to/env>\Scripts\activate
 pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 
 # -- OR --
@@ -53,6 +53,10 @@ biofefi
 ```
 in your virtual envrionment to start BioFEFI.
 
+**NB:** if `python` doesn't work, try using `python3` instead.
+
+### Developers
+
 You can obtain a copy of the latest code by downloading it from Github. You can do this by donwloading the ZIP file using the button shown below:
 ![Download ZIP](static/download-zip.png)
 
@@ -63,35 +67,45 @@ git clone https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 
 You then need to set up a Python virtual environment. In the `BioFEFI` directory that you downloaded, use the following command in the terminal:
 
-For MacOS / Linux
+On Mac/Linux
 ```shell
-# create a virtual environment
+# Create a virtual environment with venv
 python -m venv .venv
-
-# activate the virtual environment
 source .venv/bin/activate
-
-# add poetry to the virtual environment
 pip install poetry
+poetry install
 
-# install the code and its dependencies in the virtual environment
+# -- OR --
+
+# Create a virtual environment with conda
+conda create -n <env_name> python=3.11
+conda activate <env_name>
+pip install poetry
 poetry install
 ```
 
-For Windows
+On Windows
 ```shell
-# create a virtual environment
+# Create a virtual environment with venv
 python -m venv .venv
-
-# activate the virtual environment
-source .venv\Scripts\activate
-
-# add poetry to the virtual environment
+.venv\Scripts\activate
 pip install poetry
+poetry install
 
-# install the code and its dependencies in the virtual environment
+# -- OR --
+
+# Create a virtual environment with conda
+conda create -n <env_name> python=3.11
+conda activate <env_name>
+pip install poetry
 poetry install
 ```
+
+Then to run BioFEFI, in your virtual environment use
+```shell
+poetry run biofefi
+```
+to start BioFEFI.
 
 **NB:** if `python` doesn't work, try using `python3` instead.
 
