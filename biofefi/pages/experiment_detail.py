@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 import streamlit as st
 
 from biofefi.components.images.logos import sidebar_logo
@@ -26,7 +25,7 @@ navbar()
 
 header = st.session_state.get(ViewExperimentKeys.ExperimentName)
 
-st.header(header if header is not None else "View experiment")
+st.header(header if header is not None else "View Experiment")
 st.write(
     """
     On this page, you can select a completed experiment to view.
