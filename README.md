@@ -14,6 +14,45 @@ The data should be in a format where all columns except the last one are input f
 
 ## Installation
 
+### Users
+Users can install BioFEFI using `pip` like so:
+
+On Mac/Linux
+```shell
+# Create a virtual environment with venv
+python -m venv <path/to/env>
+source <path/to/env>/bin/activate
+pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+
+# -- OR --
+
+# Create a virtual environment with conda
+conda create -n <env_name> python=3.11
+conda activate <env_name>
+pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+```
+
+On Windows
+```shell
+# Create a virtual environment with venv
+python -m venv <path\to\env>
+source <path/to/env>\Scripts\activate
+pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+
+# -- OR --
+
+# Create a virtual environment with conda
+conda create -n <env_name> python=3.11
+conda activate <env_name>
+pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+```
+
+You can then run the command:
+```shell
+biofefi
+```
+in your virtual envrionment to start BioFEFI.
+
 You can obtain a copy of the latest code by downloading it from Github. You can do this by donwloading the ZIP file using the button shown below:
 ![Download ZIP](static/download-zip.png)
 
