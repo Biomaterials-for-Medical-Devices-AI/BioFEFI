@@ -26,8 +26,10 @@ st.write(
 
     ### Using BioFEFI
 
-    In order to create a **new experiment** ⚗️, go to the sidebar on the **left** and click **"New Experiment"**.
+    To create a **new experiment** ⚗️, go to the sidebar on the **left** and click **"New Experiment"**.
 
-    To view your previous experiments 📈, go to the sidebar on the **left** and click **"View Experiments"**
+    To view your previous experiments 📈, go to the sidebar on the **left** and click **"View Experiments"**.
+
+    To run a feature importance analysis 📊, go to the sidebar on the **left** and click **"Feature Importance"**.
     """
 )
