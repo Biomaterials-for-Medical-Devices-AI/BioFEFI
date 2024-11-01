@@ -28,9 +28,9 @@ header = st.session_state.get(ViewExperimentKeys.ExperimentName)
 st.header(header if header is not None else "View Experiment")
 st.write(
     """
-    On this page, you can select a completed experiment to view.
+    On this page, you can select one of your experiments to view.
 
-    Select an experiment in the dropdown below to see your results.
+    Use the dropdown below to see the details of your experiment.
 
     If you have not run any analyses yet, your experiment will be empty.
     Go to the sidebar on the **left** and select an analysis to run.
