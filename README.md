@@ -65,7 +65,7 @@ Or by using the git command in the terminal:
 git clone https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
-You then need to set up a Python virtual environment. In the `BioFEFI` directory that you downloaded, use the following command in the terminal:
+You then need to set up a Python virtual environment. In the `BioFEFI` directory that you downloaded, use the following commands in the terminal:
 
 On Mac/Linux
 ```shell
