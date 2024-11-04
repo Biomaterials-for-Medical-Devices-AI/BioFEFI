@@ -81,6 +81,7 @@ class DataSplitMethods(StrEnum):
 
 class PlotOptionKeys(StrEnum):
     AxisFontSize = "plot_axis_font_size"
+    AxisTickSize = "plot_axis_tick_size"
     ColourScheme = "plot_colour_scheme"
     RotateXAxisLabels = "angle_rotate_xaxis_labels"
     RotateYAxisLabels = "angle_rotate_yaxis_labels"

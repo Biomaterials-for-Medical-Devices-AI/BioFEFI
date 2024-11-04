@@ -139,6 +139,11 @@ def ml_options_box():
 def plot_options_box():
     """Expander containing the options for making plots"""
     with st.expander("Plot options", expanded=False):
+        save = st.checkbox(
+            "Save all plots",
+            key=PlotOptionKeys.SavePlots,
+            value=True,
+        )
         rotate_x = st.number_input(
             "Angle to rotate X-axis labels",
             min_value=0,
@@ -169,16 +174,12 @@ def plot_options_box():
             "Axis tick size",
             min_value=5,
             max_value=20,
+            key=PlotOptionKeys.AxisTickSize,
         )
         cs = st.selectbox(
             "Colour scheme",
             options=plt.style.available,
             key=PlotOptionKeys.ColourScheme,
-        )
-        st.checkbox(
-            "Save all plots",
-            key=PlotOptionKeys.SavePlots,
-            value=True,
         )
         plt.style.use(cs)
         arr = np.random.normal(1, 1, size=100)
