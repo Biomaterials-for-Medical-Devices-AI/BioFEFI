@@ -80,10 +80,12 @@ class DataSplitMethods(StrEnum):
 
 
 class PlotOptionKeys(StrEnum):
+    AxisFontSize = "plot_axis_font_size"
     ColourScheme = "plot_colour_scheme"
     RotateXAxisLabels = "angle_rotate_xaxis_labels"
     RotateYAxisLabels = "angle_rotate_yaxis_labels"
     SavePlots = "save_plots"
+    TitleFontSize = "plot_title_font_size"
 
 
 class ViewExperimentKeys(StrEnum):

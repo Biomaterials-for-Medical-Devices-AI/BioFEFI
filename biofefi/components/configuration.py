@@ -151,6 +151,18 @@ def plot_options_box():
             value=60,
             key=PlotOptionKeys.RotateYAxisLabels,
         )
+        st.number_input(
+            "Title font size",
+            min_value=8,
+            max_value=20,
+            key=PlotOptionKeys.AxisFontSize,
+        )
+        st.number_input(
+            "Axis font size",
+            min_value=8,
+            max_value=20,
+            key=PlotOptionKeys.TitleFontSize,
+        )
         st.selectbox(
             "Colour scheme",
             options=plt.style.available,
