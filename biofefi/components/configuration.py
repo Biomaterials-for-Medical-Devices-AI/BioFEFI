@@ -2,6 +2,7 @@ from biofefi.options.choices import SVM_KERNELS, PROBLEM_TYPES, NORMALISATIONS
 from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 @st.experimental_fragment
@@ -134,36 +135,42 @@ def ml_options_box():
         st.checkbox("Save models", key=ConfigStateKeys.SaveModels)
 
 
+@st.experimental_fragment
 def plot_options_box():
     """Expander containing the options for making plots"""
     with st.expander("Plot options", expanded=False):
-        st.number_input(
+        rotate_x = st.number_input(
             "Angle to rotate X-axis labels",
             min_value=0,
             max_value=90,
             value=10,
             key=PlotOptionKeys.RotateXAxisLabels,
         )
-        st.number_input(
+        rotate_y = st.number_input(
             "Angle to rotate Y-axis labels",
             min_value=0,
             max_value=90,
             value=60,
             key=PlotOptionKeys.RotateYAxisLabels,
         )
-        st.number_input(
+        tfs = st.number_input(
             "Title font size",
             min_value=8,
             max_value=20,
             key=PlotOptionKeys.AxisFontSize,
         )
-        st.number_input(
+        afs = st.number_input(
             "Axis font size",
             min_value=8,
             max_value=20,
             key=PlotOptionKeys.TitleFontSize,
         )
-        st.selectbox(
+        ats = st.number_input(
+            "Axis tick size",
+            min_value=5,
+            max_value=20,
+        )
+        cs = st.selectbox(
             "Colour scheme",
             options=plt.style.available,
             key=PlotOptionKeys.ColourScheme,
@@ -173,6 +180,17 @@ def plot_options_box():
             key=PlotOptionKeys.SavePlots,
             value=True,
         )
+        plt.style.use(cs)
+        arr = np.random.normal(1, 1, size=100)
+        fig, ax = plt.subplots()
+        ax.hist(arr, bins=20)
+        ax.set_title("Testing", fontsize=tfs)
+        ax.set_xlabel("X axis", fontsize=afs)
+        ax.set_ylabel("Y axis", fontsize=afs)
+        ax.tick_params(labelsize=ats)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=rotate_x)
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y)
+        st.pyplot(fig, clear_figure=True)
 
 
 @st.experimental_fragment
