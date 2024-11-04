@@ -1,6 +1,7 @@
 from biofefi.options.choices import SVM_KERNELS, PROBLEM_TYPES, NORMALISATIONS
 from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 import streamlit as st
+import matplotlib.pyplot as plt
 
 
 @st.experimental_fragment
@@ -149,6 +150,11 @@ def plot_options_box():
             max_value=90,
             value=60,
             key=PlotOptionKeys.RotateYAxisLabels,
+        )
+        st.selectbox(
+            "Colour scheme",
+            options=plt.style.available,
+            key=PlotOptionKeys.ColourScheme,
         )
         st.checkbox(
             "Save all plots",

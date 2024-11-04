@@ -80,6 +80,7 @@ class DataSplitMethods(StrEnum):
 
 
 class PlotOptionKeys(StrEnum):
+    ColourScheme = "plot_colour_scheme"
     RotateXAxisLabels = "angle_rotate_xaxis_labels"
     RotateYAxisLabels = "angle_rotate_yaxis_labels"
     SavePlots = "save_plots"
