@@ -1,4 +1,5 @@
 import ast
+import matplotlib.pyplot as plt
 
 from biofefi.machine_learning.ml_options import MLOptions
 
@@ -78,6 +79,31 @@ class FeatureImportanceOptions(MLOptions):
             type=int,
             default=10,
             help="Angle to rotate x-axis labels for better readability",
+        ),
+        self.parser.add_argument(
+            "--plot_axis_font_size",
+            type=int,
+            default=8,
+            help="Font size for the axis labels",
+        ),
+        self.parser.add_argument(
+            "--plot_axis_tick_size",
+            type=int,
+            default=8,
+            help="Font size for the axis ticks",
+        ),
+        self.parser.add_argument(
+            "--plot_title_font_size",
+            type=int,
+            default=8,
+            help="Font size for the plot title",
+        ),
+        self.parser.add_argument(
+            "--plot_colour_scheme",
+            type=str,
+            default=8,
+            choices=plt.style.available,
+            help="Font size for the plot title",
         ),
         self.parser.add_argument(
             "--permutation_importance_scoring",
