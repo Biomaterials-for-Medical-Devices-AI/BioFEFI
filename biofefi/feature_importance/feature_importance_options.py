@@ -95,15 +95,15 @@ class FeatureImportanceOptions(MLOptions):
         self.parser.add_argument(
             "--plot_title_font_size",
             type=int,
-            default=8,
+            default=20,
             help="Font size for the plot title",
         ),
         self.parser.add_argument(
             "--plot_colour_scheme",
             type=str,
-            default=8,
+            default="classic",
             choices=plt.style.available,
-            help="Font size for the plot title",
+            help="Colour scheme for the plot",
         ),
         self.parser.add_argument(
             "--permutation_importance_scoring",
