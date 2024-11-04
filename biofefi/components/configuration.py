@@ -196,6 +196,7 @@ def plot_options_box():
             ax.set_xticklabels(ax.get_xticklabels(), rotation=rotate_x)
             ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y)
             st.pyplot(fig, clear_figure=True)
+            fig.clear()
 
 
 @st.experimental_fragment
