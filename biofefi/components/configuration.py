@@ -150,6 +150,7 @@ def plot_options_box():
             max_value=90,
             value=10,
             key=PlotOptionKeys.RotateXAxisLabels,
+            disabled=not save,
         )
         rotate_y = st.number_input(
             "Angle to rotate Y-axis labels",
@@ -157,41 +158,47 @@ def plot_options_box():
             max_value=90,
             value=60,
             key=PlotOptionKeys.RotateYAxisLabels,
+            disabled=not save,
         )
         tfs = st.number_input(
             "Title font size",
             min_value=8,
             max_value=20,
             key=PlotOptionKeys.AxisFontSize,
+            disabled=not save,
         )
         afs = st.number_input(
             "Axis font size",
             min_value=8,
             max_value=20,
             key=PlotOptionKeys.TitleFontSize,
+            disabled=not save,
         )
         ats = st.number_input(
             "Axis tick size",
             min_value=5,
             max_value=20,
             key=PlotOptionKeys.AxisTickSize,
+            disabled=not save,
         )
         cs = st.selectbox(
             "Colour scheme",
             options=plt.style.available,
             key=PlotOptionKeys.ColourScheme,
+            disabled=not save,
         )
-        plt.style.use(cs)
-        arr = np.random.normal(1, 1, size=100)
-        fig, ax = plt.subplots()
-        ax.hist(arr, bins=20)
-        ax.set_title("Testing", fontsize=tfs)
-        ax.set_xlabel("X axis", fontsize=afs)
-        ax.set_ylabel("Y axis", fontsize=afs)
-        ax.tick_params(labelsize=ats)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=rotate_x)
-        ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y)
-        st.pyplot(fig, clear_figure=True)
+        if save:
+            plt.style.use(cs)
+            arr = np.random.normal(1, 1, size=100)
+            fig, ax = plt.subplots()
+            ax.hist(arr, bins=20)
+            ax.set_title("Testing", fontsize=tfs)
+            ax.set_xlabel("X axis", fontsize=afs)
+            ax.set_ylabel("Y axis", fontsize=afs)
+            ax.tick_params(labelsize=ats)
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=rotate_x)
+            ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y)
+            st.pyplot(fig, clear_figure=True)
 
 
 @st.experimental_fragment
