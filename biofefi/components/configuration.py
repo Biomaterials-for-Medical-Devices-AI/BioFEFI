@@ -162,22 +162,19 @@ def plot_options_box():
         )
         tfs = st.number_input(
             "Title font size",
-            min_value=8,
-            max_value=20,
+            min_value=20,
             key=PlotOptionKeys.AxisFontSize,
             disabled=not save,
         )
         afs = st.number_input(
             "Axis font size",
             min_value=8,
-            max_value=20,
             key=PlotOptionKeys.TitleFontSize,
             disabled=not save,
         )
         ats = st.number_input(
             "Axis tick size",
-            min_value=5,
-            max_value=20,
+            min_value=8,
             key=PlotOptionKeys.AxisTickSize,
             disabled=not save,
         )
@@ -192,7 +189,7 @@ def plot_options_box():
             arr = np.random.normal(1, 1, size=100)
             fig, ax = plt.subplots()
             ax.hist(arr, bins=20)
-            ax.set_title("Testing", fontsize=tfs)
+            ax.set_title("Title", fontsize=tfs)
             ax.set_xlabel("X axis", fontsize=afs)
             ax.set_ylabel("Y axis", fontsize=afs)
             ax.tick_params(labelsize=ats)
