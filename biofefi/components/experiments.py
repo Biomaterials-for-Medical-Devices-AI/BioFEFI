@@ -24,7 +24,7 @@ def experiment_selector(options: list) -> Path:
 
 
 def model_selector(options: list) -> Path:
-    """Select a model to explain. This function creates a multiselect widget
+    """Select a model or models to explain. This function creates a multiselect widget
     to allow the user to select multiple models to explain using the FI pipeline.
 
     Args:
