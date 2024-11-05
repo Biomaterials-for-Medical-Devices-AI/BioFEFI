@@ -17,8 +17,6 @@ class FeatureImportanceOptions:
     save_feature_importance_options: bool = True
     save_feature_importance_plots: bool = True
     num_features_to_plot: int = 5
-    angle_rotate_yaxis_labels: int = 60
-    angle_rotate_xaxis_labels: int = 10
     permutation_importance_scoring: str = "neg_mean_absolute_error"
     permutation_importance_repeat: int = 10
     shap_reduce_data: int = 50
