@@ -5,7 +5,7 @@ from biofefi.components.images.logos import header_logo, sidebar_logo
 from biofefi.components.logs import log_box
 from biofefi.components.forms import data_upload_form
 from biofefi.components.plots import plot_box
-from biofefi.components.configuration import fi_options_page
+from biofefi.components.forms import fi_options_form
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
@@ -241,7 +241,7 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
 
     if model_choices := st.session_state.get(ExplainModels.ExplainModels):
 
-        fi_options_page()
+        fi_options_form()
 
         if st.button("Run Feature Importance"):
             config = build_configuration()
