@@ -188,14 +188,14 @@ def pipeline(
         exec_opts (ExecutionOptions):
         experiment_name (str): The name of the experiment.
     """
-    seed = ml_opts.random_state
+    seed = exec_opts.random_state
     set_seed(seed)
     logger_instance = Logger(log_dir(experiment_name))
     logger = logger_instance.make_logger()
 
     data = DataBuilder(
         data_path=exec_opts.data_path,
-        data_split=ml_opts.data_split,
+        data_split=exec_opts.data_split,
         random_state=exec_opts.random_state,
         normalization=exec_opts.normalization,
         n_bootstraps=ml_opts.n_bootstraps,
@@ -203,7 +203,7 @@ def pipeline(
     ).ingest()
 
     # Machine learning
-    if ml_opts.is_machine_learning:
+    if exec_opts.is_machine_learning:
         trained_models = train.run(ml_opts, data, logger)
         if ml_opts.save_models:
             for model_name in trained_models:
@@ -214,7 +214,7 @@ def pipeline(
         trained_models = load_models(ml_model_dir(experiment_name))
 
     # Feature importance
-    if fi_opts.is_feature_importance:
+    if exec_opts.is_feature_importance:
         gloabl_importance_results, local_importance_results, ensemble_results = (
             feature_importance.run(fi_opts, data, trained_models, logger)
         )
