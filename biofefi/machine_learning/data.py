@@ -1,4 +1,3 @@
-import argparse
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 import pandas as pd
@@ -18,14 +17,22 @@ class DataBuilder:
         Normalisations.Standardization: StandardScaler,
     }
 
-    def __init__(self, opt: argparse.Namespace, logger: object = None) -> None:
-        self._path = opt.data_path
-        self._data_split = opt.data_split
-        self._random_state = opt.random_state
+    def __init__(
+        self,
+        data_path: str,
+        data_split: dict,
+        random_state: int,
+        normalization: str,
+        n_bootstraps: int,
+        logger: object = None,
+    ) -> None:
+        self._path = data_path
+        self._data_split = data_split
+        self._random_state = random_state
         self._logger = logger
-        self._normalization = opt.normalization
+        self._normalization = normalization
         self._numerical_cols = "all"
-        self._n_bootstraps = opt.n_bootstraps
+        self._n_bootstraps = n_bootstraps
 
     def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
