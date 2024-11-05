@@ -3,6 +3,7 @@ from pathlib import Path
 import random
 import argparse
 import os
+from multiprocessing import Process
 
 
 import numpy as np
@@ -103,3 +104,13 @@ def save_upload(file_to_upload: str, content: str, mode: str = "w"):
         os.makedirs(base_dir)
     with open(file_to_upload, mode) as f:
         f.write(content)
+
+
+def cancel_pipeline(p: Process):
+    """Cancel a running pipeline.
+
+    Args:
+        p (Process): the process running the pipeline to cancel.
+    """
+    if p.is_alive():
+        p.terminate()

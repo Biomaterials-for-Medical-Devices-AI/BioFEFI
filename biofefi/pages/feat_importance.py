@@ -1,9 +1,7 @@
 from argparse import Namespace
 from multiprocessing import Process
-from pathlib import Path
-from biofefi.components.images.logos import header_logo, sidebar_logo
+from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.logs import log_box
-from biofefi.components.forms import data_upload_form
 from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
 from biofefi.services.logs import get_logs
@@ -13,12 +11,9 @@ from biofefi.feature_importance.feature_importance_options import (
     FeatureImportanceOptions,
 )
 from biofefi.feature_importance.fuzzy_options import FuzzyOptions
-from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.machine_learning.ml_options import MLOptions
 from biofefi.options.enums import (
     ConfigStateKeys,
-    ExecutionStateKeys,
     ProblemTypes,
     PlotOptionKeys,
 )
@@ -30,19 +25,16 @@ from biofefi.options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
     log_dir,
-    ml_plot_dir,
 )
 
 from biofefi.options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
-    uploaded_file_path,
     log_dir,
-    ml_plot_dir,
     ml_model_dir,
 )
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import set_seed
+from biofefi.utils.utils import set_seed, cancel_pipeline
 from biofefi.components.navigation import navbar
 from biofefi.components.experiments import experiment_selector, model_selector
 import streamlit as st
@@ -177,14 +169,6 @@ def pipeline(
     close_logger(logger_instance, logger)
 
 
-def cancel_pipeline(p: Process):
-    """Cancel a running pipeline.
-
-    Args:
-        p (Process): the process running the pipeline to cancel.
-    """
-    if p.is_alive():
-        p.terminate()
 
 
 # Set page contents
