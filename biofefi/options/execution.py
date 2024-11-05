@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class ExecutionOptions:
     data_path: str
+    data_split: dict | None = None
     experiment_name: str = "test"
     is_feature_engineering: bool = False
     is_machine_learning: bool = False
