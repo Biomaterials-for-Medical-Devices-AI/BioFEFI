@@ -87,3 +87,8 @@ class PlotOptionKeys(StrEnum):
 
 class ViewExperimentKeys(StrEnum):
     ExperimentName = "view_experiment_name"
+
+
+class ExplainModels(StrEnum):
+    ExplainModels = "explain_models"
+    pass
