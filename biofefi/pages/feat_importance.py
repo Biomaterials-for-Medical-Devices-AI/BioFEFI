@@ -135,7 +135,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
 
 
 
-def pipeline_fi(
+def pipeline(
     fuzzy_opts: Namespace,
     fi_opts: Namespace,
     experiment_name: str,
@@ -231,7 +231,7 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
 
         if st.button("Run Feature Importance"):
             config = build_configuration()
-            process = Process(target=pipeline_fi, args=config, daemon=True)
+            process = Process(target=pipeline, args=config, daemon=True)
             process.start()
             cancel_button = st.button(
                 "Cancel", on_click=cancel_pipeline, args=(process,)
