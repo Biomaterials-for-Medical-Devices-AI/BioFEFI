@@ -10,6 +10,7 @@ from biofefi.components.configuration import (
     fi_options_box,
 )
 from biofefi.options.execution import ExecutionOptions
+from biofefi.options.ml import MachineLearningOptions
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model, load_models
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
@@ -40,12 +41,13 @@ import streamlit as st
 import os
 
 
-def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
+def build_configuration() -> (
+    tuple[Namespace, Namespace, MachineLearningOptions, ExecutionOptions, str]
+):
     """Build the configuration objects for the pipeline.
 
     Returns:
-        tuple[Namespace, Namespace, Namespace, str]: The configuration for fuzzy, FI and ML pipelines,
-        and the experiment name.
+        tuple[Namespace, Namespace, MachineLearningOptions, ExecutionOptions, str]: The configuration for fuzzy, FI and ML pipelines, the general execution and the experiment name.
     """
 
     fuzzy_opt = FuzzyOptions()
@@ -117,30 +119,10 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         )
     fi_opt = fi_opt.parse()
 
-    ml_opt = MLOptions()
-    ml_opt.initialize()
     path_to_data = uploaded_file_path(
         st.session_state[ConfigStateKeys.UploadedFileName].name,
         st.session_state[ConfigStateKeys.ExperimentName],
     )
-    ml_opt.parser.set_defaults(
-        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
-        save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
-        normalization=st.session_state[ConfigStateKeys.Normalization],
-        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        data_path=path_to_data,
-        data_split=st.session_state[ConfigStateKeys.DataSplit],
-        model_types=st.session_state[ConfigStateKeys.ModelTypes],
-        ml_log_dir=ml_plot_dir(st.session_state[ConfigStateKeys.ExperimentName]),
-        problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
-        ).lower(),
-        random_state=st.session_state[ConfigStateKeys.RandomSeed],
-        is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning],
-        save_models=st.session_state[ConfigStateKeys.SaveModels],
-    )
-    ml_opt = ml_opt.parse()
 
     exec_opts = ExecutionOptions(
         data_path=path_to_data,
@@ -149,11 +131,29 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning],
         is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
+        problem_type=st.session_state.get(
+            ConfigStateKeys.ProblemType, ProblemTypes.Auto
+        ).lower(),
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         normalization=st.session_state[ConfigStateKeys.Normalization],
     )
 
-    return fuzzy_opt, fi_opt, ml_opt, st.session_state[ConfigStateKeys.ExperimentName]
+    ml_opt = MachineLearningOptions(
+        data_split=st.session_state[ConfigStateKeys.DataSplit],
+        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
+        save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
+        model_types=st.session_state[ConfigStateKeys.ModelTypes],
+        ml_log_dir=ml_plot_dir(st.session_state[ConfigStateKeys.ExperimentName]),
+        save_models=st.session_state[ConfigStateKeys.SaveModels],
+    )
+
+    return (
+        fuzzy_opt,
+        fi_opt,
+        ml_opt,
+        exec_opts,
+        st.session_state[ConfigStateKeys.ExperimentName],
+    )
 
 
 def save_upload(file_to_upload: str, content: str, mode: str = "w"):
@@ -172,7 +172,11 @@ def save_upload(file_to_upload: str, content: str, mode: str = "w"):
 
 
 def pipeline(
-    fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace, experiment_name: str
+    fuzzy_opts: Namespace,
+    fi_opts: Namespace,
+    ml_opts: MachineLearningOptions,
+    exec_opts: ExecutionOptions,
+    experiment_name: str,
 ):
     """This function actually performs the steps of the pipeline. It can be wrapped
     in a process it doesn't block the UI.
@@ -180,7 +184,8 @@ def pipeline(
     Args:
         fuzzy_opts (Namespace): Options for fuzzy feature importance.
         fi_opts (Namespace): Options for feature importance.
-        ml_opts (Namespace): Options for machine learning.
+        ml_opts (MachineLearningOptions): Options for machine learning.
+        exec_opts (ExecutionOptions):
         experiment_name (str): The name of the experiment.
     """
     seed = ml_opts.random_state
