@@ -9,6 +9,7 @@ from biofefi.components.configuration import (
     plot_options_box,
     fi_options_box,
 )
+from biofefi.options.execution import ExecutionOptions
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model, load_models
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
@@ -140,6 +141,17 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         save_models=st.session_state[ConfigStateKeys.SaveModels],
     )
     ml_opt = ml_opt.parse()
+
+    exec_opts = ExecutionOptions(
+        data_path=path_to_data,
+        experiment_name=ConfigStateKeys.ExperimentName,
+        is_feature_engineering=False,  # not implemented so False for now
+        is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning],
+        is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
+        random_state=st.session_state[ConfigStateKeys.RandomSeed],
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        normalization=st.session_state[ConfigStateKeys.Normalization],
+    )
 
     return fuzzy_opt, fi_opt, ml_opt, st.session_state[ConfigStateKeys.ExperimentName]
 
