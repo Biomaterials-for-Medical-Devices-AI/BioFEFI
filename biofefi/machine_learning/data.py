@@ -20,11 +20,11 @@ class DataBuilder:
     def __init__(
         self,
         data_path: str,
-        data_split: dict,
         random_state: int,
         normalization: str,
         n_bootstraps: int,
         logger: object = None,
+        data_split: dict | None = None,
     ) -> None:
         self._path = data_path
         self._data_split = data_split
@@ -65,7 +65,10 @@ class DataBuilder:
         """
         X_train_list, X_test_list, y_train_list, y_test_list = [], [], [], []
 
-        if self._data_split["type"].lower() == DataSplitMethods.Holdout:
+        if (
+            self._data_split is not None
+            and self._data_split["type"].lower() == DataSplitMethods.Holdout
+        ):
             for i in range(self._n_bootstraps):
                 self._logger.info(
                     f"Using holdout data split with test size {self._data_split['test_size']} for bootstrap {i+1}"
