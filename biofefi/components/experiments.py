@@ -1,6 +1,6 @@
 import streamlit as st
 from pathlib import Path
-from biofefi.options.enums import ViewExperimentKeys, ExplainModels
+from biofefi.options.enums import ViewExperimentKeys
 from biofefi.options.file_paths import biofefi_experiments_base_dir
 
 
@@ -24,19 +24,20 @@ def experiment_selector(options: list) -> Path:
 
 
 def model_selector(options: list) -> Path:
-    """Select
+    """Select a model to explain. This function creates a multiselect widget
+    to allow the user to select multiple models to explain using the FI pipeline.
 
     Args:
         options (list): The list of model names to choose from.
 
     Returns:
-        Path: The path to the experiment on disk.
+        Path: The path to the model on disk.
     """
 
     return st.multiselect(
-        "Select an experiment",
+        "Select a model to explain",
         options=options,
         default=None,
         placeholder="Models to explain",
-        key=ExplainModels.ExplainModels,
+        key=ViewExperimentKeys.ExplainModels,
     )
