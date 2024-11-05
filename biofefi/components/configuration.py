@@ -263,5 +263,3 @@ def fi_options_box():
                     value=10,
                     key=ConfigStateKeys.NumberOfTopRules,
                 )
-
-

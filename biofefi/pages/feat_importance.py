@@ -134,7 +134,6 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
     )
 
 
-
 def pipeline(
     fuzzy_opts: Namespace,
     fi_opts: Namespace,

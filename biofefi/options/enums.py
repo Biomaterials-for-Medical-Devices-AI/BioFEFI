@@ -88,5 +88,3 @@ class PlotOptionKeys(StrEnum):
 
 class ViewExperimentKeys(StrEnum):
     ExperimentName = "view_experiment_name"
-
-
