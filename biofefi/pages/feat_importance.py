@@ -23,7 +23,7 @@ from biofefi.options.enums import (
     PlotOptionKeys,
 )
 
-from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys, ExplainModels
+from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
 
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
@@ -130,7 +130,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         fuzzy_opt,
         fi_opt,
         st.session_state[ConfigStateKeys.ExperimentName],
-        st.session_state[ExplainModels.ExplainModels],
+        st.session_state[ConfigStateKeys.ExplainModels],
     )
 
 
@@ -225,7 +225,7 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
 
     model_selector(model_choices)
 
-    if model_choices := st.session_state.get(ExplainModels.ExplainModels):
+    if model_choices := st.session_state.get(ConfigStateKeys.ExplainModels):
 
         fi_options_form()
 

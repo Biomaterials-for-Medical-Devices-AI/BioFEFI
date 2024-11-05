@@ -27,6 +27,7 @@ class ConfigStateKeys(StrEnum):
     LocalImportanceFeatures = "local_importance_methods"
     EnsembleMethods = "ensemble_methods"
     GlobalFeatureImportanceMethods = "global_feature_importance_methods"
+    ExplainModels = "explain_models"
     # Fuzzy options
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"
@@ -89,6 +90,3 @@ class ViewExperimentKeys(StrEnum):
     ExperimentName = "view_experiment_name"
 
 
-class ExplainModels(StrEnum):
-    ExplainModels = "explain_models"
-    pass
