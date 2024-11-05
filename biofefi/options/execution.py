@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class ExecutionOptions:
+    data_path: str
     experiment_name: str = "test"
     is_feature_engineering: bool = False
     is_machine_learning: bool = False
@@ -10,3 +11,4 @@ class ExecutionOptions:
     random_state: int = 1221
     problem_type: str = "classification"
     dependent_variable: str | None = None
+    normalization: str = "None"
