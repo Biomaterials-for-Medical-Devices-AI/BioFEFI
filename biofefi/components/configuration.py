@@ -265,8 +265,6 @@ def fi_options_box():
                 )
 
 
-
-
 @st.experimental_fragment
 def fi_options_page():
     global_methods = {}
@@ -326,7 +324,8 @@ def fi_options_page():
     )
     local_importance_methods["LIME"] = {"type": "local", "value": use_lime}
     use_local_shap = st.checkbox(
-        "Local SHAP", help="Use SHAP for local feature importance at the instance level."
+        "Local SHAP",
+        help="Use SHAP for local feature importance at the instance level.",
     )
     local_importance_methods["SHAP"] = {
         "type": "local",
