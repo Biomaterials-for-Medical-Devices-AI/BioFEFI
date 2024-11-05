@@ -193,7 +193,14 @@ def pipeline(
     logger_instance = Logger(log_dir(experiment_name))
     logger = logger_instance.make_logger()
 
-    data = DataBuilder(ml_opts, logger).ingest()
+    data = DataBuilder(
+        data_path=exec_opts.data_path,
+        data_split=ml_opts.data_split,
+        random_state=exec_opts.random_state,
+        normalization=exec_opts.normalization,
+        n_bootstraps=ml_opts.n_bootstraps,
+        logger=logger,
+    ).ingest()
 
     # Machine learning
     if ml_opts.is_machine_learning:
