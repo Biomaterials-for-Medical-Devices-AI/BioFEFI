@@ -4,7 +4,6 @@ from typing import Any
 
 @dataclass
 class MachineLearningOptions:
-    data_split: dict = {"type": "holdout", "test_size": 0.2}
     n_bootstraps: int = 3
     save_actual_pred_plots: bool = True
     model_types: dict = {
