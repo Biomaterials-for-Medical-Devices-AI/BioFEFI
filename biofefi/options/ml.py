@@ -30,5 +30,4 @@ class MachineLearningOptions:
             },
         },
     }
-    normalization: str = "None"
     ml_log_dir: str = "ml"
