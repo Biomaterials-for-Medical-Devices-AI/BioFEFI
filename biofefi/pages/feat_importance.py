@@ -169,8 +169,6 @@ def pipeline(
     close_logger(logger_instance, logger)
 
 
-
-
 # Set page contents
 st.set_page_config(
     page_title="Feature Importance",
