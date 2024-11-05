@@ -4,10 +4,36 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import ProblemTypes
+from biofefi.options.execution import ExecutionOptions
+from biofefi.options.file_paths import ml_plot_dir
+from biofefi.options.ml import MachineLearningOptions
+from biofefi.options.plotting import PlottingOptions
 
 
-def plot_scatter(y, yp, r2, set_name, dependent_variable, model_name, directory):
+def plot_scatter(
+    y,
+    yp,
+    r2: float,
+    set_name: str,
+    dependent_variable: str,
+    model_name: str,
+    directory: str,
+    plot_opts: PlottingOptions | None = None,
+):
+    """_summary_
+
+    Args:
+        y (_type_): True y values.
+        yp (_type_): Predicted y values.
+        r2 (float): R-squared between `y`and `yp`.
+        set_name (str): "Train" or "Test".
+        dependent_variable (str): The name of the dependent variable.
+        model_name (str): Name of the model.
+        directory (str): The directory to save the plot.
+        plot_opts (PlottingOptions | None, optional): Options for styling the plot. Defaults to None.
+    """
 
     # Create a scatter plot using Seaborn
     plt.figure(figsize=(10, 6))
@@ -35,7 +61,13 @@ def plot_scatter(y, yp, r2, set_name, dependent_variable, model_name, directory)
 
 
 def save_actual_pred_plots(
-    data, ml_results, opt: argparse.Namespace, logger, ml_metric_results
+    data: DataBuilder,
+    ml_results,
+    opt: ExecutionOptions,
+    logger,
+    ml_metric_results,
+    plot_opts: PlottingOptions | None = None,
+    ml_opts: MachineLearningOptions | None = None,
 ) -> None:
     """Save Actual vs Predicted plots for Regression models
     Args:
@@ -50,7 +82,7 @@ def save_actual_pred_plots(
     if opt.problem_type == ProblemTypes.Regression:
 
         # Create results directory if it doesn't exist
-        directory = opt.ml_log_dir
+        directory = ml_plot_dir(opt.experiment_name)
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
         # Convert train and test sets to numpy arrays for easier handling
@@ -58,14 +90,13 @@ def save_actual_pred_plots(
         y_train = [np.array(df) for df in data.y_train]
 
         # Scatter plot of actual vs predicted values
-        for model_name, model_options in opt.model_types.items():
+        for model_name, model_options in ml_opts.model_types.items():
             if model_options["use"]:
                 logger.info(f"Saving actual vs prediction plots of {model_name}...")
 
-                for i in range(opt.n_bootstraps):
+                for i in range(ml_opts.n_bootstraps):
                     y_pred_test = ml_results[i][model_name]["y_pred_test"]
                     y_pred_train = ml_results[i][model_name]["y_pred_train"]
-                    dependent_variable = opt.dependent_variable
 
                     # Plotting the training and test results
                     plot_scatter(
@@ -73,7 +104,7 @@ def save_actual_pred_plots(
                         y_pred_test,
                         ml_metric_results[model_name][i]["R2"]["test"],
                         "Test",
-                        dependent_variable,
+                        opt.dependent_variable,
                         model_name,
                         directory,
                     )
@@ -82,11 +113,7 @@ def save_actual_pred_plots(
                         y_pred_train,
                         ml_metric_results[model_name][i]["R2"]["train"],
                         "Train",
-                        dependent_variable,
+                        opt.dependent_variable,
                         model_name,
                         directory,
                     )
-
-                # sns.scatterplot(
-                #     x=y_test[i], y=y_pred_test, marker="o", s=30, color="black"
-                # )
