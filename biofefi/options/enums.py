@@ -27,6 +27,7 @@ class ConfigStateKeys(StrEnum):
     LocalImportanceFeatures = "local_importance_methods"
     EnsembleMethods = "ensemble_methods"
     GlobalFeatureImportanceMethods = "global_feature_importance_methods"
+    ExplainModels = "explain_models"
     # Fuzzy options
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"
@@ -83,3 +84,7 @@ class PlotOptionKeys(StrEnum):
     RotateXAxisLabels = "angle_rotate_xaxis_labels"
     RotateYAxisLabels = "angle_rotate_yaxis_labels"
     SavePlots = "save_plots"
+
+
+class ViewExperimentKeys(StrEnum):
+    ExperimentName = "view_experiment_name"
