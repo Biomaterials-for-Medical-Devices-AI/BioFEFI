@@ -36,14 +36,14 @@ On Mac/Linux
 # Create a virtual environment with venv
 python -m venv <path/to/env>
 source <path/to/env>/bin/activate
-pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 
 # -- OR --
 
 # Create a virtual environment with conda
 conda create -n <env_name> python=3.11
 conda activate <env_name>
-pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
 On Windows
@@ -51,14 +51,14 @@ On Windows
 # Create a virtual environment with venv
 python -m venv <path\to\env>
 <path/to/env>\Scripts\activate
-pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 
 # -- OR --
 
 # Create a virtual environment with conda
 conda create -n <env_name> python=3.11
 conda activate <env_name>
-pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
+pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
 ### Developers
