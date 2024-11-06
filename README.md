@@ -14,6 +14,20 @@ The data should be in a format where all columns except the last one are input f
 
 ## Installation
 
+**N.B.:** You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI.
+
+On Mac:
+```shell
+brew install libomp
+```
+
+On Linux (Ubuntu)
+```shell
+sudo apt install libomp-dev
+```
+
+On Windows, this doesn't seem to be a problem. You should be able to proceed with installation.
+
 ### Users
 Users can install BioFEFI using `pip` like so:
 
