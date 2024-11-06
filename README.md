@@ -53,8 +53,6 @@ biofefi
 ```
 in your virtual envrionment to start BioFEFI.
 
-**NB:** if `python` doesn't work, try using `python3` instead.
-
 ### Developers
 
 You can obtain a copy of the latest code by downloading it from Github. You can do this by donwloading the ZIP file using the button shown below:
@@ -100,14 +98,6 @@ conda activate <env_name>
 pip install poetry
 poetry install
 ```
-
-Then to run BioFEFI, in your virtual environment use
-```shell
-poetry run biofefi
-```
-to start BioFEFI.
-
-**NB:** if `python` doesn't work, try using `python3` instead.
 
 ## Running the app (users)
 
