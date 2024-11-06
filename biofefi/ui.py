@@ -246,7 +246,7 @@ if (
 ) and st.session_state.get(ExecutionStateKeys.RunPipeline, False):
     experiment_name = st.session_state.get(ConfigStateKeys.ExperimentName)
     upload_path = uploaded_file_path(uploaded_file.name, experiment_name)
-    save_upload(upload_path, uploaded_file.read().decode("utf-8"))
+    save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
     if uploaded_models := st.session_state.get(ConfigStateKeys.UploadedModels):
         for m in uploaded_models:
             upload_path = ml_model_dir(experiment_name) / m.name
