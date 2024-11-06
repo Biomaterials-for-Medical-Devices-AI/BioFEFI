@@ -47,12 +47,6 @@ conda activate <env_name>
 pip install https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
-You can then run the command:
-```shell
-biofefi
-```
-in your virtual envrionment to start BioFEFI.
-
 ### Developers
 
 You can obtain a copy of the latest code by downloading it from Github. You can do this by donwloading the ZIP file using the button shown below:
@@ -99,7 +93,11 @@ pip install poetry
 poetry install
 ```
 
-## Running the app (users)
+## Running the app
+
+Remember to activate the virtual environment before running the app, if you haven't already (see [Installation](#installation)). The app will open in your web browser. Or you can follow follow this link to view your app http://localhost:8501.
+
+### Users
 
 If the installation was successful, you should be able to run the app with the following command:
 
@@ -107,15 +105,13 @@ If the installation was successful, you should be able to run the app with the f
 biofefi
 ```
 
-## Running the app (developers)
+### Developers
 
 If the installation was successful, you should be able to run the app. In the `BioFEFI/biofefi` directory run the following command:
 
 ```bash
-streamlit run ui.py
+poetry run biofefi
 ```
-
-Remember to activate the virtual environment before running the app, if you haven't already (see [Installation](#installation)). The app will open in your web browser. Or you can follow follow this link to view your app http://localhost:8501.
 
 You will see the following screen:
 ![main screen](static/main-screen.png)
