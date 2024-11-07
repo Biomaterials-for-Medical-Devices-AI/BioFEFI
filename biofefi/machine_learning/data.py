@@ -27,7 +27,15 @@ class DataBuilder:
         self._normalization = opt.normalization
         self._numerical_cols = "all"
         self._n_bootstraps = opt.n_bootstraps
-        self._create_synthetic_data = None
+        self._create_synthetic_data = False
+
+    class DataBuilderError(Exception):
+        """
+        Custom exception raised when data loading or
+        generation fails in DataBuilder.
+        """
+
+        pass
 
     def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
@@ -47,7 +55,7 @@ class DataBuilder:
                 return X, y
 
             except Exception as e:
-                raise ValueError(f"Error loading the synthetic data: {e}")
+                raise self.DataBuilderError(f"Error generating synthetic data: {e}")
 
         else:
             self._logger.info(f"Loading data from {self._path}")
@@ -59,7 +67,7 @@ class DataBuilder:
                 return X, y
 
             except Exception as e:
-                raise ValueError(f"Error loading the data through CSV file: {e}")
+                raise self.DataBuilderError(f"Error loading data from CSV file: {e}")
 
     def _generate_data_splits(
         self, X: pd.DataFrame, y: pd.DataFrame
@@ -137,7 +145,7 @@ class DataBuilder:
 
         if isinstance(self._numerical_cols, str) and self._numerical_cols == "all":
             self._numerical_cols = data.columns
-        elif type(self._numerical_cols) == pd.Index:
+        elif isinstance(self._numerical_cols, pd.Index):
             pass
         else:
             raise TypeError("numerical_cols must be a list of columns or 'all'.")
