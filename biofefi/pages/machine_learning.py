@@ -110,6 +110,16 @@ sidebar_logo()
 navbar()
 
 st.header("Train Models")
+st.write(
+    """
+    This page is where you can train new machine learning models. First, you select an experiment
+    to add your data. Then, you can give a name to your dependent variable. This will appear on your
+    plots. Next, you choose a CSV containing your data and specify how you wish it to be standardised
+    and spit into training and test data. After that, you select the type of problem you are trying
+    to solve, followed by the models you wish to train - you may choose more than one. Finally,
+    you choose which outputs to save and hit **"Run Training"**, and wait for the pipeline to finish.
+    """
+)
 
 choices = get_experiments()
 experiment_name = experiment_selector(choices)
