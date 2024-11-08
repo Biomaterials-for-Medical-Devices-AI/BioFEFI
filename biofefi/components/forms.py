@@ -314,7 +314,7 @@ def ml_options_form():
         }
         st.divider()
 
-    use_svm = st.toggle("SVM", value=True)
+    use_svm = st.toggle("Support Vector Machine", value=True)
     if use_svm:
         st.write("Options:")
         kernel = st.selectbox("Kernel", options=SVM_KERNELS)
