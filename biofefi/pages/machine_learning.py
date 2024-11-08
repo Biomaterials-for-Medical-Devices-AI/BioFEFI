@@ -81,7 +81,7 @@ def pipeline(ml_opts: Namespace, experiment_name: str):
     """
     seed = ml_opts.random_state
     set_seed(seed)
-    logger_instance = Logger(log_dir(experiment_name))
+    logger_instance = Logger(log_dir(biofefi_experiments_base_dir() / experiment_name))
     logger = logger_instance.make_logger()
 
     data = DataBuilder(ml_opts, logger).ingest()
@@ -92,10 +92,11 @@ def pipeline(ml_opts: Namespace, experiment_name: str):
         if ml_opts.save_models:
             for model_name in trained_models:
                 for i, model in enumerate(trained_models[model_name]):
-                    save_path = ml_model_dir(experiment_name) / f"{model_name}-{i}.pkl"
+                    save_path = (
+                        ml_model_dir(biofefi_experiments_base_dir() / experiment_name)
+                        / f"{model_name}-{i}.pkl"
+                    )
                     save_model(model, save_path)
-    else:
-        trained_models = load_models(ml_model_dir(experiment_name))
 
     # Close the logger
     close_logger(logger_instance, logger)
@@ -170,7 +171,7 @@ st.toggle(
     "Save plot",
     key=PlotOptionKeys.SavePlots,
     value=True,
-    help="Save the models that are trained to disk?",
+    help="Save the plots to disk?",
 )
 
 if st.button("Run Training", type="primary") and (
@@ -188,10 +189,13 @@ if st.button("Run Training", type="primary") and (
     with st.spinner("Model training in progress. Check the logs for progress."):
         # wait for the process to finish or be cancelled
         process.join()
-    st.session_state[ConfigStateKeys.LogBox] = get_logs(
-        log_dir(biofefi_experiments_base_dir() / experiment_name)
-    )
-    log_box()
+    try:
+        st.session_state[ConfigStateKeys.LogBox] = get_logs(
+            log_dir(biofefi_experiments_base_dir() / experiment_name)
+        )
+        log_box()
+    except NotADirectoryError:
+        pass
     ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)
     if ml_plots.exists():
         plot_box(ml_plots, "Machine learning plots")
