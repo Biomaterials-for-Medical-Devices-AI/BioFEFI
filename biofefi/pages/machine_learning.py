@@ -161,18 +161,6 @@ seed = st.number_input(
 )
 
 ml_options_form()
-st.toggle(
-    "Save models",
-    key=ConfigStateKeys.SaveModels,
-    value=True,
-    help="Save the models that are trained to disk?",
-)
-st.toggle(
-    "Save plot",
-    key=PlotOptionKeys.SavePlots,
-    value=True,
-    help="Save the plots to disk?",
-)
 
 if st.button("Run Training", type="primary") and (
     uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)

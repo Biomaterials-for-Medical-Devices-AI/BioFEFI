@@ -3,7 +3,7 @@ from pathlib import Path
 import streamlit as st
 
 from biofefi.options.choices import PROBLEM_TYPES, SVM_KERNELS
-from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys
+from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys, PlotOptionKeys
 
 
 def data_upload_form():
@@ -330,3 +330,15 @@ def ml_options_form():
         }
         st.divider()
     st.session_state[ConfigStateKeys.ModelTypes] = model_types
+    st.toggle(
+        "Save models",
+        key=ConfigStateKeys.SaveModels,
+        value=True,
+        help="Save the models that are trained to disk?",
+    )
+    st.toggle(
+        "Save plot",
+        key=PlotOptionKeys.SavePlots,
+        value=True,
+        help="Save the plots to disk?",
+    )
