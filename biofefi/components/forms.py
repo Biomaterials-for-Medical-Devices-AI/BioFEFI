@@ -260,7 +260,7 @@ def ml_options_form():
     st.subheader("Select and cofigure which models to train")
 
     model_types = {}
-    use_linear = st.toggle("Linear Model", value=True)
+    use_linear = st.toggle("Linear Model", value=False)
     if use_linear:
         st.write("Options:")
         fit_intercept = st.checkbox("Fit intercept")
@@ -272,7 +272,7 @@ def ml_options_form():
         }
         st.divider()
 
-    use_rf = st.toggle("Random Forest", value=True)
+    use_rf = st.toggle("Random Forest", value=False)
     if use_rf:
         st.write("Options:")
         n_estimators_rf = st.number_input(
@@ -292,7 +292,7 @@ def ml_options_form():
         }
         st.divider()
 
-    use_xgb = st.toggle("XGBoost", value=True)
+    use_xgb = st.toggle("XGBoost", value=False)
     if use_xgb:
         st.write("Options:")
         n_estimators_xgb = st.number_input(
@@ -314,7 +314,7 @@ def ml_options_form():
         }
         st.divider()
 
-    use_svm = st.toggle("Support Vector Machine", value=True)
+    use_svm = st.toggle("Support Vector Machine", value=False)
     if use_svm:
         st.write("Options:")
         kernel = st.selectbox("Kernel", options=SVM_KERNELS)
@@ -330,6 +330,7 @@ def ml_options_form():
         }
         st.divider()
     st.session_state[ConfigStateKeys.ModelTypes] = model_types
+    st.subheader("Select outputs to save")
     st.toggle(
         "Save models",
         key=ConfigStateKeys.SaveModels,
