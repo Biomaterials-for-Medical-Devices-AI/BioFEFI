@@ -26,7 +26,7 @@ from biofefi.options.file_paths import (
 )
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
-from biofefi.services.ml_models import load_models, save_model
+from biofefi.services.ml_models import save_model
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed
 
@@ -113,77 +113,87 @@ st.header("Train Models")
 
 choices = get_experiments()
 experiment_name = experiment_selector(choices)
-st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
+if experiment_name:
+    st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
 
-st.text_input(
-    "Name of the dependent variable", key=ConfigStateKeys.DependentVariableName
-)
-st.file_uploader("Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName)
-
-st.selectbox(
-    "Normalisation",
-    NORMALISATIONS,
-    key=ConfigStateKeys.Normalization,
-)
-
-data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
-if data_split == "Holdout":
-    split_size = st.number_input(
-        "Test split",
-        min_value=0.0,
-        max_value=1.0,
-        value=0.2,
+    st.text_input(
+        "Name of the dependent variable", key=ConfigStateKeys.DependentVariableName
     )
-    st.session_state[ConfigStateKeys.DataSplit] = {
-        "type": "holdout",
-        "test_size": split_size,
-    }
-elif data_split == "K-Fold":
-    split_size = st.number_input(
-        "n splits",
-        min_value=0,
-        value=5,
-    )
-    st.session_state[ConfigStateKeys.DataSplit] = {
-        "type": "kfold",
-        "n_splits": split_size,
-    }
-else:
-    split_size = None
-st.number_input(
-    "Number of bootstraps",
-    min_value=1,
-    value=10,
-    key=ConfigStateKeys.NumberOfBootstraps,
-)
-seed = st.number_input(
-    "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
-)
 
-ml_options_form()
-
-if st.button("Run Training", type="primary") and (
-    uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
-):
-    biofefi_base_dir = biofefi_experiments_base_dir()
-    upload_path = uploaded_file_path(
-        uploaded_file.name, biofefi_base_dir / experiment_name
+    st.subheader("Data preparation")
+    st.write(
+        """
+        Upload your data file as a CSV and then define how the data will be normalised and split between
+        training and test data.
+        """
     )
-    save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
-    config = build_configuration()
-    process = Process(target=pipeline, args=config, daemon=True)
-    process.start()
-    cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
-    with st.spinner("Model training in progress. Check the logs for progress."):
-        # wait for the process to finish or be cancelled
-        process.join()
-    try:
-        st.session_state[ConfigStateKeys.LogBox] = get_logs(
-            log_dir(biofefi_experiments_base_dir() / experiment_name)
+    st.file_uploader(
+        "Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName
+    )
+    st.selectbox(
+        "Normalisation",
+        NORMALISATIONS,
+        key=ConfigStateKeys.Normalization,
+    )
+
+    data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
+    if data_split == "Holdout":
+        split_size = st.number_input(
+            "Test split",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.2,
         )
-        log_box()
-    except NotADirectoryError:
-        pass
-    ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)
-    if ml_plots.exists():
-        plot_box(ml_plots, "Machine learning plots")
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": "holdout",
+            "test_size": split_size,
+        }
+    elif data_split == "K-Fold":
+        split_size = st.number_input(
+            "n splits",
+            min_value=0,
+            value=5,
+        )
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": "kfold",
+            "n_splits": split_size,
+        }
+    else:
+        split_size = None
+    st.number_input(
+        "Number of bootstraps",
+        min_value=1,
+        value=10,
+        key=ConfigStateKeys.NumberOfBootstraps,
+    )
+    seed = st.number_input(
+        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
+    )
+
+    ml_options_form()
+
+    if st.button("Run Training", type="primary") and (
+        uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
+    ):
+        biofefi_base_dir = biofefi_experiments_base_dir()
+        upload_path = uploaded_file_path(
+            uploaded_file.name, biofefi_base_dir / experiment_name
+        )
+        save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
+        config = build_configuration()
+        process = Process(target=pipeline, args=config, daemon=True)
+        process.start()
+        cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
+        with st.spinner("Model training in progress. Check the logs for progress."):
+            # wait for the process to finish or be cancelled
+            process.join()
+        try:
+            st.session_state[ConfigStateKeys.LogBox] = get_logs(
+                log_dir(biofefi_experiments_base_dir() / experiment_name)
+            )
+            log_box()
+        except NotADirectoryError:
+            pass
+        ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)
+        if ml_plots.exists():
+            plot_box(ml_plots, "Machine learning plots")
