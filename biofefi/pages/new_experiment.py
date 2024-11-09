@@ -37,7 +37,7 @@ st.set_page_config(
     page_title="New Experiment",
     page_icon=sidebar_logo(),
 )
-navbar()
+# navbar()
 
 st.header("New Experiment")
 st.write(

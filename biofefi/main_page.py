@@ -8,7 +8,7 @@ st.set_page_config(
 )
 header_logo()
 sidebar_logo()
-navbar()
+# navbar()
 
 st.write("# Welcome")
 st.write(

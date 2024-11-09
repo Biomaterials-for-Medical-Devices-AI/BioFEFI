@@ -21,7 +21,7 @@ st.set_page_config(
     page_title="View Experiment",
     page_icon=sidebar_logo(),
 )
-navbar()
+# navbar()
 
 header = st.session_state.get(ViewExperimentKeys.ExperimentName)
 

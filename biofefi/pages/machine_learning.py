@@ -107,7 +107,7 @@ st.set_page_config(
     page_icon=sidebar_logo(),
 )
 sidebar_logo()
-navbar()
+# navbar()
 
 st.header("Train Models")
 st.write(
