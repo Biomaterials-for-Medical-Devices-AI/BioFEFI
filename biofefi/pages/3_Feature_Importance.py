@@ -25,6 +25,7 @@ from biofefi.options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
     log_dir,
+    uploaded_file_path,
 )
 
 from biofefi.options.file_paths import (
@@ -35,7 +36,11 @@ from biofefi.options.file_paths import (
 )
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import set_seed, cancel_pipeline
-from biofefi.components.experiments import experiment_selector, model_selector
+from biofefi.components.experiments import (
+    experiment_selector,
+    model_selector,
+    data_selector,
+)
 import streamlit as st
 import os
 
@@ -50,6 +55,11 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
 
     fuzzy_opt = FuzzyOptions()
     fuzzy_opt.initialize()
+    path_to_data = uploaded_file_path(
+        st.session_state[ConfigStateKeys.UploadedFileName],
+        biofefi_experiments_base_dir()
+        / st.session_state[ViewExperimentKeys.ExperimentName],
+    )
     if st.session_state.get(ConfigStateKeys.FuzzyFeatureSelection, False):
         fuzzy_opt.parser.set_defaults(
             fuzzy_feature_selection=st.session_state[
@@ -64,6 +74,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             # fuzzy_log_dir=
             dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
             experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+            data_path=path_to_data,
             problem_type=st.session_state.get(
                 ConfigStateKeys.ProblemType, ProblemTypes.Auto
             ).lower(),
@@ -87,6 +98,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
             dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
             experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+            data_path=path_to_data,
             problem_type=st.session_state.get(
                 ConfigStateKeys.ProblemType, ProblemTypes.Auto
             ).lower(),
@@ -140,12 +152,12 @@ def pipeline(
         ml_opts (Namespace): Options for machine learning.
         experiment_name (str): The name of the experiment.
     """
-    seed = fuzzy_opts.random_state
+    seed = fi_opts.random_state
     set_seed(seed)
     logger_instance = Logger(log_dir(experiment_name))
     logger = logger_instance.make_logger()
 
-    data = DataBuilder(fuzzy_opts, logger).ingest()
+    data = DataBuilder(fi_opts, logger).ingest()
 
     ## Models will already be trained before feature importance
     trained_models = load_models(ml_model_dir(experiment_name))
@@ -198,6 +210,11 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
 
     st.session_state[ConfigStateKeys.ExperimentName] = base_dir / experiment_name
     experiment_name = st.session_state[ConfigStateKeys.ExperimentName]
+
+    data_choices = os.listdir(experiment_name)
+    data_choices = filter(lambda x: x.endswith(".csv"), data_choices)
+
+    data_selector(data_choices)
 
     model_choices = os.listdir(ml_model_dir(experiment_name))
     model_choices = filter(lambda x: x.endswith(".pkl"), model_choices)
