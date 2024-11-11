@@ -240,8 +240,8 @@ def fi_options_form():
         help="Store the results from feature importance computations.",
         key=ConfigStateKeys.SaveFeatureImportanceResults,
     )
-    
-    save_plots =  st.toggle(
+
+    save_plots = st.toggle(
         "Save plot",
         key=PlotOptionKeys.SavePlots,
         value=True,
