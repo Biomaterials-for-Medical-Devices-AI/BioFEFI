@@ -239,6 +239,20 @@ def fi_options_form():
             key=ConfigStateKeys.NumberOfTopRules,
         )
 
+    save_plots = st.checkbox(
+        "Save plots",
+        value=True,
+        help="Save the generated plots to disk.",
+        key=PlotOptionKeys.SavePlots,
+    )
+
+    if save_plots:
+        st.text_input(
+            "Dependent variable name",
+            help="Specify the name of the dependent variable for labelling plots.",
+            key=ConfigStateKeys.DependentVariableName,
+        )
+
 
 @st.experimental_fragment
 def ml_options_form():
