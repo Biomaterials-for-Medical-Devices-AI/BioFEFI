@@ -175,19 +175,6 @@ def fi_options_form():
         key=ConfigStateKeys.ShapDataPercentage,
     )
 
-    # Save options
-    st.checkbox(
-        "Save feature importance options",
-        help="Save the selected configuration of feature importance methods.",
-        key=ConfigStateKeys.SaveFeatureImportanceOptions,
-    )
-
-    st.checkbox(
-        "Save feature importance results",
-        help="Store the results from feature importance computations.",
-        key=ConfigStateKeys.SaveFeatureImportanceResults,
-    )
-
     # Fuzzy Options
     st.write("### Fuzzy Feature Selection Options")
     st.write(
@@ -239,11 +226,26 @@ def fi_options_form():
             key=ConfigStateKeys.NumberOfTopRules,
         )
 
-    save_plots = st.checkbox(
-        "Save plots",
-        value=True,
-        help="Save the generated plots to disk.",
+    st.subheader("Select outputs to save")
+
+    # Save options
+    st.toggle(
+        "Save feature importance options",
+        help="Save the selected configuration of feature importance methods.",
+        key=ConfigStateKeys.SaveFeatureImportanceOptions,
+    )
+
+    st.toggle(
+        "Save feature importance results",
+        help="Store the results from feature importance computations.",
+        key=ConfigStateKeys.SaveFeatureImportanceResults,
+    )
+    
+    save_plots =  st.toggle(
+        "Save plot",
         key=PlotOptionKeys.SavePlots,
+        value=True,
+        help="Save the plots to disk?",
     )
 
     if save_plots:
