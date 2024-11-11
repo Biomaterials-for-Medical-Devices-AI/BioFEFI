@@ -84,49 +84,42 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
 
     fi_opt = FeatureImportanceOptions()
     fi_opt.initialize()
-    if st.session_state.get(ConfigStateKeys.IsFeatureImportance, False):
-        fi_opt.parser.set_defaults(
-            num_features_to_plot=st.session_state[
-                ConfigStateKeys.NumberOfImportantFeatures
-            ],
-            permutation_importance_scoring=st.session_state[
-                ConfigStateKeys.ScoringFunction
-            ],
-            permutation_importance_repeat=st.session_state[
-                ConfigStateKeys.NumberOfRepetitions
-            ],
-            shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
-            dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-            experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-            data_path=path_to_data,
-            problem_type=st.session_state.get(
-                ConfigStateKeys.ProblemType, ProblemTypes.Auto
-            ).lower(),
-            is_feature_importance=st.session_state[ConfigStateKeys.IsFeatureImportance],
-            # fi_log_dir=
-            angle_rotate_xaxis_labels=st.session_state[
-                PlotOptionKeys.RotateXAxisLabels
-            ],
-            angle_rotate_yaxis_labels=st.session_state[
-                PlotOptionKeys.RotateYAxisLabels
-            ],
-            save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
-            save_feature_importance_options=st.session_state[
-                ConfigStateKeys.SaveFeatureImportanceOptions
-            ],
-            save_feature_importance_results=st.session_state[
-                ConfigStateKeys.SaveFeatureImportanceResults
-            ],
-            local_importance_methods=st.session_state[
-                ConfigStateKeys.LocalImportanceFeatures
-            ],
-            feature_importance_ensemble=st.session_state[
-                ConfigStateKeys.EnsembleMethods
-            ],
-            global_importance_methods=st.session_state[
-                ConfigStateKeys.GlobalFeatureImportanceMethods
-            ],
-        )
+    fi_opt.parser.set_defaults(
+        num_features_to_plot=st.session_state[
+            ConfigStateKeys.NumberOfImportantFeatures
+        ],
+        permutation_importance_scoring=st.session_state[
+            ConfigStateKeys.ScoringFunction
+        ],
+        permutation_importance_repeat=st.session_state[
+            ConfigStateKeys.NumberOfRepetitions
+        ],
+        shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+        data_path=path_to_data,
+        problem_type=st.session_state.get(
+            ConfigStateKeys.ProblemType, ProblemTypes.Auto
+        ).lower(),
+        is_feature_importance=True,
+        # fi_log_dir=
+        angle_rotate_xaxis_labels=st.session_state[PlotOptionKeys.RotateXAxisLabels],
+        angle_rotate_yaxis_labels=st.session_state[PlotOptionKeys.RotateYAxisLabels],
+        save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
+        save_feature_importance_options=st.session_state[
+            ConfigStateKeys.SaveFeatureImportanceOptions
+        ],
+        save_feature_importance_results=st.session_state[
+            ConfigStateKeys.SaveFeatureImportanceResults
+        ],
+        local_importance_methods=st.session_state[
+            ConfigStateKeys.LocalImportanceFeatures
+        ],
+        feature_importance_ensemble=st.session_state[ConfigStateKeys.EnsembleMethods],
+        global_importance_methods=st.session_state[
+            ConfigStateKeys.GlobalFeatureImportanceMethods
+        ],
+    )
     fi_opt = fi_opt.parse()
 
     return (
