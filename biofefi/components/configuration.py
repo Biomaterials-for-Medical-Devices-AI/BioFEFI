@@ -185,6 +185,7 @@ def plot_options_box():
             disabled=not save,
         )
         if save:
+            st.write("### Preview")
             plt.style.use(cs)
             arr = np.random.normal(1, 1, size=100)
             fig, ax = plt.subplots()
