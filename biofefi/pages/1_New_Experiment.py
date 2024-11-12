@@ -1,7 +1,7 @@
+import os
 from pathlib import Path
 import streamlit as st
 from biofefi.components.images.logos import sidebar_logo
-from biofefi.components.navigation import navbar
 from biofefi.options.enums import ConfigStateKeys
 from biofefi.options.file_paths import biofefi_experiments_base_dir
 from biofefi.utils.utils import create_directory
@@ -26,7 +26,7 @@ def _save_directory_selector() -> Path:
 
     col1, col2 = st.columns(2, vertical_alignment="bottom")
 
-    col1.text(f"{root}/", help="Your experiment will be saved here")
+    col1.text(f"{root}{os.path.sep}", help="Your experiment will be saved here")
     sub_dir = col2.text_input("Name of the experiment", placeholder="e.g. MyExperiment")
 
     return root / sub_dir
@@ -36,7 +36,6 @@ st.set_page_config(
     page_title="New Experiment",
     page_icon=sidebar_logo(),
 )
-navbar()
 
 st.header("New Experiment")
 st.write(

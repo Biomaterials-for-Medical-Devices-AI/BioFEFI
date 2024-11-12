@@ -1,6 +1,5 @@
 import streamlit as st
 from biofefi.components.images.logos import header_logo, sidebar_logo
-from biofefi.components.navigation import navbar
 
 st.set_page_config(
     page_title="BioFEFI",
@@ -8,7 +7,6 @@ st.set_page_config(
 )
 header_logo()
 sidebar_logo()
-navbar()
 
 st.write("# Welcome")
 st.write(
@@ -29,6 +27,8 @@ st.write(
     To create a **new experiment** ⚗️, go to the sidebar on the **left** and click **"New Experiment"**.
 
     To view your previous experiments 📈, go to the sidebar on the **left** and click **"View Experiments"**.
+
+    To train new machine learning models 🏋️, go to the sidebar on the **left** and click **"Train Models"**.
 
     To run a feature importance analysis 📊, go to the sidebar on the **left** and click **"Feature Importance"**.
     """

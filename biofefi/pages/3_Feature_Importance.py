@@ -1,41 +1,43 @@
 from argparse import Namespace
 from multiprocessing import Process
-from biofefi.components.images.logos import header_logo, sidebar_logo
+from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.logs import log_box
-from biofefi.components.forms import data_upload_form
 from biofefi.components.plots import plot_box
-from biofefi.components.configuration import (
-    ml_options_box,
-    plot_options_box,
-    fi_options_box,
-)
+from biofefi.components.forms import fi_options_form
 from biofefi.services.logs import get_logs
-from biofefi.services.ml_models import save_model, load_models
+from biofefi.services.ml_models import load_models
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.feature_importance.feature_importance_options import (
     FeatureImportanceOptions,
 )
 from biofefi.feature_importance.fuzzy_options import FuzzyOptions
-from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.machine_learning.ml_options import MLOptions
 from biofefi.options.enums import (
     ConfigStateKeys,
-    ExecutionStateKeys,
     ProblemTypes,
     PlotOptionKeys,
 )
+
+from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
+
+from biofefi.options.file_paths import (
+    biofefi_experiments_base_dir,
+    fi_plot_dir,
+    fuzzy_plot_dir,
+    log_dir,
+)
+
 from biofefi.options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
-    uploaded_file_path,
     log_dir,
-    ml_plot_dir,
     ml_model_dir,
 )
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import save_upload, set_seed
+from biofefi.utils.utils import set_seed, cancel_pipeline
+from biofefi.components.experiments import experiment_selector, model_selector
 import streamlit as st
+import os
 
 
 def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
@@ -96,10 +98,6 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             angle_rotate_yaxis_labels=st.session_state[
                 PlotOptionKeys.RotateYAxisLabels
             ],
-            plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
-            plot_axis_tick_size=st.session_state[PlotOptionKeys.AxisTickSize],
-            plot_title_font_size=st.session_state[PlotOptionKeys.TitleFontSize],
-            plot_colour_scheme=st.session_state[PlotOptionKeys.ColourScheme],
             save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
             save_feature_importance_options=st.session_state[
                 ConfigStateKeys.SaveFeatureImportanceOptions
@@ -119,36 +117,19 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         )
     fi_opt = fi_opt.parse()
 
-    ml_opt = MLOptions()
-    ml_opt.initialize()
-    path_to_data = uploaded_file_path(
-        st.session_state[ConfigStateKeys.UploadedFileName].name,
+    return (
+        fuzzy_opt,
+        fi_opt,
         st.session_state[ConfigStateKeys.ExperimentName],
+        st.session_state[ConfigStateKeys.ExplainModels],
     )
-    ml_opt.parser.set_defaults(
-        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
-        save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
-        normalization=st.session_state[ConfigStateKeys.Normalization],
-        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        data_path=path_to_data,
-        data_split=st.session_state[ConfigStateKeys.DataSplit],
-        model_types=st.session_state[ConfigStateKeys.ModelTypes],
-        ml_log_dir=ml_plot_dir(st.session_state[ConfigStateKeys.ExperimentName]),
-        problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
-        ).lower(),
-        random_state=st.session_state[ConfigStateKeys.RandomSeed],
-        is_machine_learning=st.session_state[ConfigStateKeys.IsMachineLearning],
-        save_models=st.session_state[ConfigStateKeys.SaveModels],
-    )
-    ml_opt = ml_opt.parse()
-
-    return fuzzy_opt, fi_opt, ml_opt, st.session_state[ConfigStateKeys.ExperimentName]
 
 
 def pipeline(
-    fuzzy_opts: Namespace, fi_opts: Namespace, ml_opts: Namespace, experiment_name: str
+    fuzzy_opts: Namespace,
+    fi_opts: Namespace,
+    experiment_name: str,
+    explain_models: list,
 ):
     """This function actually performs the steps of the pipeline. It can be wrapped
     in a process it doesn't block the UI.
@@ -159,23 +140,17 @@ def pipeline(
         ml_opts (Namespace): Options for machine learning.
         experiment_name (str): The name of the experiment.
     """
-    seed = ml_opts.random_state
+    seed = fuzzy_opts.random_state
     set_seed(seed)
     logger_instance = Logger(log_dir(experiment_name))
     logger = logger_instance.make_logger()
 
-    data = DataBuilder(ml_opts, logger).ingest()
+    data = DataBuilder(fuzzy_opts, logger).ingest()
 
-    # Machine learning
-    if ml_opts.is_machine_learning:
-        trained_models = train.run(ml_opts, data, logger)
-        if ml_opts.save_models:
-            for model_name in trained_models:
-                for i, model in enumerate(trained_models[model_name]):
-                    save_path = ml_model_dir(experiment_name) / f"{model_name}-{i}.pkl"
-                    save_model(model, save_path)
-    else:
-        trained_models = load_models(ml_model_dir(experiment_name))
+    ## Models will already be trained before feature importance
+    trained_models = load_models(ml_model_dir(experiment_name))
+
+    trained_models = [model for model in trained_models if model in explain_models]
 
     # Feature importance
     if fi_opts.is_feature_importance:
@@ -186,74 +161,72 @@ def pipeline(
         # Fuzzy interpretation
         if fuzzy_opts.fuzzy_feature_selection:
             fuzzy_rules = fuzzy_interpretation.run(
-                fuzzy_opts, ml_opts, data, trained_models, ensemble_results, logger
+                fuzzy_opts, fuzzy_opts, data, trained_models, ensemble_results, logger
             )
 
     # Close the logger
     close_logger(logger_instance, logger)
 
 
-def cancel_pipeline(p: Process):
-    """Cancel a running pipeline.
-
-    Args:
-        p (Process): the process running the pipeline to cancel.
-    """
-    if p.is_alive():
-        p.terminate()
-
-
-## Page contents
+# Set page contents
 st.set_page_config(
-    page_title="BioFEFI",
+    page_title="Feature Importance",
     page_icon=sidebar_logo(),
 )
-header_logo()
-sidebar_logo()
-with st.sidebar:
-    st.header("Options")
-    # st.checkbox("Feature Engineering", key=ConfigStateKeys.IsFeatureEngineering)
-
-    # Machine Learning Options
-    ml_options_box()
-
-    # Feature Importance (+ Fuzzy) Options
-    fi_options_box()
-
-    # Global plot options
-    plot_options_box()
-    seed = st.number_input(
-        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
-    )
-data_upload_form()
 
 
-# If the user has uploaded a file and pressed the run button, run the pipeline
-if (
-    uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
-) and st.session_state.get(ExecutionStateKeys.RunPipeline, False):
-    experiment_name = st.session_state.get(ConfigStateKeys.ExperimentName)
-    upload_path = uploaded_file_path(uploaded_file.name, experiment_name)
-    save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
-    if uploaded_models := st.session_state.get(ConfigStateKeys.UploadedModels):
-        for m in uploaded_models:
-            upload_path = ml_model_dir(experiment_name) / m.name
-            save_upload(upload_path, m.read(), "wb")
-    config = build_configuration()
-    process = Process(target=pipeline, args=config, daemon=True)
-    process.start()
-    cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
-    with st.spinner("Running pipeline..."):
-        # wait for the process to finish or be cancelled
-        process.join()
-    st.session_state[ConfigStateKeys.LogBox] = get_logs(log_dir(experiment_name))
-    log_box()
-    ml_plots = ml_plot_dir(experiment_name)
-    if ml_plots.exists():
-        plot_box(ml_plots, "Machine learning plots")
-    fi_plots = fi_plot_dir(experiment_name)
-    if fi_plots.exists():
-        plot_box(fi_plots, "Feature importance plots")
-    fuzzy_plots = fuzzy_plot_dir(experiment_name)
-    if fuzzy_plots.exists():
-        plot_box(fuzzy_plots, "Fuzzy plots")
+st.header("Feature Importance")
+st.write(
+    """
+    This page provides options for exploring and customising feature importance and interpretability methods in the trained machine learning models. 
+    You can configure global and local feature importance techniques, select ensemble approaches, and apply fuzzy feature selection. Options include tuning scoring functions, 
+    setting data percentages for SHAP analysis, and configuring rules for fuzzy synergy analysis to gain deeper insights into model behavior.
+    """
+)
+
+# Get the base directory of all experiments
+base_dir = biofefi_experiments_base_dir()
+choices = os.listdir(base_dir)
+# Filter out hidden files and directories
+choices = filter(lambda x: not x.startswith("."), choices)
+# Filter out files
+choices = filter(lambda x: os.path.isdir(os.path.join(base_dir, x)), choices)
+
+experiment_selector(choices)
+
+if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
+
+    st.session_state[ConfigStateKeys.ExperimentName] = base_dir / experiment_name
+    experiment_name = st.session_state[ConfigStateKeys.ExperimentName]
+
+    model_choices = os.listdir(ml_model_dir(experiment_name))
+    model_choices = filter(lambda x: x.endswith(".pkl"), model_choices)
+
+    model_selector(model_choices)
+
+    if model_choices := st.session_state.get(ConfigStateKeys.ExplainModels):
+
+        fi_options_form()
+
+        if st.button("Run Feature Importance"):
+            config = build_configuration()
+            process = Process(target=pipeline, args=config, daemon=True)
+            process.start()
+            cancel_button = st.button(
+                "Cancel", on_click=cancel_pipeline, args=(process,)
+            )
+            with st.spinner(
+                "Feature Importance pipeline is running in the background. Check the logs for progress."
+            ):
+                # wait for the process to finish or be cancelled
+                process.join()
+            st.session_state[ConfigStateKeys.LogBox] = get_logs(
+                log_dir(experiment_name)
+            )
+            log_box()
+            fi_plots = fi_plot_dir(experiment_name)
+            if fi_plots.exists():
+                plot_box(fi_plots, "Feature importance plots")
+            fuzzy_plots = fuzzy_plot_dir(experiment_name)
+            if fuzzy_plots.exists():
+                plot_box(fuzzy_plots, "Fuzzy plots")
