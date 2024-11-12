@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import streamlit as st
+from biofefi.components.configuration import plot_options_box
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.enums import ConfigStateKeys
 from biofefi.options.file_paths import biofefi_experiments_base_dir
@@ -62,6 +63,10 @@ if not is_valid and st.session_state.get(ConfigStateKeys.ExperimentName):
     st.markdown(f":red[Cannot use {save_dir}; it already exists.]")
 else:
     st.session_state[ConfigStateKeys.ExperimentName] = save_dir
+
+## Set up plotting options for the experiment
+st.subheader("Configure experiment plots")
+plot_options_box()
 
 st.button(
     "Create",
