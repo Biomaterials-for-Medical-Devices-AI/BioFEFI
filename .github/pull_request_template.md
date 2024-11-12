@@ -1,4 +1,4 @@
-## Descreiption
+## Description
 <!-- Write a description of the changes here -->
 
 ## Linked issues
