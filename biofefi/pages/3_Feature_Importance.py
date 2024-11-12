@@ -25,6 +25,7 @@ from biofefi.options.file_paths import (
     fi_plot_dir,
     fuzzy_plot_dir,
     log_dir,
+    plot_options_path,
     uploaded_file_path,
 )
 
@@ -34,6 +35,7 @@ from biofefi.options.file_paths import (
     log_dir,
     ml_model_dir,
 )
+from biofefi.services.plotting import load_plot_options
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import set_seed, cancel_pipeline
 from biofefi.components.experiments import (
@@ -60,6 +62,11 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         biofefi_experiments_base_dir()
         / st.session_state[ViewExperimentKeys.ExperimentName],
     )
+    path_to_plot_opts = plot_options_path(
+        biofefi_experiments_base_dir()
+        / st.session_state[ViewExperimentKeys.ExperimentName]
+    )
+    plotting_options = load_plot_options(path_to_plot_opts)
     if st.session_state.get(ConfigStateKeys.FuzzyFeatureSelection, False):
         fuzzy_opt.parser.set_defaults(
             fuzzy_feature_selection=st.session_state[
@@ -103,8 +110,12 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         ).lower(),
         is_feature_importance=True,
         # fi_log_dir=
-        angle_rotate_xaxis_labels=st.session_state[PlotOptionKeys.RotateXAxisLabels],
-        angle_rotate_yaxis_labels=st.session_state[PlotOptionKeys.RotateYAxisLabels],
+        angle_rotate_xaxis_labels=plotting_options.angle_rotate_xaxis_labels,
+        angle_rotate_yaxis_labels=plotting_options.angle_rotate_yaxis_labels,
+        plot_axis_font_size=plotting_options.plot_axis_font_size,
+        plot_axis_tick_size=plotting_options.plot_axis_tick_size,
+        plot_title_font_size=plotting_options.plot_title_font_size,
+        plot_colour_scheme=plotting_options.plot_colour_scheme,
         save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
         save_feature_importance_options=st.session_state[
             ConfigStateKeys.SaveFeatureImportanceOptions
