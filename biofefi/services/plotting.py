@@ -14,3 +14,19 @@ def save_plot_options(path: Path, options: PlottingOptions):
     options_json = dataclasses.asdict(options)
     with open(path, "w") as json_file:
         json.dump(options_json, json_file)
+
+
+def load_plot_options(path: Path) -> PlottingOptions:
+    """Load plotting options from the given path.
+    The path will be to a `json` file containing the plot options.
+
+    Args:
+        path (Path): The path the `json` file containing the options.
+
+    Returns:
+        PlottingOptions: The plotting options.
+    """
+    with open(path, "r") as json_file:
+        options_json = json.load(json_file)
+    options = PlottingOptions(**options_json)
+    return options
