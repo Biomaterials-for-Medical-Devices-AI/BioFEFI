@@ -153,13 +153,17 @@ def pipeline(
     data = DataBuilder(fi_opts, logger).ingest()
 
     ## Models will already be trained before feature importance
-    trained_models = load_models_to_explain(ml_model_dir(experiment_name), explain_models)
+    trained_models = load_models_to_explain(
+        ml_model_dir(experiment_name), explain_models
+    )
 
     # Feature importance
     if fi_opts.is_feature_importance:
-        gloabl_importance_results, local_importance_results, ensemble_results = (
-            feature_importance.run(fi_opts, data, trained_models, logger)
-        )
+        (
+            gloabl_importance_results,
+            local_importance_results,
+            ensemble_results,
+        ) = feature_importance.run(fi_opts, data, trained_models, logger)
 
         # Fuzzy interpretation
         if fuzzy_opts.fuzzy_feature_selection:
@@ -198,7 +202,6 @@ choices = filter(lambda x: os.path.isdir(os.path.join(base_dir, x)), choices)
 experiment_selector(choices)
 
 if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
-
     st.session_state[ConfigStateKeys.ExperimentName] = base_dir / experiment_name
     experiment_name = st.session_state[ConfigStateKeys.ExperimentName]
 
@@ -222,7 +225,6 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
     if model_choices := st.session_state.get(
         ConfigStateKeys.ExplainModels
     ) and st.session_state.get(ConfigStateKeys.UploadedFileName):
-
         fi_options_form()
 
         if st.button("Run Feature Importance"):
