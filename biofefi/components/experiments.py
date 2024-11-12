@@ -58,6 +58,6 @@ def data_selector(options: list) -> Path:
         "Select a dataset to explain",
         options=options,
         index=None,
-        placeholder="Models to explain",
+        placeholder="Dataset to explain",
         key=ConfigStateKeys.UploadedFileName,
     )
