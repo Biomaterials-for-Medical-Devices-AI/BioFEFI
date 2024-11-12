@@ -3,9 +3,10 @@ from pathlib import Path
 import streamlit as st
 from biofefi.components.configuration import plot_options_box
 from biofefi.components.images.logos import sidebar_logo
-from biofefi.options.enums import ConfigStateKeys
+from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 from biofefi.options.file_paths import biofefi_experiments_base_dir
-from biofefi.utils.utils import create_directory
+from biofefi.options.plotting import PlottingOptions
+from biofefi.services.experiments import create_experiment
 
 
 def _directory_is_valid(directory: Path) -> bool:
@@ -68,10 +69,20 @@ else:
 st.subheader("Configure experiment plots")
 plot_options_box()
 
+plot_opts = PlottingOptions(
+    plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
+    plot_axis_tick_size=st.session_state[PlotOptionKeys.AxisTickSize],
+    plot_colour_scheme=st.session_state[PlotOptionKeys.ColourScheme],
+    angle_rotate_xaxis_labels=st.session_state[PlotOptionKeys.RotateXAxisLabels],
+    angle_rotate_yaxis_labels=st.session_state[PlotOptionKeys.RotateYAxisLabels],
+    save_plots=st.session_state[PlotOptionKeys.SavePlots],
+    plot_title_font_size=st.session_state[PlotOptionKeys.TitleFontSize],
+)
+
 st.button(
     "Create",
     type="primary",
     disabled=not is_valid,
-    on_click=create_directory,
-    args=(save_dir,),
+    on_click=create_experiment,
+    args=(save_dir, plot_opts),
 )
