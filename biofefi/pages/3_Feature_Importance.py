@@ -5,7 +5,7 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
 from biofefi.services.logs import get_logs
-from biofefi.services.ml_models import load_model_explain
+from biofefi.services.ml_models import load_models_to_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.feature_importance.feature_importance_options import (
     FeatureImportanceOptions,
@@ -153,7 +153,7 @@ def pipeline(
     data = DataBuilder(fi_opts, logger).ingest()
 
     ## Models will already be trained before feature importance
-    trained_models = load_model_explain(ml_model_dir(experiment_name), explain_models)
+    trained_models = load_models_to_explain(ml_model_dir(experiment_name), explain_models)
 
     # Feature importance
     if fi_opts.is_feature_importance:

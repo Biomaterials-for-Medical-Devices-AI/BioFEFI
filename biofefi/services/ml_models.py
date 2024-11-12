@@ -40,7 +40,7 @@ def load_models(path: Path) -> dict[str, list]:
     return models
 
 
-def load_model_explain(path: Path, model_names: list) -> dict[str, list]:
+def load_models_to_explain(path: Path, model_names: list) -> dict[str, list]:
     """Load pre-trained machine learning models.
 
     Args:
