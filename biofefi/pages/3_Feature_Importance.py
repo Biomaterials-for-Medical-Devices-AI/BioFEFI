@@ -5,7 +5,7 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
 from biofefi.services.logs import get_logs
-from biofefi.services.ml_models import load_models
+from biofefi.services.ml_models import load_model_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.feature_importance.feature_importance_options import (
     FeatureImportanceOptions,
@@ -153,9 +153,7 @@ def pipeline(
     data = DataBuilder(fi_opts, logger).ingest()
 
     ## Models will already be trained before feature importance
-    trained_models = load_models(ml_model_dir(experiment_name))
-
-    trained_models = [model for model in trained_models if model in explain_models]
+    trained_models = load_model_explain(ml_model_dir(experiment_name), explain_models)
 
     # Feature importance
     if fi_opts.is_feature_importance:
@@ -210,11 +208,20 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
     data_selector(data_choices)
 
     model_choices = os.listdir(ml_model_dir(experiment_name))
-    model_choices = filter(lambda x: x.endswith(".pkl"), model_choices)
+    model_choices = [x for x in model_choices if x.endswith(".pkl")]
 
-    model_selector(model_choices)
+    explain_all_models = st.toggle(
+        "Explain all models", key=ConfigStateKeys.ExplainAllModels
+    )
 
-    if model_choices := st.session_state.get(ConfigStateKeys.ExplainModels):
+    if explain_all_models:
+        st.session_state[ConfigStateKeys.ExplainModels] = model_choices
+    else:
+        model_selector(model_choices)
+
+    if model_choices := st.session_state.get(
+        ConfigStateKeys.ExplainModels
+    ) and st.session_state.get(ConfigStateKeys.UploadedFileName):
 
         fi_options_form()
 
