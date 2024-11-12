@@ -34,6 +34,26 @@ def _save_directory_selector() -> Path:
     return root / sub_dir
 
 
+def _entrypoint(save_dir: Path):
+    """Function to serve as the entrypoint for experiment creation, with access
+    to the session state. This is so configuration captured in fragements is
+    passed correctly to the services in this function.
+
+    Args:
+        save_dir (Path): The path to the experiment.
+    """
+    plot_opts = PlottingOptions(
+        plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
+        plot_axis_tick_size=st.session_state[PlotOptionKeys.AxisTickSize],
+        plot_colour_scheme=st.session_state[PlotOptionKeys.ColourScheme],
+        angle_rotate_xaxis_labels=st.session_state[PlotOptionKeys.RotateXAxisLabels],
+        angle_rotate_yaxis_labels=st.session_state[PlotOptionKeys.RotateYAxisLabels],
+        save_plots=st.session_state[PlotOptionKeys.SavePlots],
+        plot_title_font_size=st.session_state[PlotOptionKeys.TitleFontSize],
+    )
+    create_experiment(save_dir, plotting_options=plot_opts)
+
+
 st.set_page_config(
     page_title="New Experiment",
     page_icon=sidebar_logo(),
@@ -69,20 +89,10 @@ else:
 st.subheader("Configure experiment plots")
 plot_options_box()
 
-plot_opts = PlottingOptions(
-    plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
-    plot_axis_tick_size=st.session_state[PlotOptionKeys.AxisTickSize],
-    plot_colour_scheme=st.session_state[PlotOptionKeys.ColourScheme],
-    angle_rotate_xaxis_labels=st.session_state[PlotOptionKeys.RotateXAxisLabels],
-    angle_rotate_yaxis_labels=st.session_state[PlotOptionKeys.RotateYAxisLabels],
-    save_plots=st.session_state[PlotOptionKeys.SavePlots],
-    plot_title_font_size=st.session_state[PlotOptionKeys.TitleFontSize],
-)
-
 st.button(
     "Create",
     type="primary",
     disabled=not is_valid,
-    on_click=create_experiment,
-    args=(save_dir, plot_opts),
+    on_click=_entrypoint,
+    args=(save_dir,),
 )
