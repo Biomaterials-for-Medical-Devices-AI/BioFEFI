@@ -90,6 +90,7 @@ def save_importance_results(
         )
         # rotate x-axis labels for better readability
         ax.set_xticklabels(ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels)
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=opt.angle_rotate_yaxis_labels)
         fig.savefig(save_dir / f"{model_type}-bar.png")
 
         if feature_importance_type == "SHAP":
