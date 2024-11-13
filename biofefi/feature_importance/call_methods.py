@@ -178,14 +178,21 @@ def save_fuzzy_sets_plots(
                 "b",
                 label="Large",
             )
-            ax.set_title(f"{feature} Membership Functions")
+            ax.set_title(
+                f"{feature} Membership Functions",
+                family=opt.plot_font_family,
+            )
             ax.set_xticklabels(
-                ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels
+                ax.get_xticklabels(),
+                rotation=opt.angle_rotate_xaxis_labels,
+                family=opt.plot_font_family,
             )
             ax.set_yticklabels(
-                ax.get_yticklabels(), rotation=opt.angle_rotate_yaxis_labels
+                ax.get_yticklabels(),
+                rotation=opt.angle_rotate_yaxis_labels,
+                family=opt.plot_font_family,
             )
-            ax.legend()
+            ax.legend(prop={"family": opt.plot_font_family})
             fig.savefig(save_dir / f"{feature}.png")
         plt.close()
 
@@ -202,8 +209,19 @@ def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):
         plt.style.use(opt.plot_colour_scheme)
         fig, ax = plt.subplots(layout="constrained")
         sns.boxplot(data=df_cluster, x="cluster", y="target", ax=ax)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels)
-        ax.set_yticklabels(ax.get_yticklabels(), rotation=opt.angle_rotate_yaxis_labels)
-        ax.set_title("Target Clusters")
+        ax.set_xticklabels(
+            ax.get_xticklabels(),
+            rotation=opt.angle_rotate_xaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_yticklabels(
+            ax.get_yticklabels(),
+            rotation=opt.angle_rotate_yaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_title(
+            "Target Clusters",
+            family=opt.plot_font_family,
+        )
         fig.savefig(save_dir / f"target_clusters.png")
         plt.close()
