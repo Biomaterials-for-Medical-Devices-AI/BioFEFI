@@ -1,4 +1,9 @@
-from biofefi.options.choices import SVM_KERNELS, PROBLEM_TYPES, NORMALISATIONS
+from biofefi.options.choices import (
+    PLOT_FONT_FAMILIES,
+    SVM_KERNELS,
+    PROBLEM_TYPES,
+    NORMALISATIONS,
+)
 from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -184,18 +189,25 @@ def plot_options_box():
             key=PlotOptionKeys.ColourScheme,
             disabled=not save,
         )
+        font = st.selectbox(
+            "Font",
+            options=PLOT_FONT_FAMILIES,
+            key=PlotOptionKeys.FontFamily,
+            disabled=not save,
+            index=1,
+        )
         if save:
             st.write("### Preview")
             plt.style.use(cs)
             arr = np.random.normal(1, 1, size=100)
             fig, ax = plt.subplots()
             ax.hist(arr, bins=20)
-            ax.set_title("Title", fontsize=tfs)
-            ax.set_xlabel("X axis", fontsize=afs)
-            ax.set_ylabel("Y axis", fontsize=afs)
+            ax.set_title("Title", fontsize=tfs, family=font)
+            ax.set_xlabel("X axis", fontsize=afs, family=font)
+            ax.set_ylabel("Y axis", fontsize=afs, family=font)
             ax.tick_params(labelsize=ats)
-            ax.set_xticklabels(ax.get_xticklabels(), rotation=rotate_x)
-            ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y)
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=rotate_x, family=font)
+            ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y, family=font)
             st.pyplot(fig, clear_figure=True)
             fig.clear()
 
