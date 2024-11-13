@@ -4,6 +4,7 @@ from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
+from biofefi.options.choices import PROBLEM_TYPES
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models_to_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
@@ -15,7 +16,6 @@ from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
     ConfigStateKeys,
     ProblemTypes,
-    PlotOptionKeys,
 )
 
 from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
@@ -77,7 +77,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
             cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
-            save_fuzzy_set_plots=st.session_state[PlotOptionKeys.SavePlots],
+            save_fuzzy_set_plots=plotting_options.save_plots,
             # fuzzy_log_dir=
             dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
             experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
@@ -220,6 +220,14 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
     data_choices = filter(lambda x: x.endswith(".csv"), data_choices)
 
     data_selector(data_choices)
+
+    # Fuzzy options require this
+    # TODO: get this from a saved configuration from ML
+    st.selectbox(
+        "Problem type",
+        PROBLEM_TYPES,
+        key=ConfigStateKeys.ProblemType,
+    )
 
     model_choices = os.listdir(ml_model_dir(experiment_name))
     model_choices = [x for x in model_choices if x.endswith(".pkl")]
