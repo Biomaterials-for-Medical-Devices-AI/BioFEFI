@@ -116,7 +116,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         plot_axis_tick_size=plotting_options.plot_axis_tick_size,
         plot_title_font_size=plotting_options.plot_title_font_size,
         plot_colour_scheme=plotting_options.plot_colour_scheme,
-        save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
+        save_feature_importance_plots=plotting_options.save_plots,
         save_feature_importance_options=st.session_state[
             ConfigStateKeys.SaveFeatureImportanceOptions
         ],

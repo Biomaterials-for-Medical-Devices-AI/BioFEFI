@@ -76,6 +76,7 @@ def save_importance_results(
             save_dir.mkdir(exist_ok=True, parents=True)
         # Plot bar plot - sort values in descending order and plot top n features
         # rotate x-axis labels for better readability
+        plt.style.use(opt.plot_colour_scheme)
         fig, ax = plt.subplots(layout="constrained")
 
         feature_importance_df.sort_values(by=0, ascending=False).head(
