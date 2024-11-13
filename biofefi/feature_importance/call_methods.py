@@ -134,29 +134,36 @@ def save_fuzzy_sets_plots(
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
 
+        plt.style.use(opt.plot_colour_scheme)
         for feature in x_cols:
-            plt.figure(figsize=(5, 5))
-            plt.plot(
+            fig, ax = plt.subplots(layout="constrained")
+            ax.plot(
                 universe[feature],
                 membership_functions[feature]["low"],
                 "r",
                 label="Small",
             )
-            plt.plot(
+            ax.plot(
                 universe[feature],
                 membership_functions[feature]["medium"],
                 "g",
                 label="Moderate",
             )
-            plt.plot(
+            ax.plot(
                 universe[feature],
                 membership_functions[feature]["high"],
                 "b",
                 label="Large",
             )
-            plt.title(f"{feature} Membership Functions")
-            plt.legend()
-            plt.savefig(save_dir / f"{feature}.png")
+            ax.set_title(f"{feature} Membership Functions")
+            ax.set_xticklabels(
+                ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels
+            )
+            ax.set_yticklabels(
+                ax.get_yticklabels(), rotation=opt.angle_rotate_yaxis_labels
+            )
+            ax.legend()
+            fig.savefig(save_dir / f"{feature}.png")
         plt.close()
 
 
