@@ -89,16 +89,39 @@ def save_importance_results(
             ylabel="Importance",
         )
         # rotate x-axis labels for better readability
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels)
-        ax.set_yticklabels(ax.get_yticklabels(), rotation=opt.angle_rotate_yaxis_labels)
+        ax.set_xticklabels(
+            ax.get_xticklabels(),
+            rotation=opt.angle_rotate_xaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_yticklabels(
+            ax.get_yticklabels(),
+            rotation=opt.angle_rotate_yaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_xlabel(ax.get_xlabel(), family=opt.plot_font_family)
+        ax.set_ylabel(ax.get_ylabel(), family=opt.plot_font_family)
+        ax.set_title(ax.get_title(), family=opt.plot_font_family)
         fig.savefig(save_dir / f"{model_type}-bar.png")
 
         if feature_importance_type == "SHAP":
             # Plot bee swarm plot
             fig, ax = plt.subplots(layout="constrained")
-            ax.set_title(f"{feature_importance_type} - {model_type}")
+            ax.set_title(
+                f"{feature_importance_type} - {model_type}", family=opt.plot_font_family
+            )
             shap.plots.beeswarm(
                 shap_values, max_display=opt.num_features_to_plot, show=False
+            )
+            ax.set_xlabel(ax.get_xlabel(), family=opt.plot_font_family)
+            ax.set_ylabel(ax.get_ylabel(), family=opt.plot_font_family)
+            ax.set_xticklabels(
+                ax.get_xticklabels(),
+                family=opt.plot_font_family,
+            )
+            ax.set_yticklabels(
+                ax.get_yticklabels(),
+                family=opt.plot_font_family,
             )
             fig.savefig(save_dir / f"{model_type}-beeswarm.png")
 
