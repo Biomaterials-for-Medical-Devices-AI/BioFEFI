@@ -82,6 +82,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             plot_axis_font_size=plotting_options.plot_axis_font_size,
             plot_axis_tick_size=plotting_options.plot_axis_tick_size,
             plot_title_font_size=plotting_options.plot_title_font_size,
+            plot_font_family=plotting_options.plot_font_family,
             plot_colour_scheme=plotting_options.plot_colour_scheme,
             save_fuzzy_set_plots=plotting_options.save_plots,
             # fuzzy_log_dir=
@@ -122,6 +123,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         plot_axis_tick_size=plotting_options.plot_axis_tick_size,
         plot_title_font_size=plotting_options.plot_title_font_size,
         plot_colour_scheme=plotting_options.plot_colour_scheme,
+        plot_font_family=plotting_options.plot_font_family,
         save_feature_importance_plots=plotting_options.save_plots,
         save_feature_importance_options=st.session_state[
             ConfigStateKeys.SaveFeatureImportanceOptions
