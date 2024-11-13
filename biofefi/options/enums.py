@@ -89,6 +89,7 @@ class PlotOptionKeys(StrEnum):
     RotateYAxisLabels = "angle_rotate_yaxis_labels"
     SavePlots = "save_plots"
     TitleFontSize = "plot_title_font_size"
+    FontFamily = "plot_font_family"
 
 
 class ViewExperimentKeys(StrEnum):
