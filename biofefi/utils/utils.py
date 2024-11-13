@@ -37,10 +37,14 @@ def assert_model_param(model, model_params, logger: object = None) -> None:
     logger: object
         The logger to use for logging
     """
-    if hasattr(model, "args"):
-        original_args = model.args
-    else:
-        original_args = list(inspect.signature(model).parameters)
+    if model.__name__ == "BayesianRegularisedNeuralNets":
+        logger.info(
+            f"Using BayesianRegularisedNeuralNets with parameters {model_params}"
+        )
+        return model_params
+
+    original_args = list(inspect.signature(model).parameters)
+
     args_to_remove = []
     for arg in model_params:
         if arg not in original_args:
@@ -48,6 +52,7 @@ def assert_model_param(model, model_params, logger: object = None) -> None:
                 f"Model {model.__name__} does not have parameter {arg}, removing"
             )
             args_to_remove.append(arg)
+
     for arg in args_to_remove:
         model_params.pop(arg)
     # check arguments for XGBoost
@@ -63,13 +68,13 @@ def assert_model_param(model, model_params, logger: object = None) -> None:
 def log_options(log_directory, opt: argparse.Namespace):
     """Log model or feature importance hyperparameters
     Parameters
-     ----------
-         log_directory: str
-             The directory to save the log file
-         opt: argparse.Namespace
-             The options object
-     Returns:
-         None
+    ----------
+        log_directory: str
+            The directory to save the log file
+        opt: argparse.Namespace
+            The options object
+    Returns:
+        None
     """
 
     log_path = os.path.join(log_directory, "options.txt")

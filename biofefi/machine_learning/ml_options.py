@@ -99,6 +99,73 @@ class MLOptions(BaseOptions):
             required=False,
         ),
 
+        # ----- Neural Network Parameters ----- >>>>>>>>
+
+        self.parser.add_argument(
+            "--epochs",
+            type=int,
+            default=10,
+            help="Number of epochs for neural network",
+        )
+
+        self.parser.add_argument(
+            "--hidden_dim",
+            type=int,
+            default=64,
+            help="Hidden dimension for neural network",
+        )
+
+        self.parser.add_argument(
+            "--output_dim",
+            type=int,
+            default=1,
+            help="Output dimension for neural network",
+        )
+
+        self.parser.add_argument(
+            "--optimizer_type",
+            type=str,
+            default="adam",
+            help="Optimizer type: adam, sgd, or rmsprop",
+            choices=["adam", "sgd", "rmsprop"],
+            required=False,
+        )
+
+        self.parser.add_argument(
+            "--lr",
+            type=float,
+            default=0.0003,
+            help="Learning rate for neural network",
+        )
+
+        self.parser.add_argument(
+            "--prior_mu",
+            type=float,
+            default=0,
+            help="Prior mean for Bayesian Regularized Neural Network",
+        )
+
+        self.parser.add_argument(
+            "--prior_sigma",
+            type=float,
+            default=1,
+            help="Prior standard deviation for Bayesian Regularized Neural Network",
+        )
+
+        self.parser.add_argument(
+            "--lambda_reg",
+            type=float,
+            default=0.01,
+            help="Regularization parameter for Bayesian Regularized Neural Network",
+        )
+
+        self.parser.add_argument(
+            "--classfication_cutoff",
+            type=float,
+            default=0.5,
+            help="Classification cutoff for determining class on binary classification",
+        )
+
         ######## New Parameters to be added above this line ########
 
         # self.parser.set_defaults(is_machine_learning=True),
