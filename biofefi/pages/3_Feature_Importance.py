@@ -77,6 +77,12 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
             cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
+            angle_rotate_xaxis_labels=plotting_options.angle_rotate_xaxis_labels,
+            angle_rotate_yaxis_labels=plotting_options.angle_rotate_yaxis_labels,
+            plot_axis_font_size=plotting_options.plot_axis_font_size,
+            plot_axis_tick_size=plotting_options.plot_axis_tick_size,
+            plot_title_font_size=plotting_options.plot_title_font_size,
+            plot_colour_scheme=plotting_options.plot_colour_scheme,
             save_fuzzy_set_plots=plotting_options.save_plots,
             # fuzzy_log_dir=
             dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],

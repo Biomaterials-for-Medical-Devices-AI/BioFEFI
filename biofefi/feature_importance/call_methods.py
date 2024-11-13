@@ -169,8 +169,11 @@ def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):
             save_dir.mkdir(exist_ok=True, parents=True)
 
         # Plot boxplot of the target (continuous values) and target clusters (categories) using seaborn
-        plt.figure(figsize=(5, 5))
-        sns.boxplot(data=df_cluster, x="cluster", y="target")
-        plt.title("Target Clusters")
-        plt.savefig(save_dir / f"target_clusters.png")
+        plt.style.use(opt.plot_colour_scheme)
+        fig, ax = plt.subplots(layout="constrained")
+        sns.boxplot(data=df_cluster, x="cluster", y="target", ax=ax)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels)
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=opt.angle_rotate_yaxis_labels)
+        ax.set_title("Target Clusters")
+        fig.savefig(save_dir / f"target_clusters.png")
         plt.close()
