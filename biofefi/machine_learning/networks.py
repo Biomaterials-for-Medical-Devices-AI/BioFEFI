@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 from typing import Tuple
 from biofefi.utils.weight_init import normal_init, xavier_init, kaiming_init
+from biofefi.options.enums import ProblemTypes, OptimiserTypes
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -36,26 +37,26 @@ class BaseNetwork(nn.Module):
         """
         Creates the loss function
         """
-        if problem_type == "classification":
+        if ProblemTypes.Classification:
             self.loss = nn.CrossEntropyLoss()
-        elif problem_type == "regression":
+        elif ProblemTypes.Regression:
             self.loss = nn.MSELoss()
         else:
             raise NotImplementedError(f"Problem type {problem_type} not implemented")
 
     def _initialise_weights(self, init_type: str = "normal") -> None:
         """
-        Initializes the weights of the network
+        Initializes the weights of the network based on the
+        specified initialization type.
 
-        Parameters
-        ----------
-        init_type: str
-            The type of initialization
+        Args:
+            init_type (str): The type of weight initialization. Options are:
+                - "normal": Uses normal distribution initialization.
+                - "xavier_normal": Uses Xavier normal initialization.
+                - "kaiming_normal": Uses Kaiming normal initialization.
 
-        Raises
-        ------
-        NotImplementedError
-            if the method is not implemented
+        Raises:
+            NotImplementedError: If an unsupported `init_type` is provided.
         """
         if init_type == "normal":
             self.apply(normal_init)
@@ -68,26 +69,24 @@ class BaseNetwork(nn.Module):
 
     def _make_optimizer(self, optimizer_type, lr):
         """
-        Creates the optimizer for the network
+        Creates and initializes the optimizer for the network.
 
-        Parameters
-        ----------
-        optimizer_type: str
-            The type of optimizer to use
+        Args:
+            optimizer_type (str): The type of optimizer to use. Options are:
+                - "Adam": Uses the Adam optimizer.
+                - "SGD": Uses Stochastic Gradient Descent.
+                - "RMSprop": Uses RMSprop optimizer.
 
-        lr: float
-            The learning rate for the optimizer
+            lr (float): The learning rate for the optimizer.
 
-        Raises
-        ------
-        NotImplementedError
-            if the method is not implemented
+        Raises:
+            NotImplementedError: If an unsupported `optimizer_type` is provided.
         """
-        if optimizer_type == "adam":
+        if OptimiserTypes.Adam:
             self.optimizer = torch.optim.Adam(self.parameters(), lr=lr)
-        elif optimizer_type == "sgd":
+        elif OptimiserTypes.SGD:
             self.optimizer = torch.optim.SGD(self.parameters(), lr=lr)
-        elif optimizer_type == "rmsprop":
+        elif OptimiserTypes.RMSprop:
             self.optimizer = torch.optim.RMSprop(self.parameters(), lr=lr)
         else:
             raise NotImplementedError(
@@ -96,12 +95,14 @@ class BaseNetwork(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
-        Forward pass for the network
+        Defines the forward pass for the network.
 
-        Raises
-        ------
-        NotImplementedError
-            if the method is not implemented
+        Args:
+            x (torch.Tensor): The input tensor to the network.
+
+        Raises:
+            NotImplementedError: If the forward pass method is
+            not implemented in a subclass.
         """
         raise NotImplementedError
 
@@ -113,14 +114,15 @@ class BaseNetwork(nn.Module):
 
     def get_num_params(self) -> Tuple[int, int]:
         """
-        Returns the number of parameters in the network
+        Returns the total number of parameters and the
+        number of trainable parameters in the network.
 
-        Returns
-        -------
-        all_params: int
-            The total number of parameters in the network
-        trainable_params: int
-            The total number of trainable parameters in the network
+        Returns:
+            Tuple[int, int]: A tuple containing:
+                - all_params (int): The total number of
+                parameters in the network.
+                - trainable_params (int): The total number
+                of trainable parameters in the network.
         """
         all_params = sum(p.numel() for p in self.parameters())
         trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
@@ -128,17 +130,17 @@ class BaseNetwork(nn.Module):
 
     def save_model(self):
         """
-        Saves the model
+        Saves the model's state dictionary to a file.
 
-        Returns
-        -------
-        None
+        Raises:
+            NotImplementedError: If there is an error while
+            saving the model, it raises a NotImplementedError
+            with the error message.
         """
         try:
             torch.save(
                 self.state_dict(),
                 os.path.join(self._opt.checkpoints_dir, f"{self._name}.pth"),
             )
-
         except Exception as e:
             raise NotImplementedError(f"Method not implemented: {e}")

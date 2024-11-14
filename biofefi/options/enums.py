@@ -55,6 +55,12 @@ class ProblemTypes(StrEnum):
     Regression = "regression"
 
 
+class OptimiserTypes(StrEnum):
+    Adam = "adam"
+    SGD = "sgd"
+    RMSprop = "rmsprop"
+
+
 class SvmKernels(StrEnum):
     RBF = "rbf"
     Linear = "linear"

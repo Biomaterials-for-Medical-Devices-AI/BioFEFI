@@ -1,35 +1,34 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from typing import Tuple, Optional
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from biofefi.machine_learning.networks import BaseNetwork
-import numpy as np
+from biofefi.options.enums import ProblemTypes, ModelNames, OptimiserTypes
 
 
 class BayesianRegularisedNeuralNets(
     BaseNetwork, BaseEstimator, ClassifierMixin, RegressorMixin
 ):
     """
-    This class implements Bayesian Regularised Neural Networks compatible with scikit-learn.
+    This class implements Bayesian Regularised Neural Networks
+    compatible with scikit-learn.
     """
 
     def __init__(self, opt):
         """
-        Initializes the BayesianRegularisedNeuralNets class
+        Initializes the BayesianRegularisedNeuralNets class.
 
-        Parameters
-        ----------
-        opt : argparse.Namespace
-            The options for the BayesianRegularisedNeuralNets class.
+        Args:
+            opt (argparse.Namespace): The options for the
+            BayesianRegularisedNeuralNets class, typically
+            passed from a command-line interface.
         """
         super().__init__(opt)
-        self._name = "BayesianRegularisedNeuralNets"
+        self._name = ModelNames.BayesianRegularisedNeuralNets
         self._opt = opt
         self._hidden_dim = opt.hidden_dim
-
-        # Set problem type to classification or regression
-        self.problem_type = opt.problem_type
 
         # Layers will be initialized in `_initialize_network`
         self.layer1 = None
@@ -38,14 +37,13 @@ class BayesianRegularisedNeuralNets(
 
     def _initialize_network(self, input_dim, output_dim):
         """
-        Initialize the network layers based on the problem type.
+        Initializes the network layers based on the input
+        and output dimensions.
 
-        Parameters
-        ----------
-        input_dim : int
-            The input dimension of the data.
-        output_dim : int
-            The output dimension of the data, determined dynamically.
+        Args:
+            input_dim (int): The input dimension of the data.
+            output_dim (int): The output dimension of the
+            data, determined dynamically.
         """
         # Define hidden layers and output layer
         self.layer1 = nn.Linear(input_dim, self._hidden_dim)
@@ -54,16 +52,21 @@ class BayesianRegularisedNeuralNets(
 
         # Initialize weights and create optimizer here after layers are defined
         self._initialise_weights()
-        self._make_optimizer(self._opt.optimizer_type, self._opt.lr)
+        self._make_optimizer(OptimiserTypes.Adam, self._opt.lr)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
-        Forward pass of the network.
+        Defines the forward pass of the network.
 
-        Parameters
-        ----------
-        x : torch.Tensor
-            The input data.
+        Args:
+            x (torch.Tensor): The input data to the network.
+
+        Returns:
+            torch.Tensor: The output after applying the forward
+            pass through the network.
+
+        Raises:
+            ValueError: If an unsupported problem type is specified.
         """
         # Apply LeakyReLU activation to hidden layers
         x = F.leaky_relu(self.layer1(x), negative_slope=0.01)
@@ -71,13 +74,13 @@ class BayesianRegularisedNeuralNets(
         x = self.output_layer(x)
 
         # Apply appropriate activation based on problem type
-        if self.problem_type.lower() == "classification":
+        if ProblemTypes.Classification:
 
             # Use softmax for multi-class classification, sigmoid for binary
             return torch.sigmoid(x) if x.size(1) == 1 else torch.softmax(x, dim=1)
 
         # No activation for regression
-        elif self.problem_type.lower() == "regression":
+        elif ProblemTypes.Regression:
             return x
         else:
             raise ValueError(f"Unsupported problem type: {self.problem_type}")
@@ -88,13 +91,22 @@ class BayesianRegularisedNeuralNets(
         """
         Compute the Bayesian Regularization loss.
 
-        Parameters
-        ----------
-        prior_mu : float
-            The prior mean.
+        The loss is computed as the sum of squared differences
+        between model parameters and their prior mean,
+        scaled by the prior standard deviation.
 
-        prior_sigma : float
-            The prior standard deviation.
+        Args:
+            prior_mu (float, optional): The prior mean. Defaults
+            to `self._opt.prior_mu` if not provided.
+
+            prior_sigma (float, optional): The prior standard deviation.
+            Defaults to `self._opt.prior_sigma` if not provided.
+
+        Returns:
+            torch.Tensor: The computed regularization loss.
+
+        Raises:
+            ValueError: If both `prior_mu` and `prior_sigma` are not provided.
         """
         prior_mu = prior_mu if prior_mu is not None else self._opt.prior_mu
         prior_sigma = prior_sigma if prior_sigma is not None else self._opt.prior_sigma
@@ -112,25 +124,30 @@ class BayesianRegularisedNeuralNets(
         self, outputs: torch.Tensor, targets: torch.Tensor
     ) -> torch.Tensor:
         """
-        Compute the loss based on the problem type and return the total loss including the regularization loss.
+        Compute the total loss based on the problem type
+        and include regularization loss.
 
-        Parameters
-        ----------
-        outputs : torch.Tensor
-            The predicted outputs.
+        Args:
+            outputs (torch.Tensor): The predicted outputs from the model.
+            targets (torch.Tensor): The true target values.
 
-        targets : torch.Tensor
-            The target outputs.
+        Returns:
+            torch.Tensor: The total computed loss, including both
+            predictive and regularization loss.
+
+        Raises:
+            ValueError: If an unsupported problem type is specified.
         """
+
         # Determine the predictive loss based on problem type
-        if self.problem_type.lower() == "classification":
+        if ProblemTypes.Classification:
             if outputs.size(1) == 1:
                 predictive_loss = nn.BCELoss()(outputs, targets)
                 print("Using BCELoss for binary classification.")
             else:
                 predictive_loss = nn.CrossEntropyLoss()(outputs, targets)
                 print("Using CrossEntropyLoss for multi-class classification.")
-        elif self.problem_type.lower() == "regression":
+        elif ProblemTypes.Regression:
             predictive_loss = nn.MSELoss()(outputs, targets)
             print("Using MSELoss for regression.")
         else:
@@ -148,25 +165,25 @@ class BayesianRegularisedNeuralNets(
         validation_data: Optional[Tuple[np.ndarray, np.ndarray]] = None,
     ) -> None:
         """
-        Trains the Bayesian Regularized Neural Network.
+        Train the Bayesian Regularized Neural Network.
 
-        Parameters
-        ----------
-        X : np.ndarray
-            The input data.
+        Args:
+            X (np.ndarray): The input training data.
+            y (np.ndarray): The target training data.
 
-        y : np.ndarray
-            The target data.
+            validation_data (Optional[Tuple[np.ndarray, np.ndarray]]): Optional
+            validation data (inputs, targets).
 
-        validation_data : Optional[Tuple[np.ndarray, np.ndarray]]
-            The validation data.
+        Returns:
+            self: The trained model.
+
         """
         # Convert input data to PyTorch tensors
         X = torch.tensor(X, dtype=torch.float32)
         y = torch.tensor(y, dtype=torch.float32)
 
         # Adjust target `y` for classification tasks
-        if self.problem_type.lower() == "classification":
+        if ProblemTypes.Classification:
 
             # Ensure y is 1D and of type Long for CrossEntropyLoss
             y = y.squeeze().long()
@@ -178,14 +195,14 @@ class BayesianRegularisedNeuralNets(
             val_y = torch.tensor(val_y, dtype=torch.float32)
 
             # Ensure validation y is also 1D for classification
-            if self.problem_type.lower() == "classification":
+            if ProblemTypes.Classification:
                 val_y = val_y.squeeze().long()
             validation_data = (val_X, val_y)
 
         input_dim = X.shape[1]
 
         # Determine number of classes if classification
-        if self.problem_type.lower() == "classification":
+        if ProblemTypes.Classification:
 
             # Set output_dim dynamically based on unique classes
             self._output_dim = len(torch.unique(y))
@@ -235,21 +252,20 @@ class BayesianRegularisedNeuralNets(
         """
         Predict outputs for the given input data.
 
-        Parameters
-        ----------
-        X : np.ndarray
-            Input data features.
+        Args:
+            X (np.ndarray): The input data features for prediction.
 
-        Returns
-        -------
-        np.ndarray
-            Predicted outputs as a numpy array.
+        Returns:
+            np.ndarray: The predicted outputs as a numpy array.
+
+        Raises:
+            ValueError: If an unsupported problem type is specified.
         """
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
         self.eval()
         with torch.no_grad():
             outputs = self(X)
-            if self.problem_type == "classification":
+            if ProblemTypes.Classification:
                 if outputs.size(1) == 1:
                     return (
                         (outputs > self._opt.classification_cutoff)
@@ -259,7 +275,7 @@ class BayesianRegularisedNeuralNets(
                     )
                 else:
                     return torch.argmax(outputs, dim=1).cpu().numpy()
-            elif self.problem_type == "regression":
+            elif ProblemTypes.Regression:
                 return outputs.cpu().numpy()
             else:
                 raise ValueError(f"Unsupported problem type: {self.problem_type}")

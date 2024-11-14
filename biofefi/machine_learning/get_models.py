@@ -35,26 +35,26 @@ def get_models(
     model_types: Dict[str, Dict], problem_type: str, logger: object = None
 ) -> List:
     """
-    Initialize and return a dictionary of models based on
-    specified types and problem domain.
+    Initialises and returns a dictionary of models based on
+    the specified types and problem domain.
 
-    Parameters
-    ----------
-    model_types : Dict[str, Dict]
-        Dictionary where keys are model names and values are
-        dictionaries containing model parameters and
-        usage flags.
+    Args:
+        model_types (Dict[str, Dict]): A dictionary where keys are
+        model names and values are dictionaries containing model
+        parameters and usage flags.
 
-    problem_type : str
-        The type of problem ('classification' or 'regression').
+        problem_type (str): The type of problem
+        ('classification' or 'regression').
 
-    logger : object, optional
-        Logger object for logging information.
+        logger (object, optional): Logger object for logging
+        information. Defaults to None.
 
-    Returns
-    -------
-    models : Dict[str, object]
-        Dictionary of initialized model instances.
+    Returns:
+        Dict[str, object]: A dictionary of initialized model
+        instances, where keys are model names.
+
+    Raises:
+        ValueError: If a model type in `model_types` is not recognised.
     """
     models = {}
     model_list = [
@@ -64,9 +64,8 @@ def get_models(
     ]
     for model, model_param in model_list:
 
-        model_class = _MODEL_PROBLEM_DICT.get((model, problem_type.lower()))
-        if model_class:
-            if model == "BayesianRegularisedNeuralNets":
+        if model_class := _MODEL_PROBLEM_DICT.get((model, problem_type.lower())):
+            if ModelNames.BayesianRegularisedNeuralNets:
 
                 model_param["problem_type"] = problem_type.lower()
                 opt = SimpleNamespace(**model_param)
@@ -86,5 +85,5 @@ def get_models(
                     models[model] = model_class(**model_param)
 
         else:
-            raise ValueError(f"Model type {model} not recognized")
+            raise ValueError(f"Model type {model} not recognised")
     return models
