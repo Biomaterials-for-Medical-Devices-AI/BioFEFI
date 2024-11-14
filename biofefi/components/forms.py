@@ -4,6 +4,7 @@ import streamlit as st
 from biofefi.components.configuration import plot_options_box
 from biofefi.options.choices import PROBLEM_TYPES, SVM_KERNELS
 from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys, PlotOptionKeys
+from biofefi.options.file_paths import biofefi_experiments_base_dir
 
 
 def data_upload_form():
@@ -40,7 +41,7 @@ def data_upload_form():
 
 def _save_directory_selector() -> Path:
     """Create a selector for the directory to save experiments."""
-    root = Path.home()
+    root = biofefi_experiments_base_dir()
 
     col1, col2 = st.columns([0.3, 0.7], vertical_alignment="bottom")
 
