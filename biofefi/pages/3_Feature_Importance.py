@@ -4,6 +4,7 @@ from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
+from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models_to_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
@@ -71,7 +72,11 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
             save_fuzzy_set_plots=st.session_state[PlotOptionKeys.SavePlots],
-            # fuzzy_log_dir=
+            fuzzy_log_dir=log_dir(
+                biofefi_experiments_base_dir()
+                / st.session_state[ViewExperimentKeys.ExperimentName]
+            )
+            / "fuzzy",
             dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
             experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
             data_path=path_to_data,
@@ -102,7 +107,11 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             ConfigStateKeys.ProblemType, ProblemTypes.Auto
         ).lower(),
         is_feature_importance=True,
-        # fi_log_dir=
+        fi_log_dir=log_dir(
+            biofefi_experiments_base_dir()
+            / st.session_state[ViewExperimentKeys.ExperimentName]
+        )
+        / "fi",
         angle_rotate_xaxis_labels=st.session_state[PlotOptionKeys.RotateXAxisLabels],
         angle_rotate_yaxis_labels=st.session_state[PlotOptionKeys.RotateYAxisLabels],
         save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
@@ -191,26 +200,21 @@ st.write(
     """
 )
 
-# Get the base directory of all experiments
-base_dir = biofefi_experiments_base_dir()
-choices = os.listdir(base_dir)
-# Filter out hidden files and directories
-choices = filter(lambda x: not x.startswith("."), choices)
-# Filter out files
-choices = filter(lambda x: os.path.isdir(os.path.join(base_dir, x)), choices)
 
-experiment_selector(choices)
+choices = get_experiments()
+experiment_name = experiment_selector(choices)
 
-if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
-    st.session_state[ConfigStateKeys.ExperimentName] = base_dir / experiment_name
-    experiment_name = st.session_state[ConfigStateKeys.ExperimentName]
+if experiment_name:
+    st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
 
-    data_choices = os.listdir(experiment_name)
+    data_choices = os.listdir(biofefi_experiments_base_dir() / experiment_name)
     data_choices = filter(lambda x: x.endswith(".csv"), data_choices)
 
     data_selector(data_choices)
 
-    model_choices = os.listdir(ml_model_dir(experiment_name))
+    model_choices = os.listdir(
+        ml_model_dir(biofefi_experiments_base_dir() / experiment_name)
+    )
     model_choices = [x for x in model_choices if x.endswith(".pkl")]
 
     explain_all_models = st.toggle(
@@ -240,12 +244,14 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
                 # wait for the process to finish or be cancelled
                 process.join()
             st.session_state[ConfigStateKeys.LogBox] = get_logs(
-                log_dir(experiment_name)
+                log_dir(biofefi_experiments_base_dir() / experiment_name)
             )
             log_box()
-            fi_plots = fi_plot_dir(experiment_name)
+            fi_plots = fi_plot_dir(biofefi_experiments_base_dir() / experiment_name)
             if fi_plots.exists():
                 plot_box(fi_plots, "Feature importance plots")
-            fuzzy_plots = fuzzy_plot_dir(experiment_name)
+            fuzzy_plots = fuzzy_plot_dir(
+                biofefi_experiments_base_dir() / experiment_name
+            )
             if fuzzy_plots.exists():
                 plot_box(fuzzy_plots, "Fuzzy plots")
