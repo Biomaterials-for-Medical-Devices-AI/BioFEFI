@@ -156,14 +156,16 @@ def pipeline(
     """
     seed = fi_opts.random_state
     set_seed(seed)
-    logger_instance = Logger(log_dir(experiment_name))
-    logger = logger_instance.make_logger()
+    fi_logger_instance = Logger(
+        log_dir(biofefi_experiments_base_dir() / experiment_name) / "fi"
+    )
+    fi_logger = fi_logger_instance.make_logger()
 
-    data = DataBuilder(fi_opts, logger).ingest()
+    data = DataBuilder(fi_opts, fi_logger).ingest()
 
     ## Models will already be trained before feature importance
     trained_models = load_models_to_explain(
-        ml_model_dir(experiment_name), explain_models
+        ml_model_dir(biofefi_experiments_base_dir() / experiment_name), explain_models
     )
 
     # Feature importance
@@ -172,16 +174,26 @@ def pipeline(
             gloabl_importance_results,
             local_importance_results,
             ensemble_results,
-        ) = feature_importance.run(fi_opts, data, trained_models, logger)
+        ) = feature_importance.run(fi_opts, data, trained_models, fi_logger)
 
         # Fuzzy interpretation
         if fuzzy_opts.fuzzy_feature_selection:
-            fuzzy_rules = fuzzy_interpretation.run(
-                fuzzy_opts, fuzzy_opts, data, trained_models, ensemble_results, logger
+            fuzzy_logger_instance = Logger(
+                log_dir(biofefi_experiments_base_dir() / experiment_name) / "fuzzy"
             )
+            fuzzy_logger = fuzzy_logger_instance.make_logger()
+            fuzzy_rules = fuzzy_interpretation.run(
+                fuzzy_opts,
+                fuzzy_opts,
+                data,
+                trained_models,
+                ensemble_results,
+                fuzzy_logger,
+            )
+            close_logger(fuzzy_logger_instance, fuzzy_logger)
 
-    # Close the logger
-    close_logger(logger_instance, logger)
+    # Close the fi logger
+    close_logger(fi_logger_instance, fi_logger)
 
 
 # Set page contents
