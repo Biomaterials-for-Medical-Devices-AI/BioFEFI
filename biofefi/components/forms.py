@@ -21,7 +21,7 @@ def data_upload_form():
     ):
         st.markdown(f":red[Cannot use {save_dir}; it already exists.]")
     else:
-        st.session_state[ConfigStateKeys.ExperimentName] = save_dir
+        st.session_state[ConfigStateKeys.ExperimentName] = save_dir.name
     st.text_input(
         "Name of the dependent variable", key=ConfigStateKeys.DependentVariableName
     )
