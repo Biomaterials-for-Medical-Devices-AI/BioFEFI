@@ -131,7 +131,7 @@ def save_fuzzy_sets_plots(
     # Plot the membership functions
     if opt.save_fuzzy_set_plots:
         logger.info(f"Saving fuzzy set plots ...")
-        save_dir = fuzzy_plot_dir(opt.experiment_name)
+        save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
 
@@ -165,7 +165,7 @@ def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):
     # Plot the target clusters
     if opt.save_fuzzy_set_plots:
         logger.info(f"Saving target clusters plot ...")
-        save_dir = fuzzy_plot_dir(opt.experiment_name)
+        save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
 
