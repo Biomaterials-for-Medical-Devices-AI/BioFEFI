@@ -57,7 +57,29 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
     if fuzzy_plots.exists():
         plot_box(fuzzy_plots, "Fuzzy plots")
     try:
-        st.session_state[ConfigStateKeys.LogBox] = get_logs(log_dir(experiment_name))
-        log_box()
+        st.session_state[ConfigStateKeys.MLLogBox] = get_logs(
+            log_dir(
+                biofefi_experiments_base_dir()
+                / st.session_state[ConfigStateKeys.ExperimentName]
+            )
+            / "ml"
+        )
+        st.session_state[ConfigStateKeys.FILogBox] = get_logs(
+            log_dir(
+                biofefi_experiments_base_dir()
+                / st.session_state[ConfigStateKeys.ExperimentName]
+            )
+            / "fi"
+        )
+        st.session_state[ConfigStateKeys.FuzzyLogBox] = get_logs(
+            log_dir(
+                biofefi_experiments_base_dir()
+                / st.session_state[ConfigStateKeys.ExperimentName]
+            )
+            / "fuzzy"
+        )
+        log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
+        log_box(box_title="Feature Importance Logs", key=ConfigStateKeys.FILogBox)
+        log_box(box_title="Fuzzy FI Logs", key=ConfigStateKeys.FuzzyLogBox)
     except NotADirectoryError:
         pass
