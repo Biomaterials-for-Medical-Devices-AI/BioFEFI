@@ -54,7 +54,7 @@ def build_configuration() -> tuple[Namespace, str]:
         data_path=path_to_data,
         data_split=st.session_state[ConfigStateKeys.DataSplit],
         model_types=st.session_state[ConfigStateKeys.ModelTypes],
-        ml_log_dir=ml_plot_dir(
+        ml_plot_dir=ml_plot_dir(
             biofefi_experiments_base_dir()
             / st.session_state[ConfigStateKeys.ExperimentName]
         ),

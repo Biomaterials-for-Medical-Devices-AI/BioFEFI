@@ -24,8 +24,10 @@ from biofefi.options.enums import (
     ExecutionStateKeys,
     ProblemTypes,
     PlotOptionKeys,
+    ViewExperimentKeys,
 )
 from biofefi.options.file_paths import (
+    biofefi_experiments_base_dir,
     fi_plot_dir,
     fuzzy_plot_dir,
     uploaded_file_path,
@@ -130,7 +132,15 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         data_path=path_to_data,
         data_split=st.session_state[ConfigStateKeys.DataSplit],
         model_types=st.session_state[ConfigStateKeys.ModelTypes],
-        ml_log_dir=ml_plot_dir(st.session_state[ConfigStateKeys.ExperimentName]),
+        ml_plot_dir=ml_plot_dir(
+            biofefi_experiments_base_dir()
+            / st.session_state[ConfigStateKeys.ExperimentName]
+        ),
+        ml_log_dir=log_dir(
+            biofefi_experiments_base_dir()
+            / st.session_state[ConfigStateKeys.ExperimentName]
+        )
+        / "ml",
         problem_type=st.session_state.get(
             ConfigStateKeys.ProblemType, ProblemTypes.Auto
         ).lower(),
@@ -229,11 +239,15 @@ if (
     uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
 ) and st.session_state.get(ExecutionStateKeys.RunPipeline, False):
     experiment_name = st.session_state.get(ConfigStateKeys.ExperimentName)
-    upload_path = uploaded_file_path(uploaded_file.name, experiment_name)
+    upload_path = uploaded_file_path(
+        uploaded_file.name, biofefi_experiments_base_dir() / experiment_name
+    )
     save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
     if uploaded_models := st.session_state.get(ConfigStateKeys.UploadedModels):
         for m in uploaded_models:
-            upload_path = ml_model_dir(experiment_name) / m.name
+            upload_path = (
+                ml_model_dir(biofefi_experiments_base_dir() / experiment_name) / m.name
+            )
             save_upload(upload_path, m.read(), "wb")
     config = build_configuration()
     process = Process(target=pipeline, args=config, daemon=True)
@@ -242,14 +256,16 @@ if (
     with st.spinner("Running pipeline..."):
         # wait for the process to finish or be cancelled
         process.join()
-    st.session_state[ConfigStateKeys.LogBox] = get_logs(log_dir(experiment_name))
+    st.session_state[ConfigStateKeys.LogBox] = get_logs(
+        log_dir(biofefi_experiments_base_dir() / experiment_name)
+    )
     log_box()
-    ml_plots = ml_plot_dir(experiment_name)
+    ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)
     if ml_plots.exists():
         plot_box(ml_plots, "Machine learning plots")
-    fi_plots = fi_plot_dir(experiment_name)
+    fi_plots = fi_plot_dir(biofefi_experiments_base_dir() / experiment_name)
     if fi_plots.exists():
         plot_box(fi_plots, "Feature importance plots")
-    fuzzy_plots = fuzzy_plot_dir(experiment_name)
+    fuzzy_plots = fuzzy_plot_dir(biofefi_experiments_base_dir() / experiment_name)
     if fuzzy_plots.exists():
         plot_box(fuzzy_plots, "Fuzzy plots")
