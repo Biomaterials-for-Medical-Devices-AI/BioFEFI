@@ -196,10 +196,10 @@ if experiment_name:
             # wait for the process to finish or be cancelled
             process.join()
         try:
-            st.session_state[ConfigStateKeys.LogBox] = get_logs(
-                log_dir(biofefi_experiments_base_dir() / experiment_name)
+            st.session_state[ConfigStateKeys.MLLogBox] = get_logs(
+                log_dir(biofefi_experiments_base_dir() / experiment_name) / "ml"
             )
-            log_box()
+            log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
         except NotADirectoryError:
             pass
         ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)

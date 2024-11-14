@@ -243,10 +243,19 @@ if experiment_name:
             ):
                 # wait for the process to finish or be cancelled
                 process.join()
-            st.session_state[ConfigStateKeys.LogBox] = get_logs(
-                log_dir(biofefi_experiments_base_dir() / experiment_name)
-            )
-            log_box()
+            try:
+                st.session_state[ConfigStateKeys.FILogBox] = get_logs(
+                    log_dir(biofefi_experiments_base_dir() / experiment_name) / "fi"
+                )
+                st.session_state[ConfigStateKeys.FuzzyLogBox] = get_logs(
+                    log_dir(biofefi_experiments_base_dir() / experiment_name) / "fuzzy"
+                )
+                log_box(
+                    box_title="Feature Importance Logs", key=ConfigStateKeys.FILogBox
+                )
+                log_box(box_title="Fuzzy FI Logs", key=ConfigStateKeys.FuzzyLogBox)
+            except NotADirectoryError:
+                pass
             fi_plots = fi_plot_dir(biofefi_experiments_base_dir() / experiment_name)
             if fi_plots.exists():
                 plot_box(fi_plots, "Feature importance plots")
