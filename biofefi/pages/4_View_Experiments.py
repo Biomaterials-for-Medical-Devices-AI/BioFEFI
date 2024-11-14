@@ -58,25 +58,13 @@ if experiment_name := st.session_state.get(ViewExperimentKeys.ExperimentName):
         plot_box(fuzzy_plots, "Fuzzy plots")
     try:
         st.session_state[ConfigStateKeys.MLLogBox] = get_logs(
-            log_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
-            / "ml"
+            log_dir(biofefi_experiments_base_dir() / experiment_name) / "ml"
         )
         st.session_state[ConfigStateKeys.FILogBox] = get_logs(
-            log_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
-            / "fi"
+            log_dir(biofefi_experiments_base_dir() / experiment_name) / "fi"
         )
         st.session_state[ConfigStateKeys.FuzzyLogBox] = get_logs(
-            log_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
-            / "fuzzy"
+            log_dir(biofefi_experiments_base_dir() / experiment_name) / "fuzzy"
         )
         log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
         log_box(box_title="Feature Importance Logs", key=ConfigStateKeys.FILogBox)
