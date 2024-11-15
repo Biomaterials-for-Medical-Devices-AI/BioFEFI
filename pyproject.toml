@@ -11,7 +11,6 @@ authors = [
 readme = "README.md"
 include = [
     { path = "static", format = ["sdist", "wheel"] },
-    { path = ".streamlit", format = ["sdist", "wheel"] },
 ]
 
 [tool.poetry.dependencies]
