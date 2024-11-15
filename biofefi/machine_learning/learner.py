@@ -39,11 +39,8 @@ class Learner:
             self._logger.info(f"Processing bootstrap sample {i+1}...")
 
             # Access data using dictionary keys
-            X_train = data.get("X_train", data["X_train"])[i]
-            X_test = data.get("X_test", data["X_test"])[i]
-
-            y_train = data.get("y_train", data["y_train"])[i]
-            y_test = data.get("y_test", data["y_test"])[i]
+            X_train, X_test = data["X_train"][i], data["X_test"][i]
+            y_train, y_test = data["y_train"][i], data["y_test"][i]
 
             res[i] = {}
             for model_name, model in self._models.items():
