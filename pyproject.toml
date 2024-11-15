@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = [
     "Daniel Lea <Daniel.Lea@nottingham.ac.uk>",
-    "Eduardo Aguilar-Bejarano <pcxea2@exmail.nottingham.ac.uk>",
+    "Eduardo Aguilar <pcxea2@exmail.nottingham.ac.uk>",
     "Karthikeyan Sivakumar <psxks12@exmail.nottingham.ac.uk>",
     "Grazziela Figueredo <pmzgf@exmail.nottingham.ac.uk>"
 ]
