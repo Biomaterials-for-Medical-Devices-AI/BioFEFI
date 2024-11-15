@@ -134,7 +134,6 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             / st.session_state[ViewExperimentKeys.ExperimentName]
         )
         / "fi",
-        save_feature_importance_plots=st.session_state[PlotOptionKeys.SavePlots],
         save_feature_importance_options=st.session_state[
             ConfigStateKeys.SaveFeatureImportanceOptions
         ],
@@ -243,7 +242,6 @@ if experiment_name:
     data_choices = filter(lambda x: x.endswith(".csv"), data_choices)
 
     data_selector(data_choices)
-
 
     # Fuzzy options require this
     # TODO: get this from a saved configuration from ML
