@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from biofefi.feature_importance.call_methods import save_importance_results
 from biofefi.feature_importance.ensemble_methods import (
@@ -229,7 +230,7 @@ class Interpreter:
                         ensemble_results[ensemble_type] = majority_vote_results
 
             self._logger.info(
-                f"Ensemble feature importance results: \n{ensemble_results}"
+                f"Ensemble feature importance results: {os.linesep}{ensemble_results}"
             )
 
         return ensemble_results
