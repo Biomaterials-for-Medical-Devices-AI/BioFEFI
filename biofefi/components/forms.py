@@ -145,11 +145,12 @@ def fi_options_form():
     )
 
     # Scoring function for permutation importance
-    if st.session_state.get(ConfigStateKeys.ProblemType) == 'Regression':
-        scoring_options = ["neg_mean_absolute_error",
+    if st.session_state.get(ConfigStateKeys.ProblemType) == "Regression":
+        scoring_options = [
+            "neg_mean_absolute_error",
             "neg_root_mean_squared_error",
-            ]
-    elif st.session_state.get(ConfigStateKeys.ProblemType) == 'Classification':
+        ]
+    elif st.session_state.get(ConfigStateKeys.ProblemType) == "Classification":
         scoring_options = ["accuracy", "f1"]
 
     st.selectbox(
