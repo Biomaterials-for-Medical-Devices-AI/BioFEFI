@@ -2,7 +2,12 @@
 name = "biofefi"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = [
+    "Daniel Lea <Daniel.Lea@nottingham.ac.uk>",
+    "Eduardo Aguilar-Bejarano <pcxea2@exmail.nottingham.ac.uk>",
+    "Karthikeyan Sivakumar <psxks12@exmail.nottingham.ac.uk>",
+    "Grazziela Figueredo <pmzgf@exmail.nottingham.ac.uk>"
+]
 readme = "README.md"
 include = [
     { path = "static", format = ["sdist", "wheel"] },
