@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 import streamlit as st
-from biofefi.components.configuration import plot_options_box
 from biofefi.options.choices import PROBLEM_TYPES, SVM_KERNELS
 from biofefi.options.enums import (
     ConfigStateKeys,
@@ -150,15 +149,21 @@ def fi_options_form():
     )
 
     # Scoring function for permutation importance
-    if st.session_state.get(ConfigStateKeys.ProblemType) == ProblemTypes.Regression:
+    if (
+        st.session_state.get(ConfigStateKeys.ProblemType)
+        == ProblemTypes.Regression.capitalize()  # problem type choices are captialised
+    ):
         scoring_options = [
             "neg_mean_absolute_error",
             "neg_root_mean_squared_error",
         ]
     elif (
-        st.session_state.get(ConfigStateKeys.ProblemType) == ProblemTypes.Classification
+        st.session_state.get(ConfigStateKeys.ProblemType)
+        == ProblemTypes.Classification.capitalize()  # problem type choices are captialised
     ):
         scoring_options = ["accuracy", "f1"]
+    else:
+        scoring_options = []
 
     st.selectbox(
         "Scoring function for permutation importance",
