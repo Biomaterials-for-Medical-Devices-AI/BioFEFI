@@ -82,7 +82,7 @@ def save_actual_pred_plots(
     if opt.problem_type == ProblemTypes.Regression:
 
         # Create results directory if it doesn't exist
-        directory = ml_plot_dir(opt.experiment_name)
+        directory = opt.ml_plot_dir
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
         # Convert train and test sets to numpy arrays for easier handling

@@ -31,3 +31,4 @@ class MachineLearningOptions:
     }
     ml_log_dir: str = "ml"
     save_models: bool = True
+    ml_plot_dir: str = "ml"

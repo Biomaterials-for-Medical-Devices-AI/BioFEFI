@@ -4,6 +4,8 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 from biofefi.options.file_paths import (
+    biofefi_experiments_base_dir,
+    fi_options_dir,
     fi_plot_dir,
     fi_result_dir,
     fuzzy_plot_dir,
@@ -52,30 +54,14 @@ def save_importance_results(
     """
     logger.info(f"Saving importance results and plots of {feature_importance_type}...")
 
-    # Create results directory if it doesn't exist
-    if importance_type == "fuzzy":
-        # directory for fuzzy feature importance results
-        directory = f"./log/{opt.experiment_name}/{opt.fuzzy_log_dir}/results/"
-    elif model_type == None:
-        # directory for ensemble feature importance results
-        directory = f"./log/{opt.experiment_name}/{opt.fi_log_dir}/results/Ensemble_importances/{feature_importance_type}/"
-    elif importance_type == "local":
-        # directory for local model feature importance results
-        directory = f"./log/{opt.experiment_name}/{opt.fi_log_dir}/results/{model_type}/local_feature_importances/{feature_importance_type}/"
-    else:
-        # directory for individual model feature importance results
-        directory = f"./log/{opt.experiment_name}/{opt.fi_log_dir}/results/{model_type}/global_feature_importances/{feature_importance_type}/"
-
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
     # Save plots when the flag is set to True and importance type is not fuzzy
     if opt.save_feature_importance_plots and importance_type != "fuzzy":
-        save_dir = fi_plot_dir(opt.experiment_name)
+        save_dir = fi_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         # Plot bar plot - sort values in descending order and plot top n features
         # rotate x-axis labels for better readability
+        plt.style.use(opt.plot_colour_scheme)
         fig, ax = plt.subplots(layout="constrained")
 
         feature_importance_df.sort_values(by=0, ascending=False).head(
@@ -88,15 +74,39 @@ def save_importance_results(
             ylabel="Importance",
         )
         # rotate x-axis labels for better readability
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=opt.angle_rotate_xaxis_labels)
+        ax.set_xticklabels(
+            ax.get_xticklabels(),
+            rotation=opt.angle_rotate_xaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_yticklabels(
+            ax.get_yticklabels(),
+            rotation=opt.angle_rotate_yaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_xlabel(ax.get_xlabel(), family=opt.plot_font_family)
+        ax.set_ylabel(ax.get_ylabel(), family=opt.plot_font_family)
+        ax.set_title(ax.get_title(), family=opt.plot_font_family)
         fig.savefig(save_dir / f"{model_type}-bar.png")
 
         if feature_importance_type == "SHAP":
             # Plot bee swarm plot
             fig, ax = plt.subplots(layout="constrained")
-            ax.set_title(f"{feature_importance_type} - {model_type}")
+            ax.set_title(
+                f"{feature_importance_type} - {model_type}", family=opt.plot_font_family
+            )
             shap.plots.beeswarm(
                 shap_values, max_display=opt.num_features_to_plot, show=False
+            )
+            ax.set_xlabel(ax.get_xlabel(), family=opt.plot_font_family)
+            ax.set_ylabel(ax.get_ylabel(), family=opt.plot_font_family)
+            ax.set_xticklabels(
+                ax.get_xticklabels(),
+                family=opt.plot_font_family,
+            )
+            ax.set_yticklabels(
+                ax.get_yticklabels(),
+                family=opt.plot_font_family,
             )
             fig.savefig(save_dir / f"{model_type}-beeswarm.png")
 
@@ -106,20 +116,27 @@ def save_importance_results(
 
     # Save the results to a CSV file - create folders if they don't exist
     if opt.save_feature_importance_results and importance_type != "fuzzy":
-        save_dir = fi_result_dir(opt.experiment_name)
+        save_dir = fi_result_dir(biofefi_experiments_base_dir() / opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         feature_importance_df.to_csv(save_dir / f"{feature_importance_type}.csv")
 
     if opt.save_feature_importance_results and importance_type == "fuzzy":
-        save_dir = fuzzy_result_dir(opt.experiment_name)
+        save_dir = fuzzy_result_dir(
+            biofefi_experiments_base_dir() / opt.experiment_name
+        )
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         feature_importance_df.to_csv(save_dir / f"{feature_importance_type}.csv")
 
     # Save the metrics to a log file
     if opt.save_feature_importance_options:
-        log_options(directory, opt)
+        options_path = fi_options_dir(
+            biofefi_experiments_base_dir() / opt.experiment_name
+        )
+        if not options_path.exists():
+            options_path.mkdir(parents=True, exist_ok=True)
+        log_options(options_path, opt)
 
 
 def save_fuzzy_sets_plots(
@@ -128,33 +145,47 @@ def save_fuzzy_sets_plots(
     # Plot the membership functions
     if opt.save_fuzzy_set_plots:
         logger.info(f"Saving fuzzy set plots ...")
-        save_dir = fuzzy_plot_dir(opt.experiment_name)
+        save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
 
+        plt.style.use(opt.plot_colour_scheme)
         for feature in x_cols:
-            plt.figure(figsize=(5, 5))
-            plt.plot(
+            fig, ax = plt.subplots(layout="constrained")
+            ax.plot(
                 universe[feature],
                 membership_functions[feature]["low"],
                 "r",
                 label="Small",
             )
-            plt.plot(
+            ax.plot(
                 universe[feature],
                 membership_functions[feature]["medium"],
                 "g",
                 label="Moderate",
             )
-            plt.plot(
+            ax.plot(
                 universe[feature],
                 membership_functions[feature]["high"],
                 "b",
                 label="Large",
             )
-            plt.title(f"{feature} Membership Functions")
-            plt.legend()
-            plt.savefig(save_dir / f"{feature}.png")
+            ax.set_title(
+                f"{feature} Membership Functions",
+                family=opt.plot_font_family,
+            )
+            ax.set_xticklabels(
+                ax.get_xticklabels(),
+                rotation=opt.angle_rotate_xaxis_labels,
+                family=opt.plot_font_family,
+            )
+            ax.set_yticklabels(
+                ax.get_yticklabels(),
+                rotation=opt.angle_rotate_yaxis_labels,
+                family=opt.plot_font_family,
+            )
+            ax.legend(prop={"family": opt.plot_font_family})
+            fig.savefig(save_dir / f"{feature}.png")
         plt.close()
 
 
@@ -162,13 +193,27 @@ def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):
     # Plot the target clusters
     if opt.save_fuzzy_set_plots:
         logger.info(f"Saving target clusters plot ...")
-        save_dir = fuzzy_plot_dir(opt.experiment_name)
+        save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
 
         # Plot boxplot of the target (continuous values) and target clusters (categories) using seaborn
-        plt.figure(figsize=(5, 5))
-        sns.boxplot(data=df_cluster, x="cluster", y="target")
-        plt.title("Target Clusters")
-        plt.savefig(save_dir / f"target_clusters.png")
+        plt.style.use(opt.plot_colour_scheme)
+        fig, ax = plt.subplots(layout="constrained")
+        sns.boxplot(data=df_cluster, x="cluster", y="target", ax=ax)
+        ax.set_xticklabels(
+            ax.get_xticklabels(),
+            rotation=opt.angle_rotate_xaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_yticklabels(
+            ax.get_yticklabels(),
+            rotation=opt.angle_rotate_yaxis_labels,
+            family=opt.plot_font_family,
+        )
+        ax.set_title(
+            "Target Clusters",
+            family=opt.plot_font_family,
+        )
+        fig.savefig(save_dir / f"target_clusters.png")
         plt.close()
