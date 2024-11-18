@@ -16,58 +16,74 @@ from biofefi.options.enums import (
     ProblemTypes,
     ViewExperimentKeys,
 )
+from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     log_dir,
     ml_model_dir,
     ml_plot_dir,
+    plot_options_path,
     uploaded_file_path,
 )
+from biofefi.options.ml import MachineLearningOptions
+from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
+from biofefi.services.plotting import load_plot_options
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed
 
 
-def build_configuration() -> tuple[Namespace, str]:
-    """Build the configuration objects for the pipeline.
+def build_configuration() -> (
+    tuple[MachineLearningOptions, ExecutionOptions, PlottingOptions, str]
+):
+    """Build the configuration options to run the Machine Learning pipeline.
 
     Returns:
-        tuple[Namespace, str]: The configuration for the ML pipeline
-        and the experiment name.
+        tuple[MachineLearningOptions, ExecutionOptions, PlottingOptions, str]:
+        The machine learning options, general execution options, plotting options, experiment name
     """
 
-    ml_opt = MLOptions()
-    ml_opt.initialize()
     path_to_data = uploaded_file_path(
         st.session_state[ConfigStateKeys.UploadedFileName].name,
         biofefi_experiments_base_dir()
-        / st.session_state[ViewExperimentKeys.ExperimentName],
+        / st.session_state[ConfigStateKeys.ExperimentName],
     )
-    ml_opt.parser.set_defaults(
-        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
-        save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
+    path_to_plot_opts = plot_options_path(
+        biofefi_experiments_base_dir()
+        / st.session_state[ConfigStateKeys.ExperimentName]
+    )
+    plot_opt = load_plot_options(path_to_plot_opts)
+
+    exec_opt = ExecutionOptions(
         normalization=st.session_state[ConfigStateKeys.Normalization],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         data_path=path_to_data,
         data_split=st.session_state[ConfigStateKeys.DataSplit],
+        problem_type=st.session_state.get(
+            ConfigStateKeys.ProblemType, ProblemTypes.Auto
+        ).lower(),
+        random_state=st.session_state[ConfigStateKeys.RandomSeed],
+    )
+    ml_opt = MachineLearningOptions(
+        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
+        save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
         model_types=st.session_state[ConfigStateKeys.ModelTypes],
         ml_plot_dir=ml_plot_dir(
             biofefi_experiments_base_dir()
             / st.session_state[ConfigStateKeys.ExperimentName]
         ),
-        problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
-        ).lower(),
-        random_state=st.session_state[ConfigStateKeys.RandomSeed],
-        is_machine_learning=True,
+        ml_log_dir=log_dir(
+            biofefi_experiments_base_dir()
+            / st.session_state[ConfigStateKeys.ExperimentName]
+        )
+        / "ml",
         save_models=st.session_state[ConfigStateKeys.SaveModels],
     )
-    ml_opt = ml_opt.parse()
 
-    return ml_opt, st.session_state[ConfigStateKeys.ExperimentName]
+    return ml_opt, exec_opt, plot_opt, st.session_state[ConfigStateKeys.ExperimentName]
 
 
 def pipeline(ml_opts: Namespace, experiment_name: str):
