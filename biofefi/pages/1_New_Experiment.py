@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 import streamlit as st
-from biofefi.components.configuration import plot_options_box
+from biofefi.components.configuration import execution_options_box, plot_options_box
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
+from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import biofefi_experiments_base_dir
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import create_experiment
@@ -42,6 +43,12 @@ def _entrypoint(save_dir: Path):
     Args:
         save_dir (Path): The path to the experiment.
     """
+    exec_opts = ExecutionOptions(
+        data_split=st.session_state[ConfigStateKeys.DataSplit],
+        problem_type=st.session_state[ConfigStateKeys.ProblemType],
+        normalization=st.session_state[ConfigStateKeys.Normalization],
+        random_state=st.session_state[ConfigStateKeys.RandomSeed],
+    )
     plot_opts = PlottingOptions(
         plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
         plot_axis_tick_size=st.session_state[PlotOptionKeys.AxisTickSize],
@@ -85,6 +92,9 @@ if not is_valid and st.session_state.get(ConfigStateKeys.ExperimentName):
     st.markdown(f":red[Cannot use {save_dir}; it already exists.]")
 else:
     st.session_state[ConfigStateKeys.ExperimentName] = save_dir
+
+st.subheader("Configure data options")
+execution_options_box()
 
 ## Set up plotting options for the experiment
 st.subheader("Configure experiment plots")
