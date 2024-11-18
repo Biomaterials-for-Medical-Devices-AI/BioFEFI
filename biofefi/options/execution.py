@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from biofefi.options.enums import Normalisations, ProblemTypes
+
 
 @dataclass
 class ExecutionOptions:
@@ -10,6 +12,6 @@ class ExecutionOptions:
     is_machine_learning: bool = False
     is_feature_importance: bool = False
     random_state: int = 1221
-    problem_type: str = "classification"
+    problem_type: ProblemTypes = ProblemTypes.Classification
     dependent_variable: str | None = None
-    normalization: str = "None"
+    normalization: Normalisations = Normalisations.NoNormalisation
