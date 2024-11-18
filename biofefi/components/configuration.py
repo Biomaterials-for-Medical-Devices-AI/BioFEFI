@@ -168,13 +168,13 @@ def plot_options_box():
         tfs = st.number_input(
             "Title font size",
             min_value=20,
-            key=PlotOptionKeys.AxisFontSize,
+            key=PlotOptionKeys.TitleFontSize,
             disabled=not save,
         )
         afs = st.number_input(
             "Axis font size",
             min_value=8,
-            key=PlotOptionKeys.TitleFontSize,
+            key=PlotOptionKeys.AxisFontSize,
             disabled=not save,
         )
         ats = st.number_input(
