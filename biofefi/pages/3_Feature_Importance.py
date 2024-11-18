@@ -5,6 +5,7 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
 from biofefi.options.choices import PROBLEM_TYPES
+from biofefi.options.execution import ExecutionOptions
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models_to_explain
@@ -12,7 +13,7 @@ from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.feature_importance.feature_importance_options import (
     FeatureImportanceOptions,
 )
-from biofefi.feature_importance.fuzzy_options import FuzzyOptions
+from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
     ConfigStateKeys,
@@ -56,7 +57,7 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         and the experiment name.
     """
 
-    fuzzy_opt = FuzzyOptions()
+    fuzzy_opt = None
     fuzzy_opt.initialize()
     path_to_data = uploaded_file_path(
         st.session_state[ConfigStateKeys.UploadedFileName],
@@ -68,36 +69,32 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
         / st.session_state[ViewExperimentKeys.ExperimentName]
     )
     plotting_options = load_plot_options(path_to_plot_opts)
+    exec_opts = ExecutionOptions(
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+        data_path=path_to_data,
+        problem_type=st.session_state.get(
+            ConfigStateKeys.ProblemType, ProblemTypes.Auto
+        ).lower(),
+    )
     if st.session_state.get(ConfigStateKeys.FuzzyFeatureSelection, False):
-        fuzzy_opt.parser.set_defaults(
+        fuzzy_opt = FuzzyOptions(
             fuzzy_feature_selection=st.session_state[
                 ConfigStateKeys.FuzzyFeatureSelection
             ],
-            num_fuzzy_features=st.session_state[ConfigStateKeys.NumberOfFuzzyFeatures],
+            number_fuzzy_features=st.session_state[
+                ConfigStateKeys.NumberOfFuzzyFeatures
+            ],
             granular_features=st.session_state[ConfigStateKeys.GranularFeatures],
             num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
             cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
-            angle_rotate_xaxis_labels=plotting_options.angle_rotate_xaxis_labels,
-            angle_rotate_yaxis_labels=plotting_options.angle_rotate_yaxis_labels,
-            plot_axis_font_size=plotting_options.plot_axis_font_size,
-            plot_axis_tick_size=plotting_options.plot_axis_tick_size,
-            plot_title_font_size=plotting_options.plot_title_font_size,
-            plot_font_family=plotting_options.plot_font_family,
-            plot_colour_scheme=plotting_options.plot_colour_scheme,
             save_fuzzy_set_plots=plotting_options.save_plots,
             fuzzy_log_dir=log_dir(
                 biofefi_experiments_base_dir()
                 / st.session_state[ViewExperimentKeys.ExperimentName]
             )
             / "fuzzy",
-            dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-            experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-            data_path=path_to_data,
-            problem_type=st.session_state.get(
-                ConfigStateKeys.ProblemType, ProblemTypes.Auto
-            ).lower(),
-            is_granularity=st.session_state[ConfigStateKeys.GranularFeatures],
         )
     fuzzy_opt = fuzzy_opt.parse()
 
