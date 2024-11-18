@@ -1,10 +1,11 @@
 from biofefi.options.choices import (
+    DATA_SPLITS,
     PLOT_FONT_FAMILIES,
     SVM_KERNELS,
     PROBLEM_TYPES,
     NORMALISATIONS,
 )
-from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
+from biofefi.options.enums import ConfigStateKeys, DataSplitMethods, PlotOptionKeys
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
@@ -318,3 +319,51 @@ def fi_options_box():
                     value=10,
                     key=ConfigStateKeys.NumberOfTopRules,
                 )
+
+
+@st.experimental_fragment
+def execution_options_box():
+    data_split = st.selectbox("Data split method", DATA_SPLITS)
+    if data_split == DataSplitMethods.Holdout.capitalize():
+        split_size = st.number_input(
+            "Test split",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.2,
+        )
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": DataSplitMethods.Holdout,
+            "test_size": split_size,
+        }
+    elif data_split == DataSplitMethods.KFold.capitalize():
+        split_size = st.number_input(
+            "n splits",
+            min_value=0,
+            value=5,
+        )
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": DataSplitMethods.KFold,
+            "n_splits": split_size,
+        }
+    else:
+        split_size = None
+    st.number_input(
+        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
+    )
+    st.write(
+        """
+        If your dependent variable is categorical (e.g. cat 🐱 or dog 🐶), choose **"Classification"**.
+
+        If your dependent variable is continuous (e.g. stock prices 📈), choose **"Regression"**.
+        """
+    )
+    st.selectbox(
+        "Problem type",
+        PROBLEM_TYPES,
+        key=ConfigStateKeys.ProblemType,
+    )
+    st.selectbox(
+        "Normalisation",
+        NORMALISATIONS,
+        key=ConfigStateKeys.Normalization,
+    )
