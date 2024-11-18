@@ -36,27 +36,47 @@ def plot_scatter(
     """
 
     # Create a scatter plot using Seaborn
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=y, y=yp)
+    plt.style.use(plot_opts.plot_colour_scheme)
+    fig, ax = plt.subplots(layout="constrained")
+    sns.scatterplot(x=y, y=yp, ax=ax)
 
     # Add the best fit line
-    plt.plot([y.min(), y.max()], [y.min(), y.max()], "k--", lw=4)
+    ax.plot([y.min(), y.max()], [y.min(), y.max()], "k--", lw=4)
 
     # Set labels and title
-    plt.xlabel("Measured " + dependent_variable, fontsize=13)
-    plt.ylabel("Predicted " + dependent_variable, fontsize=13)
+    ax.set_xlabel(
+        "Measured " + dependent_variable,
+        fontsize=plot_opts.plot_axis_font_size,
+        family=plot_opts.plot_font_family,
+    )
+    ax.set_ylabel(
+        "Predicted " + dependent_variable,
+        fontsize=plot_opts.plot_axis_font_size,
+        family=plot_opts.plot_font_family,
+    )
     figure_title = "Prediction Error for " + model_name + " - " + set_name
-    plt.title(figure_title, fontsize=13)
+    ax.set_title(
+        figure_title,
+        fontsize=plot_opts.plot_title_font_size,
+        family=plot_opts.plot_font_family,
+    )
 
     # Add legend
     legend = "R2: " + str(float("{0:.2f}".format(r2["value"])))
-    plt.legend(["Best fit", legend], loc="upper left", fontsize=13)
+    ax.legend(
+        ["Best fit", legend],
+        prop={
+            "family": plot_opts.plot_font_family,
+            "size": plot_opts.plot_axis_tick_size,
+        },
+        loc="upper left",
+    )
 
     # Add grid
-    plt.grid(axis="both")
+    ax.grid(visible=True, axis="both")
 
     # Save the figure
-    plt.savefig(f"{directory}/{model_name}-{set_name}.png")
+    fig.savefig(f"{directory}/{model_name}-{set_name}.png")
     plt.close()
 
 
@@ -82,7 +102,7 @@ def save_actual_pred_plots(
     if opt.problem_type == ProblemTypes.Regression:
 
         # Create results directory if it doesn't exist
-        directory = opt.ml_plot_dir
+        directory = ml_opts.ml_plot_dir
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
         # Convert train and test sets to numpy arrays for easier handling
@@ -107,6 +127,7 @@ def save_actual_pred_plots(
                         opt.dependent_variable,
                         model_name,
                         directory,
+                        plot_opts=plot_opts,
                     )
                     plot_scatter(
                         y_train[i],
@@ -116,4 +137,5 @@ def save_actual_pred_plots(
                         opt.dependent_variable,
                         model_name,
                         directory,
+                        plot_opts=plot_opts,
                     )
