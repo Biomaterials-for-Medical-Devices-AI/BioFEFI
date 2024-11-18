@@ -101,24 +101,36 @@ def pipeline(
         plotting_opts (PlottingOptions): Options for plotting.
         experiment_name (str): The name of the experiment.
     """
-    seed = ml_opts.random_state
+    seed = exec_opts.random_state
     set_seed(seed)
     logger_instance = Logger(log_dir(biofefi_experiments_base_dir() / experiment_name))
     logger = logger_instance.make_logger()
 
-    data = DataBuilder(ml_opts, logger).ingest()
+    data = DataBuilder(
+        data_path=exec_opts.data_path,
+        random_state=exec_opts.random_state,
+        normalization=exec_opts.normalization,
+        n_bootstraps=ml_opts.n_bootstraps,
+        logger=logger,
+        data_split=exec_opts.data_split,
+    ).ingest()
 
     # Machine learning
-    if ml_opts.is_machine_learning:
-        trained_models = train.run(ml_opts, data, logger)
-        if ml_opts.save_models:
-            for model_name in trained_models:
-                for i, model in enumerate(trained_models[model_name]):
-                    save_path = (
-                        ml_model_dir(biofefi_experiments_base_dir() / experiment_name)
-                        / f"{model_name}-{i}.pkl"
-                    )
-                    save_model(model, save_path)
+    trained_models = train.run(
+        ml_opts=ml_opts,
+        exec_opts=exec_opts,
+        plot_opts=plotting_opts,
+        data=data,
+        logger=logger,
+    )
+    if ml_opts.save_models:
+        for model_name in trained_models:
+            for i, model in enumerate(trained_models[model_name]):
+                save_path = (
+                    ml_model_dir(biofefi_experiments_base_dir() / experiment_name)
+                    / f"{model_name}-{i}.pkl"
+                )
+                save_model(model, save_path)
 
     # Close the logger
     close_logger(logger_instance, logger)
