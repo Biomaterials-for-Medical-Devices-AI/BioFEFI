@@ -1,4 +1,3 @@
-from argparse import Namespace
 from multiprocessing import Process
 import streamlit as st
 from biofefi.components.experiments import experiment_selector
@@ -8,13 +7,11 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.machine_learning.ml_options import MLOptions
 from biofefi.options.choices import NORMALISATIONS
 from biofefi.options.enums import (
     ConfigStateKeys,
     PlotOptionKeys,
     ProblemTypes,
-    ViewExperimentKeys,
 )
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
