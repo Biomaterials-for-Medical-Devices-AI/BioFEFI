@@ -86,12 +86,19 @@ def build_configuration() -> (
     return ml_opt, exec_opt, plot_opt, st.session_state[ConfigStateKeys.ExperimentName]
 
 
-def pipeline(ml_opts: Namespace, experiment_name: str):
+def pipeline(
+    ml_opts: MachineLearningOptions,
+    exec_opts: ExecutionOptions,
+    plotting_opts: PlottingOptions,
+    experiment_name: str,
+):
     """This function actually performs the steps of the pipeline. It can be wrapped
     in a process it doesn't block the UI.
 
     Args:
-        ml_opts (Namespace): Options for machine learning.
+        ml_opts (MachineLearningOptions): Options for machine learning.
+        exec_opts (ExecutionOptions): General execution options.
+        plotting_opts (PlottingOptions): Options for plotting.
         experiment_name (str): The name of the experiment.
     """
     seed = ml_opts.random_state
