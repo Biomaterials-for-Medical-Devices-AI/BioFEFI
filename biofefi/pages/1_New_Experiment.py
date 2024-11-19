@@ -8,6 +8,7 @@ from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import biofefi_experiments_base_dir, uploaded_file_path
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import create_experiment
+from biofefi.utils.utils import save_upload
 
 
 def _directory_is_valid(directory: Path) -> bool:
@@ -52,13 +53,14 @@ def _entrypoint(save_dir: Path):
     Args:
         save_dir (Path): The path to the experiment.
     """
+    # Set up options to save
     path_to_data = uploaded_file_path(
         st.session_state[ConfigStateKeys.UploadedFileName].name,
         biofefi_experiments_base_dir()
         / st.session_state[ConfigStateKeys.ExperimentName],
     )
     exec_opts = ExecutionOptions(
-        data_path=path_to_data,
+        data_path=str(path_to_data),  # Path objects aren't JSON serialisable
         data_split=st.session_state[ConfigStateKeys.DataSplit],
         problem_type=st.session_state[ConfigStateKeys.ProblemType],
         normalization=st.session_state[ConfigStateKeys.Normalization],
@@ -76,7 +78,13 @@ def _entrypoint(save_dir: Path):
         plot_title_font_size=st.session_state[PlotOptionKeys.TitleFontSize],
         plot_font_family=st.session_state[PlotOptionKeys.FontFamily],
     )
+
+    # Create the experiment directory and save configs
     create_experiment(save_dir, plotting_options=plot_opts, execution_options=exec_opts)
+
+    # Save the data
+    uploaded_file = st.session_state[ConfigStateKeys.UploadedFileName]
+    save_upload(path_to_data, uploaded_file.read().decode("utf-8-sig"))
 
 
 st.set_page_config(
