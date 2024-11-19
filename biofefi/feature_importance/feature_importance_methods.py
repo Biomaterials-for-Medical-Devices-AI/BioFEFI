@@ -1,10 +1,12 @@
 from typing import Any
 from sklearn.base import is_classifier
-import argparse
 import pandas as pd
 import shap
 from sklearn.inspection import permutation_importance
+from lime.lime_tabular import LimeTabularExplainer
+import warnings
 
+from biofefi.options.enums import ProblemTypes
 from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.utils.logging_utils import Logger
 
@@ -109,24 +111,25 @@ def calculate_shap_values(
     return shap_df, shap_values
 
 
-def calculate_lime_values(model, X, opt: argparse.Namespace, logger):
-    """Calculate LIME values for a given model and dataset
+def calculate_lime_values(
+    model, X: pd.DataFrame, problem_type: ProblemTypes, logger: Logger
+) -> pd.DataFrame:
+    """Calculate LIME values for a given model and dataset.
+
     Args:
-        model: Model object
-        X: Dataset
-        opt: Options
-        logger: Logger
+        model: The model.
+        X (pd.DataFrame): The dataset.
+        problem_type (ProblemTypes): The problem type.
+        logger (Logger): The logger.
+
     Returns:
-        lime_df: Average LIME values
+        pd.DataFrame: The LIME values.
     """
     logger.info(f"Calculating LIME Importance for {model.__class__.__name__} model..")
-    # Use LIME to explain predictions
-    from lime.lime_tabular import LimeTabularExplainer
-    import warnings
 
     # Suppress all warnings
     warnings.filterwarnings("ignore")
-    explainer = LimeTabularExplainer(X.to_numpy(), mode=opt.problem_type)
+    explainer = LimeTabularExplainer(X.to_numpy(), mode=problem_type)
 
     coefficients = []
 
