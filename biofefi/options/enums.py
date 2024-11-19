@@ -16,6 +16,11 @@ class ConfigStateKeys(StrEnum):
     Normalization = "normalization"
     ModelTypes = "model_types"
     SaveModels = "save_models"
+    # rerun ML
+    RerunLR = "rerun_lr"
+    RerunRF = "rerun_rf"
+    RerunXGB = "rerun_xgb"
+    RerunSVM = "rerun_svm"
     # Feature Importance options
     IsFeatureImportance = "is_feature_importance"
     NumberOfImportantFeatures = "num_important_features"
