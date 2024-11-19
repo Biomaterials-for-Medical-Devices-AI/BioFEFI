@@ -1,5 +1,7 @@
 import os
 
+import pandas as pd
+
 from biofefi.feature_importance.call_methods import save_importance_results
 from biofefi.feature_importance.ensemble_methods import (
     calculate_ensemble_majorityvote,
@@ -57,7 +59,9 @@ class Interpreter:
 
         return global_importance_results, local_importance_results, ensemble_results
 
-    def _individual_feature_importance(self, models, X, y):
+    def _individual_feature_importance(
+        self, models: dict, X: pd.DataFrame, y: pd.Series
+    ):
         """
         Calculate global feature importance for a given model and dataset.
         Parameters:
@@ -89,10 +93,14 @@ class Interpreter:
                         # Select the first model in the list - model[0]
                         if feature_importance_type == "Permutation Importance":
                             # Run Permutation Importance -
-                            permutation_importance_df = (
-                                calculate_permutation_importance(
-                                    model[0], X, y, self._fi_opt, self._logger
-                                )
+                            permutation_importance_df = calculate_permutation_importance(
+                                model=model[0],
+                                X=X,
+                                y=y,
+                                permutation_importance_scoring=self._fi_opt.permutation_importance_scoring,
+                                permutation_importance_repeat=self._fi_opt.permutation_importance_repeat,
+                                random_state=self._exec_opt.random_state,
+                                logger=self._logger,
                             )
                             save_importance_results(
                                 permutation_importance_df,
