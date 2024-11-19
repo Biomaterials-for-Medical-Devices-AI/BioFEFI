@@ -63,6 +63,8 @@ def _entrypoint(save_dir: Path):
         problem_type=st.session_state[ConfigStateKeys.ProblemType],
         normalization=st.session_state[ConfigStateKeys.Normalization],
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
+        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
+        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
     )
     plot_opts = PlottingOptions(
         plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
@@ -106,7 +108,9 @@ is_valid = _directory_is_valid(save_dir)
 if not is_valid and st.session_state.get(ConfigStateKeys.ExperimentName):
     st.markdown(f":red[Cannot use {save_dir}; it already exists.]")
 else:
-    st.session_state[ConfigStateKeys.ExperimentName] = save_dir
+    st.session_state[ConfigStateKeys.ExperimentName] = (
+        save_dir.name
+    )  # get the experiment name from the file path
 
 st.write(
     """
@@ -115,6 +119,9 @@ st.write(
     """
 )
 st.file_uploader("Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName)
+st.text_input(
+    "Name of the dependent variable", key=ConfigStateKeys.DependentVariableName
+)
 
 st.subheader("Configure data options")
 execution_options_box()
