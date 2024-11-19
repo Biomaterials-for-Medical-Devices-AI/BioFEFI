@@ -16,7 +16,7 @@ def save_execution_options(path: Path, options: ExecutionOptions):
         json.dump(options_json, json_file)
 
 
-def load_plot_options(path: Path) -> ExecutionOptions:
+def load_execution_options(path: Path) -> ExecutionOptions:
     """Load experiment execution options from the given path.
     The path will be to a `json` file containing the options.
 
