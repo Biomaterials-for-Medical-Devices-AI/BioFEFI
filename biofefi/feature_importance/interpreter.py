@@ -171,15 +171,17 @@ class Interpreter:
                         if feature_importance_type == "LIME":
                             # Run Permutation Importance
                             lime_importance_df = calculate_lime_values(
-                                model[0], X, self._fi_opt, self._logger
+                                model[0], X, self._exec_opt.problem_type, self._logger
                             )
                             save_importance_results(
-                                lime_importance_df,
-                                model_type,
-                                value["type"],
-                                feature_importance_type,
-                                self._fi_opt,
-                                self._logger,
+                                feature_importance_df=lime_importance_df,
+                                model_type=model_type,
+                                importance_type=value["type"],
+                                feature_importance_type=feature_importance_type,
+                                experiment_name=self._exec_opt.experiment_name,
+                                fi_opt=self._fi_opt,
+                                plot_opt=self._plot_opt,
+                                logger=self._logger,
                             )
                             feature_importance_results[model_type][
                                 feature_importance_type
@@ -191,13 +193,15 @@ class Interpreter:
                                 model[0], X, value["type"], self._fi_opt, self._logger
                             )
                             save_importance_results(
-                                shap_df,
-                                model_type,
-                                value["type"],
-                                feature_importance_type,
-                                self._fi_opt,
-                                self._logger,
-                                shap_values,
+                                feature_importance_df=shap_df,
+                                model_type=model_type,
+                                importance_type=value["type"],
+                                feature_importance_type=feature_importance_type,
+                                experiment_name=self._exec_opt.experiment_name,
+                                fi_opt=self._fi_opt,
+                                plot_opt=self._plot_opt,
+                                logger=self._logger,
+                                shap_values=shap_values,
                             )
                             feature_importance_results[model_type][
                                 feature_importance_type
