@@ -1,8 +1,11 @@
+from typing import Any
 from sklearn.base import is_classifier
 import argparse
 import pandas as pd
+import shap
 from sklearn.inspection import permutation_importance
 
+from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.utils.logging_utils import Logger
 
 
@@ -54,24 +57,36 @@ def calculate_permutation_importance(
     return permutation_importance_df
 
 
-def calculate_shap_values(model, X, shap_type, opt: argparse.Namespace, logger):
-    """Calculate SHAP values for a given model and dataset
-    Args:
-        model: Model object
-        X: Dataset
-        opt: Options
-        logger: Logger
-    Returns:
-        shap_df: Average SHAP values
-    """
-    import shap
+def calculate_shap_values(
+    model,
+    X: pd.DataFrame,
+    shap_type: str,
+    fi_opt: FeatureImportanceOptions,
+    logger: Logger,
+) -> tuple[pd.DataFrame, Any]:
+    """Calculate SHAP values for a given model and dataset.
 
+    Args:
+        model: Model object.
+        X (pd.DataFrame): The dataset.
+        shap_type (str): The type of SHAP (local or global).
+        fi_opt (FeatureImportanceOptions): The options.
+        logger (Logger): The logger.
+
+    Raises:
+        ValueError: SHAP type is not "local" or "global"
+
+    Returns:
+        tuple[pd.DataFrame, Any]: SHAP dataframe and SHAP values.
+    """
     logger.info(f"Calculating SHAP Importance for {model.__class__.__name__} model..")
 
-    if opt.shap_reduce_data == 100:
+    if fi_opt.shap_reduce_data == 100:
         explainer = shap.Explainer(model.predict, X)
     else:
-        X_reduced = shap.utils.sample(X, int(X.shape[0] * opt.shap_reduce_data / 100))
+        X_reduced = shap.utils.sample(
+            X, int(X.shape[0] * fi_opt.shap_reduce_data / 100)
+        )
         explainer = shap.Explainer(model.predict, X_reduced)
 
     shap_values = explainer(X)
