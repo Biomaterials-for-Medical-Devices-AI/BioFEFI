@@ -30,6 +30,8 @@ class BayesianRegularisedNeuralNets(
         self._opt = opt
         self._hidden_dim = opt.hidden_dim
 
+        self.problem_type = opt.problem_type
+
         # Layers will be initialized in `_initialize_network`
         self.layer1 = None
         self.layer2 = None
@@ -74,13 +76,13 @@ class BayesianRegularisedNeuralNets(
         x = self.output_layer(x)
 
         # Apply appropriate activation based on problem type
-        if ProblemTypes.Classification:
+        if self.problem_type.lower() == ProblemTypes.Classification:
 
             # Use softmax for multi-class classification, sigmoid for binary
             return torch.sigmoid(x) if x.size(1) == 1 else torch.softmax(x, dim=1)
 
         # No activation for regression
-        elif ProblemTypes.Regression:
+        elif self.problem_type.lower() == ProblemTypes.Regression:
             return x
         else:
             raise ValueError(f"Unsupported problem type: {self.problem_type}")
@@ -140,15 +142,14 @@ class BayesianRegularisedNeuralNets(
         """
 
         # Determine the predictive loss based on problem type
-        if ProblemTypes.Classification:
+        if self.problem_type.lower() == ProblemTypes.Classification:
             if outputs.size(1) == 1:
                 predictive_loss = nn.BCELoss()(outputs, targets)
-                print("Using BCELoss for binary classification.")
+
             else:
                 predictive_loss = nn.CrossEntropyLoss()(outputs, targets)
                 print("Using CrossEntropyLoss for multi-class classification.")
-        elif ProblemTypes.Regression:
-            predictive_loss = nn.MSELoss()(outputs, targets)
+        elif self.problem_type.lower() == ProblemTypes.Regression:
             print("Using MSELoss for regression.")
         else:
             raise ValueError(f"Unsupported problem type: {self.problem_type}")
@@ -183,7 +184,7 @@ class BayesianRegularisedNeuralNets(
         y = torch.tensor(y, dtype=torch.float32)
 
         # Adjust target `y` for classification tasks
-        if ProblemTypes.Classification:
+        if self.problem_type.lower() == ProblemTypes.Classification:
 
             # Ensure y is 1D and of type Long for CrossEntropyLoss
             y = y.squeeze().long()
@@ -195,14 +196,14 @@ class BayesianRegularisedNeuralNets(
             val_y = torch.tensor(val_y, dtype=torch.float32)
 
             # Ensure validation y is also 1D for classification
-            if ProblemTypes.Classification:
+            if self.problem_type.lower() == ProblemTypes.Classification:
                 val_y = val_y.squeeze().long()
             validation_data = (val_X, val_y)
 
         input_dim = X.shape[1]
 
         # Determine number of classes if classification
-        if ProblemTypes.Classification:
+        if self.problem_type.lower() == ProblemTypes.Classification:
 
             # Set output_dim dynamically based on unique classes
             self._output_dim = len(torch.unique(y))
@@ -265,7 +266,7 @@ class BayesianRegularisedNeuralNets(
         self.eval()
         with torch.no_grad():
             outputs = self(X)
-            if ProblemTypes.Classification:
+            if self.problem_type.lower() == ProblemTypes.Classification:
                 if outputs.size(1) == 1:
                     return (
                         (outputs > self._opt.classification_cutoff)
@@ -275,7 +276,7 @@ class BayesianRegularisedNeuralNets(
                     )
                 else:
                     return torch.argmax(outputs, dim=1).cpu().numpy()
-            elif ProblemTypes.Regression:
+            elif self.problem_type.lower() == ProblemTypes.Regression:
                 return outputs.cpu().numpy()
             else:
                 raise ValueError(f"Unsupported problem type: {self.problem_type}")

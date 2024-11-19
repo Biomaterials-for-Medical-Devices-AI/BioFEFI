@@ -4,6 +4,7 @@ import random
 import argparse
 import os
 from multiprocessing import Process
+from biofefi.options.enums import ModelNames
 
 
 import numpy as np
@@ -11,12 +12,10 @@ import numpy as np
 
 def set_seed(seed: int) -> None:
     """
-    Sets the seed for the experiment
+    Sets the seed for the experiment.
 
-    Parameters
-    ----------
-    seed: int
-        The seed to use for the experiment
+    Args:
+        seed (int): The seed to use for the experiment.
     """
     # torch.manual_seed(seed)
     np.random.seed(seed)
@@ -26,18 +25,18 @@ def set_seed(seed: int) -> None:
 
 def assert_model_param(model, model_params, logger: object = None) -> None:
     """
-    Asserts that the model parameters are valid
+    Asserts that the model parameters are valid.
 
-    Parameters
-    ----------
-    model: object
-        The model to check the parameters for
-    model_params: dict
-        The model parameters to check
-    logger: object
-        The logger to use for logging
+    Args:
+        model (object): The model to check the parameters for.
+        model_params (dict): The model parameters to check.
+        logger (object, optional): The logger to use for logging.
+        Defaults to None.
+
+    Returns:
+        dict: Validated model parameters.
     """
-    if model.__name__ == "BayesianRegularisedNeuralNets":
+    if model.__name__ == ModelNames.BayesianRegularisedNeuralNets:
         logger.info(
             f"Using BayesianRegularisedNeuralNets with parameters {model_params}"
         )
@@ -66,13 +65,14 @@ def assert_model_param(model, model_params, logger: object = None) -> None:
 
 
 def log_options(log_directory, opt: argparse.Namespace):
-    """Log model or feature importance hyperparameters
-    Parameters
-    ----------
-        log_directory: str
-            The directory to save the log file
-        opt: argparse.Namespace
-            The options object
+    """
+    Log model or feature importance hyperparameters.
+
+    Args:
+        log_directory (str): The directory to save the log file.
+        opt (argparse.Namespace): The options object containing
+        hyperparameters.
+
     Returns:
         None
     """
@@ -85,9 +85,9 @@ def log_options(log_directory, opt: argparse.Namespace):
 
 
 def create_directory(path: Path):
-    """Create a directory at the specified path. If intermediate directories
-    don't already exist, create them. If the path already exists, no action
-    is taken.
+    """Create a directory at the specified path. If intermediate
+    directories don't already exist, create them. If the path
+    already exists, no action is taken.
 
     Args:
         path (Path): The path the directory to create.
@@ -102,7 +102,8 @@ def save_upload(file_to_upload: str, content: str, mode: str = "w"):
     Args:
         file_to_upload (str): The name of the file to save.
         content (str): The contents to save to the file.
-        mode (str): The mode to write the file. e.g. "w", "w+", "wb", etc.
+        mode (str): The mode to write the file.
+        e.g. "w", "w+", "wb", etc.
     """
     base_dir = os.path.dirname(file_to_upload)
     if not os.path.exists(base_dir):
