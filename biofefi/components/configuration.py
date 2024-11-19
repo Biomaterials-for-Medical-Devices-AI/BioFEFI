@@ -325,15 +325,6 @@ def fi_options_box():
 def execution_options_box():
     st.write(
         """
-        Upload your data file as a CSV and then define how the data will be normalised and split between
-        training and test data.
-        """
-    )
-    st.file_uploader(
-        "Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName
-    )
-    st.write(
-        """
         If your dependent variable is categorical (e.g. cat 🐱 or dog 🐶), choose **"Classification"**.
 
         If your dependent variable is continuous (e.g. stock prices 📈), choose **"Regression"**.

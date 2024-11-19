@@ -35,6 +35,15 @@ def _save_directory_selector() -> Path:
     return root / sub_dir
 
 
+def _file_is_uploaded() -> bool:
+    """Determine if the user has uploaded a file to the form.
+
+    Returns:
+        bool: `True` if a file was uploaded, else `False`.
+    """
+    return st.session_state.get(ConfigStateKeys.UploadedFileName) is not None
+
+
 def _entrypoint(save_dir: Path):
     """Function to serve as the entrypoint for experiment creation, with access
     to the session state. This is so configuration captured in fragements is
@@ -93,6 +102,14 @@ if not is_valid and st.session_state.get(ConfigStateKeys.ExperimentName):
 else:
     st.session_state[ConfigStateKeys.ExperimentName] = save_dir
 
+st.write(
+    """
+        Upload your data file as a CSV and then define how the data will be normalised and split between
+        training and test data.
+        """
+)
+st.file_uploader("Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName)
+
 st.subheader("Configure data options")
 execution_options_box()
 
@@ -103,7 +120,7 @@ plot_options_box()
 st.button(
     "Create",
     type="primary",
-    disabled=not is_valid,
+    disabled=not is_valid or not _file_is_uploaded(),
     on_click=_entrypoint,
     args=(save_dir,),
 )
