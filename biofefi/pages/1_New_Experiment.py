@@ -3,7 +3,12 @@ from pathlib import Path
 import streamlit as st
 from biofefi.components.configuration import execution_options_box, plot_options_box
 from biofefi.components.images.logos import sidebar_logo
-from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
+from biofefi.options.enums import (
+    ConfigStateKeys,
+    Normalisations,
+    PlotOptionKeys,
+    ProblemTypes,
+)
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import biofefi_experiments_base_dir, uploaded_file_path
 from biofefi.options.plotting import PlottingOptions
@@ -62,8 +67,12 @@ def _entrypoint(save_dir: Path):
     exec_opts = ExecutionOptions(
         data_path=str(path_to_data),  # Path objects aren't JSON serialisable
         data_split=st.session_state[ConfigStateKeys.DataSplit],
-        problem_type=st.session_state[ConfigStateKeys.ProblemType],
-        normalization=st.session_state[ConfigStateKeys.Normalization],
+        problem_type=st.session_state.get(
+            ConfigStateKeys.ProblemType, ProblemTypes.Auto
+        ).lower(),
+        normalization=st.session_state.get(
+            ConfigStateKeys.Normalization, Normalisations.NoNormalisation
+        ).lower(),
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
