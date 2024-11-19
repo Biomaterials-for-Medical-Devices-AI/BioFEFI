@@ -1,4 +1,3 @@
-from argparse import Namespace
 from multiprocessing import Process
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.logs import log_box
@@ -14,11 +13,6 @@ from biofefi.services.ml_models import load_models_to_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import (
-    ConfigStateKeys,
-    ProblemTypes,
-)
-
 from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
 
 from biofefi.options.file_paths import (
@@ -28,7 +22,6 @@ from biofefi.options.file_paths import (
     fuzzy_plot_dir,
     log_dir,
     plot_options_path,
-    uploaded_file_path,
 )
 
 from biofefi.options.file_paths import (
