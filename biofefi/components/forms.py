@@ -150,16 +150,16 @@ def fi_options_form():
 
     # Scoring function for permutation importance
     if (
-        st.session_state.get(ConfigStateKeys.ProblemType)
-        == ProblemTypes.Regression.capitalize()  # problem type choices are captialised
+        st.session_state.get(ConfigStateKeys.ProblemType, ProblemTypes.Auto).lower()
+        == ProblemTypes.Regression
     ):
         scoring_options = [
             "neg_mean_absolute_error",
             "neg_root_mean_squared_error",
         ]
     elif (
-        st.session_state.get(ConfigStateKeys.ProblemType)
-        == ProblemTypes.Classification.capitalize()  # problem type choices are captialised
+        st.session_state.get(ConfigStateKeys.ProblemType, ProblemTypes.Auto).lower()
+        == ProblemTypes.Classification
     ):
         scoring_options = ["accuracy", "f1"]
     else:
