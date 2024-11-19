@@ -103,12 +103,14 @@ class Interpreter:
                                 logger=self._logger,
                             )
                             save_importance_results(
-                                permutation_importance_df,
-                                model_type,
-                                value["type"],
-                                feature_importance_type,
-                                self._fi_opt,
-                                self._logger,
+                                feature_importance_df=permutation_importance_df,
+                                model_type=model_type,
+                                importance_type=value["type"],
+                                feature_importance_type=feature_importance_type,
+                                experiment_name=self._exec_opt.experiment_name,
+                                fi_opt=self._fi_opt,
+                                plot_opt=self._plot_opt,
+                                logger=self._logger,
                             )
                             feature_importance_results[model_type][
                                 feature_importance_type
@@ -120,13 +122,15 @@ class Interpreter:
                                 model[0], X, value["type"], self._fi_opt, self._logger
                             )
                             save_importance_results(
-                                shap_df,
-                                model_type,
-                                value["type"],
-                                feature_importance_type,
-                                self._fi_opt,
-                                self._logger,
-                                shap_values,
+                                feature_importance_df=shap_df,
+                                model_type=model_type,
+                                importance_type=value["type"],
+                                feature_importance_type=feature_importance_type,
+                                experiment_name=self._exec_opt.experiment_name,
+                                fi_opt=self._fi_opt,
+                                plot_opt=self._plot_opt,
+                                logger=self._logger,
+                                shap_values=shap_values,
                             )
                             feature_importance_results[model_type][
                                 feature_importance_type
