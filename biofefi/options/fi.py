@@ -4,15 +4,9 @@ from typing import Any
 
 @dataclass
 class FeatureImportanceOptions:
-    global_importance_methods: Any = {
-        "Permutation Importance": {"type": "global", "value": True},
-        "SHAP": {"type": "global", "value": False},
-    }
-    feature_importance_ensemble: Any = {"Mean": True, "Majority Vote": True}
-    local_importance_methods: Any = {
-        "LIME": {"type": "local", "value": True},
-        "SHAP": {"type": "local", "value": False},
-    }
+    global_importance_methods: dict
+    feature_importance_ensemble: dict
+    local_importance_methods: dict
     save_feature_importance_results: bool = True
     save_feature_importance_options: bool = True
     save_feature_importance_plots: bool = True
