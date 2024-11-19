@@ -16,6 +16,7 @@ from biofefi.options.enums import (
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
+    execution_options_path,
     log_dir,
     ml_model_dir,
     ml_plot_dir,
@@ -24,6 +25,7 @@ from biofefi.options.file_paths import (
 )
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
+from biofefi.services.configuration import load_execution_options
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
@@ -42,28 +44,17 @@ def build_configuration() -> (
         The machine learning options, general execution options, plotting options, experiment name
     """
 
-    path_to_data = uploaded_file_path(
-        st.session_state[ConfigStateKeys.UploadedFileName].name,
-        biofefi_experiments_base_dir()
-        / st.session_state[ConfigStateKeys.ExperimentName],
-    )
     path_to_plot_opts = plot_options_path(
         biofefi_experiments_base_dir()
         / st.session_state[ConfigStateKeys.ExperimentName]
     )
     plot_opt = load_plot_options(path_to_plot_opts)
 
-    exec_opt = ExecutionOptions(
-        normalization=st.session_state[ConfigStateKeys.Normalization],
-        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        data_path=path_to_data,
-        data_split=st.session_state[ConfigStateKeys.DataSplit],
-        problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
-        ).lower(),
-        random_state=st.session_state[ConfigStateKeys.RandomSeed],
+    path_to_exec_opts = execution_options_path(
+        biofefi_experiments_base_dir()
+        / st.session_state[ConfigStateKeys.ExperimentName]
     )
+    exec_opt = load_execution_options(path_to_exec_opts)
     ml_opt = MachineLearningOptions(
         n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
         save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
