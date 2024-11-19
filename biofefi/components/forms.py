@@ -291,8 +291,6 @@ def ml_options_form():
         )
     )
 
-    st.write(trained_models.keys())
-
     model_types = {}
     use_linear = st.toggle("Linear Model", value=False)
     if use_linear:
