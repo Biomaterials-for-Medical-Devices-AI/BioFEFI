@@ -149,14 +149,7 @@ if experiment_name:
 
     ml_options_form()
 
-    if st.button("Run Training", type="primary") and (
-        uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
-    ):
-        biofefi_base_dir = biofefi_experiments_base_dir()
-        upload_path = uploaded_file_path(
-            uploaded_file.name, biofefi_base_dir / experiment_name
-        )
-        save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
+    if st.button("Run Training", type="primary"):
         config = build_configuration()
         process = Process(target=pipeline, args=config, daemon=True)
         process.start()
