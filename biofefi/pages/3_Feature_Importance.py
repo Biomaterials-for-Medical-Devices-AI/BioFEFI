@@ -6,6 +6,7 @@ from biofefi.components.forms import fi_options_form
 from biofefi.options.choices import PROBLEM_TYPES
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
+from biofefi.options.plotting import PlottingOptions
 from biofefi.services.configuration import load_execution_options
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
@@ -122,6 +123,7 @@ def build_configuration() -> (
         fuzzy_opt,
         fi_opt,
         exec_opt,
+        plotting_options,
         st.session_state[ConfigStateKeys.ExperimentName],
         st.session_state[ConfigStateKeys.ExplainModels],
     )
@@ -131,6 +133,7 @@ def pipeline(
     fuzzy_opts: FuzzyOptions,
     fi_opts: FeatureImportanceOptions,
     exec_opts: ExecutionOptions,
+    plot_opts: PlottingOptions,
     experiment_name: str,
     explain_models: list,
 ):
@@ -138,23 +141,24 @@ def pipeline(
     in a process it doesn't block the UI.
 
     Args:
-        fuzzy_opts (Namespace): Options for fuzzy feature importance.
-        fi_opts (Namespace): Options for feature importance.
-        ml_opts (Namespace): Options for machine learning.
-        experiment_name (str): The name of the experiment.
+        fuzzy_opts (FuzzyOptions): Options for fuzzy feature importance.
+        fi_opts (FeatureImportanceOptions): Options for feature importance.
+        exec_opts (ExecutionOptions): Options for pipeline execution.
+        plot_opts (PlottingOptions): Options for plotting.
+        experiment_name (str): The experiment name.
+        explain_models (list): The models to analyse.
     """
-    seed = fi_opts.random_state
+    biofefi_base_dir = biofefi_experiments_base_dir()
+    seed = exec_opts.random_state
     set_seed(seed)
-    fi_logger_instance = Logger(
-        log_dir(biofefi_experiments_base_dir() / experiment_name) / "fi"
-    )
+    fi_logger_instance = Logger(log_dir(biofefi_base_dir / experiment_name) / "fi")
     fi_logger = fi_logger_instance.make_logger()
 
     data = DataBuilder(fi_opts, fi_logger).ingest()
 
     ## Models will already be trained before feature importance
     trained_models = load_models_to_explain(
-        ml_model_dir(biofefi_experiments_base_dir() / experiment_name), explain_models
+        ml_model_dir(biofefi_base_dir / experiment_name), explain_models
     )
 
     # Feature importance
@@ -163,12 +167,19 @@ def pipeline(
             gloabl_importance_results,
             local_importance_results,
             ensemble_results,
-        ) = feature_importance.run(fi_opts, data, trained_models, fi_logger)
+        ) = feature_importance.run(
+            fi_opt=fi_opts,
+            exec_opt=exec_opts,
+            plot_opt=plot_opts,
+            data=data,
+            models=trained_models,
+            logger=fi_logger,
+        )
 
         # Fuzzy interpretation
         if fuzzy_opts.fuzzy_feature_selection:
             fuzzy_logger_instance = Logger(
-                log_dir(biofefi_experiments_base_dir() / experiment_name) / "fuzzy"
+                log_dir(biofefi_base_dir / experiment_name) / "fuzzy"
             )
             fuzzy_logger = fuzzy_logger_instance.make_logger()
             fuzzy_rules = fuzzy_interpretation.run(
