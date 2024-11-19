@@ -156,60 +156,6 @@ experiment_name = experiment_selector(choices)
 if experiment_name:
     st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
 
-    st.text_input(
-        "Name of the dependent variable", key=ConfigStateKeys.DependentVariableName
-    )
-
-    st.subheader("Data preparation")
-    st.write(
-        """
-        Upload your data file as a CSV and then define how the data will be normalised and split between
-        training and test data.
-        """
-    )
-    st.file_uploader(
-        "Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName
-    )
-    st.selectbox(
-        "Normalisation",
-        NORMALISATIONS,
-        key=ConfigStateKeys.Normalization,
-    )
-
-    data_split = st.selectbox("Data split method", ["Holdout", "K-Fold"])
-    if data_split == "Holdout":
-        split_size = st.number_input(
-            "Test split",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.2,
-        )
-        st.session_state[ConfigStateKeys.DataSplit] = {
-            "type": "holdout",
-            "test_size": split_size,
-        }
-    elif data_split == "K-Fold":
-        split_size = st.number_input(
-            "n splits",
-            min_value=0,
-            value=5,
-        )
-        st.session_state[ConfigStateKeys.DataSplit] = {
-            "type": "kfold",
-            "n_splits": split_size,
-        }
-    else:
-        split_size = None
-    st.number_input(
-        "Number of bootstraps",
-        min_value=1,
-        value=10,
-        key=ConfigStateKeys.NumberOfBootstraps,
-    )
-    seed = st.number_input(
-        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
-    )
-
     ml_options_form()
 
     if st.button("Run Training", type="primary") and (

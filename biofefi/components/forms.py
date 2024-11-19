@@ -267,20 +267,6 @@ def fi_options_form():
 @st.experimental_fragment
 def ml_options_form():
     """The form for setting up the machine learning pipeline."""
-    st.subheader("Select your problem type")
-    st.write(
-        """
-        If your dependent variable is categorical (e.g. cat 🐱 or dog 🐶), choose **"Classification"**.
-
-        If your dependent variable is continuous (e.g. stock prices 📈), choose **"Regression"**.
-        """
-    )
-    st.selectbox(
-        "Problem type",
-        PROBLEM_TYPES,
-        key=ConfigStateKeys.ProblemType,
-    )
-
     st.subheader("Select and cofigure which models to train")
 
     model_types = {}
