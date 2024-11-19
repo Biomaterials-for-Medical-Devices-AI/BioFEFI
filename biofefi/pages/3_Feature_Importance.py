@@ -6,13 +6,12 @@ from biofefi.components.plots import plot_box
 from biofefi.components.forms import fi_options_form
 from biofefi.options.choices import PROBLEM_TYPES
 from biofefi.options.execution import ExecutionOptions
+from biofefi.options.fi import FeatureImportanceOptions
+from biofefi.services.configuration import load_execution_options
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models_to_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
-from biofefi.feature_importance.feature_importance_options import (
-    FeatureImportanceOptions,
-)
 from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
@@ -24,6 +23,7 @@ from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
 
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
+    execution_options_path,
     fi_plot_dir,
     fuzzy_plot_dir,
     log_dir,
@@ -49,34 +49,31 @@ import streamlit as st
 import os
 
 
-def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
+def build_configuration() -> (
+    tuple[FuzzyOptions | None, FeatureImportanceOptions, ExecutionOptions, str, list]
+):
     """Build the configuration objects for the pipeline.
 
     Returns:
-        tuple[Namespace, Namespace, Namespace, str]: The configuration for fuzzy, FI and ML pipelines,
-        and the experiment name.
+        tuple[FuzzyOptions | None, FeatureImportanceOptions, ExecutionOptions, str, list]: The configuration for fuzzy, FI and ML pipelines,
+        the experiment name and the list of models to explain.
     """
+    biofefi_base_dir = biofefi_experiments_base_dir()
 
-    fuzzy_opt = None
-    fuzzy_opt.initialize()
-    path_to_data = uploaded_file_path(
-        st.session_state[ConfigStateKeys.UploadedFileName],
-        biofefi_experiments_base_dir()
-        / st.session_state[ViewExperimentKeys.ExperimentName],
-    )
+    # Load plotting options
     path_to_plot_opts = plot_options_path(
-        biofefi_experiments_base_dir()
-        / st.session_state[ViewExperimentKeys.ExperimentName]
+        biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
     )
     plotting_options = load_plot_options(path_to_plot_opts)
-    exec_opts = ExecutionOptions(
-        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        data_path=path_to_data,
-        problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
-        ).lower(),
+
+    # Load executuon options
+    path_to_exec_opts = execution_options_path(
+        biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName]
     )
+    exec_opt = load_execution_options(path_to_exec_opts)
+
+    # Set up fuzzy options
+    fuzzy_opt = None
     if st.session_state.get(ConfigStateKeys.FuzzyFeatureSelection, False):
         fuzzy_opt = FuzzyOptions(
             fuzzy_feature_selection=st.session_state[
@@ -91,16 +88,13 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
             save_fuzzy_set_plots=plotting_options.save_plots,
             fuzzy_log_dir=log_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ViewExperimentKeys.ExperimentName]
+                biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
             )
             / "fuzzy",
         )
-    fuzzy_opt = fuzzy_opt.parse()
 
-    fi_opt = FeatureImportanceOptions()
-    fi_opt.initialize()
-    fi_opt.parser.set_defaults(
+    # Set up feature importance options
+    fi_opt = FeatureImportanceOptions(
         num_features_to_plot=st.session_state[
             ConfigStateKeys.NumberOfImportantFeatures
         ],
@@ -111,24 +105,9 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             ConfigStateKeys.NumberOfRepetitions
         ],
         shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
-        dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
-        experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        data_path=path_to_data,
-        problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
-        ).lower(),
-        is_feature_importance=True,
-        angle_rotate_xaxis_labels=plotting_options.angle_rotate_xaxis_labels,
-        angle_rotate_yaxis_labels=plotting_options.angle_rotate_yaxis_labels,
-        plot_axis_font_size=plotting_options.plot_axis_font_size,
-        plot_axis_tick_size=plotting_options.plot_axis_tick_size,
-        plot_title_font_size=plotting_options.plot_title_font_size,
-        plot_colour_scheme=plotting_options.plot_colour_scheme,
-        plot_font_family=plotting_options.plot_font_family,
         save_feature_importance_plots=plotting_options.save_plots,
         fi_log_dir=log_dir(
-            biofefi_experiments_base_dir()
-            / st.session_state[ViewExperimentKeys.ExperimentName]
+            biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
         )
         / "fi",
         save_feature_importance_options=st.session_state[
@@ -145,19 +124,20 @@ def build_configuration() -> tuple[Namespace, Namespace, Namespace, str]:
             ConfigStateKeys.GlobalFeatureImportanceMethods
         ],
     )
-    fi_opt = fi_opt.parse()
 
     return (
         fuzzy_opt,
         fi_opt,
+        exec_opt,
         st.session_state[ConfigStateKeys.ExperimentName],
         st.session_state[ConfigStateKeys.ExplainModels],
     )
 
 
 def pipeline(
-    fuzzy_opts: Namespace,
-    fi_opts: Namespace,
+    fuzzy_opts: FuzzyOptions,
+    fi_opts: FeatureImportanceOptions,
+    exec_opts: ExecutionOptions,
     experiment_name: str,
     explain_models: list,
 ):
