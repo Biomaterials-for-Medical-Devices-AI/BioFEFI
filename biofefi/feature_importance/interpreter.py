@@ -232,12 +232,14 @@ class Interpreter:
                             feature_importance_results, self._fi_opt, self._logger
                         )
                         save_importance_results(
-                            mean_results,
-                            None,
-                            None,
-                            ensemble_type,
-                            self._fi_opt,
-                            self._logger,
+                            feature_importance_df=mean_results,
+                            model_type=None,
+                            importance_type=None,
+                            feature_importance_type=ensemble_type,
+                            experiment_name=self._exec_opt.experiment_name,
+                            fi_opt=self._fi_opt,
+                            plot_opt=self._plot_opt,
+                            logger=self._logger,
                         )
                         ensemble_results[ensemble_type] = mean_results
 
@@ -247,12 +249,14 @@ class Interpreter:
                             feature_importance_results, self._fi_opt, self._logger
                         )
                         save_importance_results(
-                            majority_vote_results,
-                            None,
-                            None,
-                            ensemble_type,
-                            self._fi_opt,
-                            self._logger,
+                            feature_importance_df=majority_vote_results,
+                            model_type=None,
+                            importance_type=None,
+                            feature_importance_type=ensemble_type,
+                            experiment_name=self._exec_opt.experiment_name,
+                            fi_opt=self._fi_opt,
+                            plot_opt=self._plot_opt,
+                            logger=self._logger,
                         )
                         ensemble_results[ensemble_type] = majority_vote_results
 
