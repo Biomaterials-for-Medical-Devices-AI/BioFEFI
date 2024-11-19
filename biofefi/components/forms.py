@@ -340,6 +340,13 @@ def ml_options_form():
         }
         st.divider()
     st.session_state[ConfigStateKeys.ModelTypes] = model_types
+
+    st.number_input(
+        "Number of bootstraps",
+        min_value=1,
+        value=10,
+        key=ConfigStateKeys.NumberOfBootstraps,
+    )
     st.subheader("Select outputs to save")
     st.toggle(
         "Save models",
@@ -348,7 +355,7 @@ def ml_options_form():
         help="Save the models that are trained to disk?",
     )
     st.toggle(
-        "Save plot",
+        "Save plots",
         key=PlotOptionKeys.SavePlots,
         value=True,
         help="Save the plots to disk?",
