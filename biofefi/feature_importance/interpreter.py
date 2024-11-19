@@ -1,4 +1,3 @@
-import argparse
 import os
 
 from biofefi.feature_importance.call_methods import save_importance_results
@@ -11,6 +10,11 @@ from biofefi.feature_importance.feature_importance_methods import (
     calculate_shap_values,
     calculate_lime_values,
 )
+from biofefi.machine_learning.data import TabularData
+from biofefi.options.execution import ExecutionOptions
+from biofefi.options.fi import FeatureImportanceOptions
+from biofefi.options.plotting import PlottingOptions
+from biofefi.utils.logging_utils import Logger
 
 
 class Interpreter:
@@ -19,14 +23,22 @@ class Interpreter:
 
     """
 
-    def __init__(self, opt: argparse.Namespace, logger: object = None) -> None:
-        self._opt = opt
+    def __init__(
+        self,
+        fi_opt: FeatureImportanceOptions,
+        exec_opt: ExecutionOptions,
+        plot_opt: PlottingOptions,
+        logger: Logger | None = None,
+    ) -> None:
+        self._fi_opt = fi_opt
         self._logger = logger
-        self._feature_importance_methods = self._opt.global_importance_methods
-        self._local_importance_methods = self._opt.local_importance_methods
-        self._feature_importance_ensemble = self._opt.feature_importance_ensemble
+        self._exec_opt = exec_opt
+        self._plot_opt = plot_opt
+        self._feature_importance_methods = self._fi_opt.global_importance_methods
+        self._local_importance_methods = self._fi_opt.local_importance_methods
+        self._feature_importance_ensemble = self._fi_opt.feature_importance_ensemble
 
-    def interpret(self, models, data):
+    def interpret(self, models: dict, data: TabularData):
         """
         Interpret the model results using the selected feature importance methods and ensemble methods.
         Parameters:
@@ -80,7 +92,7 @@ class Interpreter:
                             # Run Permutation Importance -
                             permutation_importance_df = (
                                 calculate_permutation_importance(
-                                    model[0], X, y, self._opt, self._logger
+                                    model[0], X, y, self._fi_opt, self._logger
                                 )
                             )
                             save_importance_results(
@@ -88,7 +100,7 @@ class Interpreter:
                                 model_type,
                                 value["type"],
                                 feature_importance_type,
-                                self._opt,
+                                self._fi_opt,
                                 self._logger,
                             )
                             feature_importance_results[model_type][
@@ -98,14 +110,14 @@ class Interpreter:
                         if feature_importance_type == "SHAP":
                             # Run SHAP
                             shap_df, shap_values = calculate_shap_values(
-                                model[0], X, value["type"], self._opt, self._logger
+                                model[0], X, value["type"], self._fi_opt, self._logger
                             )
                             save_importance_results(
                                 shap_df,
                                 model_type,
                                 value["type"],
                                 feature_importance_type,
-                                self._opt,
+                                self._fi_opt,
                                 self._logger,
                                 shap_values,
                             )
@@ -148,14 +160,14 @@ class Interpreter:
                         if feature_importance_type == "LIME":
                             # Run Permutation Importance
                             lime_importance_df = calculate_lime_values(
-                                model[0], X, self._opt, self._logger
+                                model[0], X, self._fi_opt, self._logger
                             )
                             save_importance_results(
                                 lime_importance_df,
                                 model_type,
                                 value["type"],
                                 feature_importance_type,
-                                self._opt,
+                                self._fi_opt,
                                 self._logger,
                             )
                             feature_importance_results[model_type][
@@ -165,14 +177,14 @@ class Interpreter:
                         if feature_importance_type == "SHAP":
                             # Run SHAP
                             shap_df, shap_values = calculate_shap_values(
-                                model[0], X, value["type"], self._opt, self._logger
+                                model[0], X, value["type"], self._fi_opt, self._logger
                             )
                             save_importance_results(
                                 shap_df,
                                 model_type,
                                 value["type"],
                                 feature_importance_type,
-                                self._opt,
+                                self._fi_opt,
                                 self._logger,
                                 shap_values,
                             )
@@ -202,14 +214,14 @@ class Interpreter:
                     if ensemble_type == "Mean":
                         # Calculate mean of feature importance results
                         mean_results = calculate_ensemble_mean(
-                            feature_importance_results, self._opt, self._logger
+                            feature_importance_results, self._fi_opt, self._logger
                         )
                         save_importance_results(
                             mean_results,
                             None,
                             None,
                             ensemble_type,
-                            self._opt,
+                            self._fi_opt,
                             self._logger,
                         )
                         ensemble_results[ensemble_type] = mean_results
@@ -217,14 +229,14 @@ class Interpreter:
                     if ensemble_type == "Majority Vote":
                         # Calculate majority vote of feature importance results
                         majority_vote_results = calculate_ensemble_majorityvote(
-                            feature_importance_results, self._opt, self._logger
+                            feature_importance_results, self._fi_opt, self._logger
                         )
                         save_importance_results(
                             majority_vote_results,
                             None,
                             None,
                             ensemble_type,
-                            self._opt,
+                            self._fi_opt,
                             self._logger,
                         )
                         ensemble_results[ensemble_type] = majority_vote_results
