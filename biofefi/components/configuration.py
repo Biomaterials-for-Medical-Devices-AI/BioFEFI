@@ -323,32 +323,14 @@ def fi_options_box():
 
 @st.experimental_fragment
 def execution_options_box():
-    data_split = st.selectbox("Data split method", DATA_SPLITS)
-    if data_split == DataSplitMethods.Holdout.capitalize():
-        split_size = st.number_input(
-            "Test split",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.2,
-        )
-        st.session_state[ConfigStateKeys.DataSplit] = {
-            "type": DataSplitMethods.Holdout,
-            "test_size": split_size,
-        }
-    elif data_split == DataSplitMethods.KFold.capitalize():
-        split_size = st.number_input(
-            "n splits",
-            min_value=0,
-            value=5,
-        )
-        st.session_state[ConfigStateKeys.DataSplit] = {
-            "type": DataSplitMethods.KFold,
-            "n_splits": split_size,
-        }
-    else:
-        split_size = None
-    st.number_input(
-        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
+    st.write(
+        """
+        Upload your data file as a CSV and then define how the data will be normalised and split between
+        training and test data.
+        """
+    )
+    st.file_uploader(
+        "Choose a CSV file", type="csv", key=ConfigStateKeys.UploadedFileName
     )
     st.write(
         """
@@ -366,4 +348,31 @@ def execution_options_box():
         "Normalisation",
         NORMALISATIONS,
         key=ConfigStateKeys.Normalization,
+    )
+    data_split = st.selectbox("Data split method", DATA_SPLITS)
+    if data_split.lower() == DataSplitMethods.Holdout:
+        split_size = st.number_input(
+            "Test split",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.2,
+        )
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": DataSplitMethods.Holdout,
+            "test_size": split_size,
+        }
+    elif data_split.lower() == DataSplitMethods.KFold:
+        split_size = st.number_input(
+            "n splits",
+            min_value=0,
+            value=5,
+        )
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": DataSplitMethods.KFold,
+            "n_splits": split_size,
+        }
+    else:
+        split_size = None
+    st.number_input(
+        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
     )
