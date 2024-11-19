@@ -2,7 +2,9 @@ import argparse
 import pickle
 import os
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
+from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     fi_options_dir,
@@ -11,6 +13,8 @@ from biofefi.options.file_paths import (
     fuzzy_plot_dir,
     fuzzy_result_dir,
 )
+from biofefi.options.plotting import PlottingOptions
+from biofefi.utils.logging_utils import Logger
 from biofefi.utils.utils import log_options
 import shap
 
@@ -33,39 +37,45 @@ def load_data(opt: argparse.Namespace):
 
 
 def save_importance_results(
-    feature_importance_df,
+    feature_importance_df: pd.DataFrame,
     model_type,
-    importance_type,
-    feature_importance_type,
-    opt: argparse.Namespace,
-    logger,
+    importance_type: str,
+    feature_importance_type: str,
+    experiment_name: str,
+    fi_opt: FeatureImportanceOptions,
+    plot_opt: PlottingOptions,
+    logger: Logger,
     shap_values=None,
 ):
-    """Save the feature importance results to a CSV file
+    """Save the feature importance results to a CSV file and the plots.
+
     Args:
-        feature_importance_df: DataFrame of feature importance results
-        model_type: Type of model
-        feature_importance_type: Type of feature importance method
-        opt: Options
-        logger: Logger
-        shap_values: SHAP values
-    Returns:
-        None
+        feature_importance_df (pd.DataFrame): DataFrame of feature importance results.
+        model_type (_type_): Type of model.
+        importance_type (str): Type of feature importance method.
+        feature_importance_type (str): Type of feature importance method (Again for some reason).
+        experiment_name (str): Name of the experiment, to know where to save outputs.
+        fi_opt (FeatureImportanceOptions): Feature importance options.
+        plot_opt (PlottingOptions): Plotting options.
+        logger (Logger): The logger.
+        shap_values (_type_, optional): SHAP values. Defaults to None.
     """
+
+    biofefi_base_dir = biofefi_experiments_base_dir()
     logger.info(f"Saving importance results and plots of {feature_importance_type}...")
 
     # Save plots when the flag is set to True and importance type is not fuzzy
-    if opt.save_feature_importance_plots and importance_type != "fuzzy":
-        save_dir = fi_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
+    if fi_opt.save_feature_importance_plots and importance_type != "fuzzy":
+        save_dir = fi_plot_dir(biofefi_base_dir / experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         # Plot bar plot - sort values in descending order and plot top n features
         # rotate x-axis labels for better readability
-        plt.style.use(opt.plot_colour_scheme)
+        plt.style.use(plot_opt.plot_colour_scheme)
         fig, ax = plt.subplots(layout="constrained")
 
         feature_importance_df.sort_values(by=0, ascending=False).head(
-            opt.num_features_to_plot
+            fi_opt.num_features_to_plot
         ).plot(
             kind="bar",
             legend=False,
@@ -76,67 +86,60 @@ def save_importance_results(
         # rotate x-axis labels for better readability
         ax.set_xticklabels(
             ax.get_xticklabels(),
-            rotation=opt.angle_rotate_xaxis_labels,
-            family=opt.plot_font_family,
+            rotation=plot_opt.angle_rotate_xaxis_labels,
+            family=plot_opt.plot_font_family,
         )
         ax.set_yticklabels(
             ax.get_yticklabels(),
-            rotation=opt.angle_rotate_yaxis_labels,
-            family=opt.plot_font_family,
+            rotation=plot_opt.angle_rotate_yaxis_labels,
+            family=plot_opt.plot_font_family,
         )
-        ax.set_xlabel(ax.get_xlabel(), family=opt.plot_font_family)
-        ax.set_ylabel(ax.get_ylabel(), family=opt.plot_font_family)
-        ax.set_title(ax.get_title(), family=opt.plot_font_family)
+        ax.set_xlabel(ax.get_xlabel(), family=plot_opt.plot_font_family)
+        ax.set_ylabel(ax.get_ylabel(), family=plot_opt.plot_font_family)
+        ax.set_title(ax.get_title(), family=plot_opt.plot_font_family)
         fig.savefig(save_dir / f"{model_type}-bar.png")
 
         if feature_importance_type == "SHAP":
             # Plot bee swarm plot
             fig, ax = plt.subplots(layout="constrained")
             ax.set_title(
-                f"{feature_importance_type} - {model_type}", family=opt.plot_font_family
+                f"{feature_importance_type} - {model_type}",
+                family=plot_opt.plot_font_family,
             )
             shap.plots.beeswarm(
-                shap_values, max_display=opt.num_features_to_plot, show=False
+                shap_values, max_display=fi_opt.num_features_to_plot, show=False
             )
-            ax.set_xlabel(ax.get_xlabel(), family=opt.plot_font_family)
-            ax.set_ylabel(ax.get_ylabel(), family=opt.plot_font_family)
+            ax.set_xlabel(ax.get_xlabel(), family=plot_opt.plot_font_family)
+            ax.set_ylabel(ax.get_ylabel(), family=plot_opt.plot_font_family)
             ax.set_xticklabels(
                 ax.get_xticklabels(),
-                family=opt.plot_font_family,
+                family=plot_opt.plot_font_family,
             )
             ax.set_yticklabels(
                 ax.get_yticklabels(),
-                family=opt.plot_font_family,
+                family=plot_opt.plot_font_family,
             )
             fig.savefig(save_dir / f"{model_type}-beeswarm.png")
 
-    if opt.save_feature_importance_plots and importance_type == "fuzzy":
-        # save fuzzy sets
-        raise NotImplementedError(f"Plotting fuzzy sets not implemented yet")
-
     # Save the results to a CSV file - create folders if they don't exist
-    if opt.save_feature_importance_results and importance_type != "fuzzy":
-        save_dir = fi_result_dir(biofefi_experiments_base_dir() / opt.experiment_name)
+    if fi_opt.save_feature_importance_results and importance_type != "fuzzy":
+        save_dir = fi_result_dir(biofefi_base_dir / experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         feature_importance_df.to_csv(save_dir / f"{feature_importance_type}.csv")
 
-    if opt.save_feature_importance_results and importance_type == "fuzzy":
-        save_dir = fuzzy_result_dir(
-            biofefi_experiments_base_dir() / opt.experiment_name
-        )
+    if fi_opt.save_feature_importance_results and importance_type == "fuzzy":
+        save_dir = fuzzy_result_dir(biofefi_base_dir / experiment_name)
         if not save_dir.exists():
             save_dir.mkdir(exist_ok=True, parents=True)
         feature_importance_df.to_csv(save_dir / f"{feature_importance_type}.csv")
 
     # Save the metrics to a log file
-    if opt.save_feature_importance_options:
-        options_path = fi_options_dir(
-            biofefi_experiments_base_dir() / opt.experiment_name
-        )
+    if fi_opt.save_feature_importance_options:
+        options_path = fi_options_dir(biofefi_base_dir / experiment_name)
         if not options_path.exists():
             options_path.mkdir(parents=True, exist_ok=True)
-        log_options(options_path, opt)
+        log_options(options_path, fi_opt)
 
 
 def save_fuzzy_sets_plots(
