@@ -7,11 +7,9 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.choices import NORMALISATIONS
 from biofefi.options.enums import (
     ConfigStateKeys,
     PlotOptionKeys,
-    ProblemTypes,
 )
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
@@ -21,7 +19,6 @@ from biofefi.options.file_paths import (
     ml_model_dir,
     ml_plot_dir,
     plot_options_path,
-    uploaded_file_path,
 )
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
@@ -31,7 +28,7 @@ from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
 from biofefi.services.plotting import load_plot_options
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed
+from biofefi.utils.utils import cancel_pipeline, set_seed
 
 
 def build_configuration() -> (
@@ -150,6 +147,7 @@ if experiment_name:
     ml_options_form()
 
     if st.button("Run Training", type="primary"):
+        biofefi_base_dir = biofefi_experiments_base_dir()
         config = build_configuration()
         process = Process(target=pipeline, args=config, daemon=True)
         process.start()
@@ -159,11 +157,11 @@ if experiment_name:
             process.join()
         try:
             st.session_state[ConfigStateKeys.MLLogBox] = get_logs(
-                log_dir(biofefi_experiments_base_dir() / experiment_name) / "ml"
+                log_dir(biofefi_base_dir / experiment_name) / "ml"
             )
             log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
         except NotADirectoryError:
             pass
-        ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)
+        ml_plots = ml_plot_dir(biofefi_base_dir / experiment_name)
         if ml_plots.exists():
             plot_box(ml_plots, "Machine learning plots")
