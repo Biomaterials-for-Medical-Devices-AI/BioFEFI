@@ -1,20 +1,34 @@
 from sklearn.base import is_classifier
 import argparse
 import pandas as pd
+from sklearn.inspection import permutation_importance
+
+from biofefi.utils.logging_utils import Logger
 
 
-def calculate_permutation_importance(model, X, y, opt: argparse.Namespace, logger):
-    """Calculate permutation importance for a given model and dataset
+def calculate_permutation_importance(
+    model,
+    X: pd.DataFrame,
+    y: pd.Series,
+    permutation_importance_scoring: str,
+    permutation_importance_repeat: int,
+    random_state: int,
+    logger: Logger,
+):
+    """Calculate permutation importance for a given model and dataset.
+
     Args:
-        model: Model object
-        X: Input features
-        y: Target variable
-        opt: Options
-        logger: Logger
+        model: Model object.
+        X (pd.DataFrame): Input features.
+        y (pd.Series): Target variable.
+        permutation_importance_scoring (str): Permutation importance scoring method.
+        permutation_importance_repeat (int): Number of repeats for importance scoring.
+        random_state (int): Seed for the random state.
+        logger (Logger): The logger.
+
     Returns:
         permutation_importance: Permutation importance values
     """
-    from sklearn.inspection import permutation_importance
 
     logger.info(
         f"Calculating Permutation Importance for {model.__class__.__name__} model.."
@@ -25,9 +39,9 @@ def calculate_permutation_importance(model, X, y, opt: argparse.Namespace, logge
         model,
         X=X,
         y=y,
-        scoring=opt.permutation_importance_scoring,
-        n_repeats=opt.permutation_importance_repeat,
-        random_state=opt.random_state,
+        scoring=permutation_importance_scoring,
+        n_repeats=permutation_importance_repeat,
+        random_state=random_state,
     )
     # Create a DataFrame with the results
     permutation_importance_df = pd.DataFrame(
