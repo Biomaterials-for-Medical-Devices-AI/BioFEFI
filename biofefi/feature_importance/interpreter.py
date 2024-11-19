@@ -38,15 +38,14 @@ class Interpreter:
         self._local_importance_methods = self._fi_opt.local_importance_methods
         self._feature_importance_ensemble = self._fi_opt.feature_importance_ensemble
 
-    def interpret(self, models: dict, data: TabularData):
+    def interpret(self, models: dict, data: TabularData) -> tuple[dict, dict, dict]:
         """
         Interpret the model results using the selected feature importance methods and ensemble methods.
         Parameters:
             models (dict): Dictionary of models.
-            X (pd.DataFrame): Features.
-            y (pd.Series): Target.
+            data (TabularData): The data to interpret.
         Returns:
-            dict: Dictionary of feature importance results.
+            tuple[dict, dict, dict]: Global, local and ensemble feature importance votes.
         """
         # Load just the first fold of the data and the first models for interpretation
         X, y = data.X_train[0], data.y_train[0]
