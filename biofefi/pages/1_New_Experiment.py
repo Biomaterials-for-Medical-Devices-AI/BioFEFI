@@ -5,7 +5,7 @@ from biofefi.components.configuration import execution_options_box, plot_options
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 from biofefi.options.execution import ExecutionOptions
-from biofefi.options.file_paths import biofefi_experiments_base_dir
+from biofefi.options.file_paths import biofefi_experiments_base_dir, uploaded_file_path
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import create_experiment
 
@@ -52,7 +52,13 @@ def _entrypoint(save_dir: Path):
     Args:
         save_dir (Path): The path to the experiment.
     """
+    path_to_data = uploaded_file_path(
+        st.session_state[ConfigStateKeys.UploadedFileName].name,
+        biofefi_experiments_base_dir()
+        / st.session_state[ConfigStateKeys.ExperimentName],
+    )
     exec_opts = ExecutionOptions(
+        data_path=path_to_data,
         data_split=st.session_state[ConfigStateKeys.DataSplit],
         problem_type=st.session_state[ConfigStateKeys.ProblemType],
         normalization=st.session_state[ConfigStateKeys.Normalization],
@@ -68,7 +74,7 @@ def _entrypoint(save_dir: Path):
         plot_title_font_size=st.session_state[PlotOptionKeys.TitleFontSize],
         plot_font_family=st.session_state[PlotOptionKeys.FontFamily],
     )
-    create_experiment(save_dir, plotting_options=plot_opts)
+    create_experiment(save_dir, plotting_options=plot_opts, execution_options=exec_opts)
 
 
 st.set_page_config(
