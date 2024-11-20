@@ -319,7 +319,7 @@ class Fuzzy:
         import skfuzzy as fuzz
 
         self._logger.info(f"Extracting fuzzy rules...")
-        if self._fuzzy_opt.problem_type == ProblemTypes.Regression:
+        if self._exec_opt.problem_type == ProblemTypes.Regression:
             target = np.array(df[df.columns[-1]])
             centers, membership_matrix, _, _, _, _, _ = fuzz.cluster.cmeans(
                 data=target.reshape(1, -1),
@@ -340,7 +340,7 @@ class Fuzzy:
             ]
 
             # Replace cluser numbers by cluster names based on their average values
-            cluster_names = self._fuzzy_opt.names_clusters
+            cluster_names = self._fuzzy_opt.cluster_names
 
             # Create a list of tuples where each tuple contains a cluster number and its corresponding average
             clusters = list(zip(cluster_numbers, cluster_averages))
