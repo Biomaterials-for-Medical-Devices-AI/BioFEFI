@@ -76,6 +76,7 @@ def _entrypoint(save_dir: Path):
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
+        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
     )
     plot_opts = PlottingOptions(
         plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],

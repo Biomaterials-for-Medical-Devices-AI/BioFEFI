@@ -12,3 +12,4 @@ class ExecutionOptions:
     problem_type: ProblemTypes = ProblemTypes.Classification
     dependent_variable: str | None = None
     normalization: Normalisations = Normalisations.NoNormalisation
+    n_bootstraps: int = 3

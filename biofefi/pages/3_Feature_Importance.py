@@ -160,7 +160,7 @@ def pipeline(
         data_path=exec_opts.data_path,
         random_state=exec_opts.random_state,
         normalization=exec_opts.normalization,
-        n_bootstraps=10,
+        n_bootstraps=exec_opts.n_bootstraps,
         logger=fi_logger,
         data_split=exec_opts.data_split,
     ).ingest()

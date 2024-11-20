@@ -53,7 +53,6 @@ def build_configuration() -> (
     )
     exec_opt = load_execution_options(path_to_exec_opts)
     ml_opt = MachineLearningOptions(
-        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
         save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
         model_types=st.session_state[ConfigStateKeys.ModelTypes],
         ml_plot_dir=ml_plot_dir(
@@ -95,7 +94,7 @@ def pipeline(
         data_path=exec_opts.data_path,
         random_state=exec_opts.random_state,
         normalization=exec_opts.normalization,
-        n_bootstraps=ml_opts.n_bootstraps,
+        n_bootstraps=exec_opts.n_bootstraps,
         logger=logger,
         data_split=exec_opts.data_split,
     ).ingest()
