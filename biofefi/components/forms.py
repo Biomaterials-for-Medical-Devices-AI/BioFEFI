@@ -258,12 +258,6 @@ def fi_options_form():
         key=ConfigStateKeys.SaveFeatureImportanceResults,
     )
 
-    st.text_input(
-        "Dependent variable name",
-        help="Specify the name of the dependent variable for labelling plots.",
-        key=ConfigStateKeys.DependentVariableName,
-    )
-
 
 @st.experimental_fragment
 def ml_options_form():
