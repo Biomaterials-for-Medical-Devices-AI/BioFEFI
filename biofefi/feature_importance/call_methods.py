@@ -198,31 +198,32 @@ def save_fuzzy_sets_plots(
     plt.close()
 
 
-def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):
+def save_target_clusters_plots(
+    df_cluster, exec_opt: ExecutionOptions, plot_opt: PlottingOptions, logger: Logger
+):
     # Plot the target clusters
-    if opt.save_fuzzy_set_plots:
-        logger.info(f"Saving target clusters plot ...")
-        save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
-        if not save_dir.exists():
-            save_dir.mkdir(exist_ok=True, parents=True)
+    logger.info(f"Saving target clusters plot ...")
+    save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / exec_opt.experiment_name)
+    if not save_dir.exists():
+        save_dir.mkdir(exist_ok=True, parents=True)
 
-        # Plot boxplot of the target (continuous values) and target clusters (categories) using seaborn
-        plt.style.use(opt.plot_colour_scheme)
-        fig, ax = plt.subplots(layout="constrained")
-        sns.boxplot(data=df_cluster, x="cluster", y="target", ax=ax)
-        ax.set_xticklabels(
-            ax.get_xticklabels(),
-            rotation=opt.angle_rotate_xaxis_labels,
-            family=opt.plot_font_family,
-        )
-        ax.set_yticklabels(
-            ax.get_yticklabels(),
-            rotation=opt.angle_rotate_yaxis_labels,
-            family=opt.plot_font_family,
-        )
-        ax.set_title(
-            "Target Clusters",
-            family=opt.plot_font_family,
-        )
-        fig.savefig(save_dir / f"target_clusters.png")
-        plt.close()
+    # Plot boxplot of the target (continuous values) and target clusters (categories) using seaborn
+    plt.style.use(plot_opt.plot_colour_scheme)
+    fig, ax = plt.subplots(layout="constrained")
+    sns.boxplot(data=df_cluster, x="cluster", y="target", ax=ax)
+    ax.set_xticklabels(
+        ax.get_xticklabels(),
+        rotation=plot_opt.angle_rotate_xaxis_labels,
+        family=plot_opt.plot_font_family,
+    )
+    ax.set_yticklabels(
+        ax.get_yticklabels(),
+        rotation=plot_opt.angle_rotate_yaxis_labels,
+        family=plot_opt.plot_font_family,
+    )
+    ax.set_title(
+        "Target Clusters",
+        family=plot_opt.plot_font_family,
+    )
+    fig.savefig(save_dir / f"target_clusters.png")
+    plt.close()

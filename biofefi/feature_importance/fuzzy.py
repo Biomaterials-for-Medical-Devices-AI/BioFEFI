@@ -369,7 +369,13 @@ class Fuzzy:
                 }
             )
 
-            save_target_clusters_plots(df_cluster, self._fuzzy_opt, self._logger)
+            if self._fuzzy_opt.save_fuzzy_set_plots:
+                save_target_clusters_plots(
+                    df_cluster=df_cluster,
+                    exec_opt=self._exec_opt,
+                    plot_opt=self._plot_opt,
+                    logger=self._logger,
+                )
             # Assign labels to target
             df.loc[:, df.columns[-1]] = primary_cluster_assignment
 
