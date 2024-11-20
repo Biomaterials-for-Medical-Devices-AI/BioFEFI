@@ -509,7 +509,10 @@ class Fuzzy:
                         if feature_importance_type == "LIME":
                             # Run LIME importance
                             lime_importance_df = calculate_lime_values(
-                                model[0], X, self._fuzzy_opt, self._logger
+                                model=model[0],
+                                X=X,
+                                problem_type=self._exec_opt.problem_type,
+                                logger=self._logger,
                             )
                             # Normalise LIME coefficients between 0 and 1 (0 being the lowest impact and 1 being the highest impact)
                             lime_importance_df = lime_importance_df.abs()
@@ -528,11 +531,11 @@ class Fuzzy:
                         if feature_importance_type == "SHAP":
                             # Run SHAP
                             shap_df, shap_values = calculate_shap_values(
-                                model[0],
-                                X,
-                                value["type"],
-                                self._fuzzy_opt,
-                                self._logger,
+                                model=model[0],
+                                X=X,
+                                shap_type=value["type"],
+                                fi_opt=self._fi_opt,
+                                logger=self._logger,
                             )
                             # Normalise SHAP values between 0 and 1 (0 being the lowest impact and 1 being the highest impact)
                             shap_df = shap_df.abs()
