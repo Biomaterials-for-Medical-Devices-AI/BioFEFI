@@ -180,8 +180,10 @@ if experiment_name:
 
     ml_options_form()
 
-    if st.button("Run Training", type="primary") and (
-        uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName)
+    if (
+        st.button("Run Training", type="primary")
+        and (st.session_state[ConfigStateKeys.RerunML])
+        and (uploaded_file := st.session_state.get(ConfigStateKeys.UploadedFileName))
     ):
         biofefi_base_dir = biofefi_experiments_base_dir()
         upload_path = uploaded_file_path(
@@ -205,3 +207,8 @@ if experiment_name:
         ml_plots = ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)
         if ml_plots.exists():
             plot_box(ml_plots, "Machine learning plots")
+
+    elif not st.session_state[ConfigStateKeys.RerunML]:
+        st.success(
+            "You have chosen not to rerun the machine learning experiments. You can proceed to feature importance analysis."
+        )
