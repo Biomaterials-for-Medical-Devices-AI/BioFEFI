@@ -232,6 +232,7 @@ def fi_options_form():
             "Names of clusters (comma-separated)",
             help="Specify names for each cluster (e.g., Low, Medium, High).",
             key=ConfigStateKeys.ClusterNames,
+            value=", ".join(["very low", "low", "medium", "high", "very high"]),
         )
 
         st.number_input(
