@@ -28,7 +28,7 @@ from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed, delete_dir
+from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed, delete_directory
 
 
 def build_configuration() -> tuple[Namespace, str]:
@@ -193,9 +193,9 @@ if experiment_name:
         save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
 
         if os.path.exists(ml_model_dir(biofefi_base_dir / experiment_name)):
-            delete_dir(ml_model_dir(biofefi_base_dir / experiment_name))
+            delete_directory(ml_model_dir(biofefi_base_dir / experiment_name))
         if os.path.exists(ml_plot_dir(biofefi_base_dir / experiment_name)):
-            delete_dir(ml_plot_dir(biofefi_base_dir / experiment_name))
+            delete_directory(ml_plot_dir(biofefi_base_dir / experiment_name))
 
         config = build_configuration()
         process = Process(target=pipeline, args=config, daemon=True)
