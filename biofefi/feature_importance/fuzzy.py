@@ -39,7 +39,6 @@ class Fuzzy:
         self._fi_opt = fi_opt
         self._exec_opt = exec_opt
         self._plot_opt = plot_opt
-        # self._ml_opt = ml_opt
         self._logger = logger
         self._local_importance_methods = self._fi_opt.local_importance_methods
         self.importance_type = "local"  # local feature importance
@@ -80,18 +79,12 @@ class Fuzzy:
             X_train = self._fuzzy_granularity(X_train)
             X_test = self._fuzzy_granularity(X_test)
 
-        # # Step 3: Train and evaluate models
-        # if self._fuzzy_opt.fuzzy_feature_selection or self._fuzzy_opt.granular_features:
-        #     # Update data object with new features
-        #     data.X_train[0], data.X_test[0] = X_train, X_test
-        #     # use parser to update ml_opt
-        #     models = train.run(self._ml_opt, data, self._logger)
-        # Step 4: Master feature importance dataframe for granular features from local feature importance methods and ML models
+        # Step 3: Master feature importance dataframe for granular features from local feature importance methods and ML models
         master_importance_df = self._local_feature_importance(
             models, data.X_train[0], data.y_train[0]
         )
 
-        # Step 5: Extract fuzzy rules from master dataframe
+        # Step 4: Extract fuzzy rules from master dataframe
         fuzzy_rules_df = self._fuzzy_rule_extraction(master_importance_df)
         save_importance_results(
             feature_importance_df=fuzzy_rules_df,
@@ -104,7 +97,7 @@ class Fuzzy:
             logger=self._logger,
         )
 
-        # Step 6: Identify the synergy of important features by context (e.g. target category:low, medium, high)
+        # Step 5: Identify the synergy of important features by context (e.g. target category:low, medium, high)
         df_contextual_rules = self._contextual_synergy_analysis(fuzzy_rules_df)
         save_importance_results(
             feature_importance_df=df_contextual_rules,
