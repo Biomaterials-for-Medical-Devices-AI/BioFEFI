@@ -284,25 +284,31 @@ def ml_options_form():
 
     st.subheader("Select and cofigure which models to train")
 
-    trained_models = load_models(
-        ml_model_dir(
-            biofefi_experiments_base_dir()
-            / st.session_state[ConfigStateKeys.ExperimentName]
-        )
-    )
-
-    model_types = {}
-    use_linear = st.toggle("Linear Model", value=False)
-    if use_linear:
-
-        if "LinearRegression" in trained_models.keys():
-            st.warning("Linear Regression model already trained")
-            use_linear = st.checkbox(
-                "Would you like to re run the experiment. This will delete previous results",
-                key=ConfigStateKeys.RerunLR,
-                value=True,
+    try:
+        trained_models = load_models(
+            ml_model_dir(
+                biofefi_experiments_base_dir()
+                / st.session_state[ConfigStateKeys.ExperimentName]
             )
+        )
 
+        if trained_models:
+            st.warning("You have trained models in this experiment.")
+            st.checkbox(
+                "Would you like to rerun the experiments? This will overwrite the existing models.",
+                value=True,
+                key=ConfigStateKeys.RerunML,
+            )
+        else:
+            st.session_state[ConfigStateKeys.RerunML] = True
+
+    except:
+        st.session_state[ConfigStateKeys.RerunML] = True
+
+    if st.session_state[ConfigStateKeys.RerunML]:
+
+        model_types = {}
+        use_linear = st.toggle("Linear Model", value=False)
         if use_linear:
 
             st.write("Options:")
@@ -315,17 +321,7 @@ def ml_options_form():
             }
             st.divider()
 
-    use_rf = st.toggle("Random Forest", value=False)
-    if use_rf:
-
-        if any("RandomForest" in key for key in trained_models.keys()):
-            st.warning("Random Forest model already trained")
-            use_rf = st.checkbox(
-                "Would you like to re run the experiment. This will delete previous results",
-                key=ConfigStateKeys.RerunRF,
-                value=True,
-            )
-
+        use_rf = st.toggle("Random Forest", value=False)
         if use_rf:
 
             st.write("Options:")
@@ -346,17 +342,7 @@ def ml_options_form():
             }
             st.divider()
 
-    use_xgb = st.toggle("XGBoost", value=False)
-    if use_xgb:
-
-        if any("XGB" in key for key in trained_models.keys()):
-            st.warning("XGBoost model already trained")
-            use_xgb = st.checkbox(
-                "Would you like to re run the experiment. This will delete previous results",
-                key=ConfigStateKeys.RerunXGB,
-                value=True,
-            )
-
+        use_xgb = st.toggle("XGBoost", value=False)
         if use_xgb:
 
             st.write("Options:")
@@ -381,18 +367,9 @@ def ml_options_form():
             }
             st.divider()
 
-    use_svm = st.toggle("Support Vector Machine", value=False)
-    if use_svm:
-
-        if any("SV" in key for key in trained_models.keys()):
-            st.warning("Support Vector Machine model already trained")
-            use_svm = st.checkbox(
-                "Would you like to re run the experiment. This will delete previous results",
-                key=ConfigStateKeys.RerunSVM,
-                value=True,
-            )
-
+        use_svm = st.toggle("Support Vector Machine", value=False)
         if use_svm:
+
             st.write("Options:")
             kernel = st.selectbox("Kernel", options=SVM_KERNELS)
             degree = st.number_input("Degree", min_value=0, value=3)
@@ -407,17 +384,17 @@ def ml_options_form():
             }
             st.divider()
 
-    st.session_state[ConfigStateKeys.ModelTypes] = model_types
-    st.subheader("Select outputs to save")
-    st.toggle(
-        "Save models",
-        key=ConfigStateKeys.SaveModels,
-        value=True,
-        help="Save the models that are trained to disk?",
-    )
-    st.toggle(
-        "Save plot",
-        key=PlotOptionKeys.SavePlots,
-        value=True,
-        help="Save the plots to disk?",
-    )
+        st.session_state[ConfigStateKeys.ModelTypes] = model_types
+        st.subheader("Select outputs to save")
+        st.toggle(
+            "Save models",
+            key=ConfigStateKeys.SaveModels,
+            value=True,
+            help="Save the models that are trained to disk?",
+        )
+        st.toggle(
+            "Save plot",
+            key=PlotOptionKeys.SavePlots,
+            value=True,
+            help="Save the plots to disk?",
+        )
