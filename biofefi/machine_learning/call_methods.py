@@ -86,6 +86,7 @@ def save_actual_pred_plots(
     opt: ExecutionOptions,
     logger,
     ml_metric_results,
+    n_bootstraps: int,
     plot_opts: PlottingOptions | None = None,
     ml_opts: MachineLearningOptions | None = None,
 ) -> None:
@@ -114,7 +115,7 @@ def save_actual_pred_plots(
             if model_options["use"]:
                 logger.info(f"Saving actual vs prediction plots of {model_name}...")
 
-                for i in range(ml_opts.n_bootstraps):
+                for i in range(n_bootstraps):
                     y_pred_test = ml_results[i][model_name]["y_pred_test"]
                     y_pred_train = ml_results[i][model_name]["y_pred_train"]
 

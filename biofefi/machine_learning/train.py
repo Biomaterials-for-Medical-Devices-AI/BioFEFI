@@ -30,7 +30,7 @@ def run(
         problem_type=exec_opts.problem_type,
         data_split=exec_opts.data_split,
         normalization=exec_opts.normalization,
-        n_bootstraps=ml_opts.n_bootstraps,
+        n_bootstraps=exec_opts.n_bootstraps,
         logger=logger,
     )
     res, metric_res, metric_res_stats, trained_models = learner.fit(data)
@@ -44,6 +44,7 @@ def run(
             ml_metric_results=metric_res,
             ml_opts=ml_opts,
             plot_opts=plot_opts,
+            n_bootstraps=exec_opts.n_bootstraps,
         )
 
     return trained_models
