@@ -76,16 +76,16 @@ class Fuzzy:
             # if error occurs, use Mean ensemble results
 
         # Step 2: Assign granularity to features e.g. low, medium, high categories
-        if self._fuzzy_opt.is_granularity:
+        if self._fuzzy_opt.granular_features:
             X_train = self._fuzzy_granularity(X_train)
             X_test = self._fuzzy_granularity(X_test)
 
-        # Step 3: Train and evaluate models
-        if self._fuzzy_opt.fuzzy_feature_selection or self._fuzzy_opt.is_granularity:
-            # Update data object with new features
-            data.X_train[0], data.X_test[0] = X_train, X_test
-            # use parser to update ml_opt
-            models = train.run(self._ml_opt, data, self._logger)
+        # # Step 3: Train and evaluate models
+        # if self._fuzzy_opt.fuzzy_feature_selection or self._fuzzy_opt.granular_features:
+        #     # Update data object with new features
+        #     data.X_train[0], data.X_test[0] = X_train, X_test
+        #     # use parser to update ml_opt
+        #     models = train.run(self._ml_opt, data, self._logger)
         # Step 4: Master feature importance dataframe for granular features from local feature importance methods and ML models
         master_importance_df = self._local_feature_importance(
             models, data.X_train[0], data.y_train[0]
