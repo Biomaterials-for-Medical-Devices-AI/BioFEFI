@@ -1,5 +1,6 @@
 from argparse import Namespace
 from multiprocessing import Process
+import os
 import streamlit as st
 from biofefi.components.experiments import experiment_selector
 from biofefi.components.forms import ml_options_form
@@ -27,7 +28,7 @@ from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed
+from biofefi.utils.utils import cancel_pipeline, save_upload, set_seed, delete_dir
 
 
 def build_configuration() -> tuple[Namespace, str]:
@@ -190,6 +191,12 @@ if experiment_name:
             uploaded_file.name, biofefi_base_dir / experiment_name
         )
         save_upload(upload_path, uploaded_file.read().decode("utf-8-sig"))
+
+        if os.path.exists(ml_model_dir(biofefi_base_dir / experiment_name)):
+            delete_dir(ml_model_dir(biofefi_base_dir / experiment_name))
+        if os.path.exists(ml_plot_dir(biofefi_base_dir / experiment_name)):
+            delete_dir(ml_plot_dir(biofefi_base_dir / experiment_name))
+
         config = build_configuration()
         process = Process(target=pipeline, args=config, daemon=True)
         process.start()
