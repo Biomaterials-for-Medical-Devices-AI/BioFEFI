@@ -13,6 +13,11 @@ from biofefi.feature_importance.call_methods import (
     save_target_clusters_plots,
 )
 from biofefi.options.enums import ProblemTypes
+from biofefi.options.execution import ExecutionOptions
+from biofefi.options.fi import FeatureImportanceOptions
+from biofefi.options.fuzzy import FuzzyOptions
+from biofefi.options.plotting import PlottingOptions
+from biofefi.utils.logging_utils import Logger
 
 
 class Fuzzy:
@@ -22,12 +27,21 @@ class Fuzzy:
     """
 
     def __init__(
-        self, opt: argparse.Namespace, ml_opt: argparse.Namespace, logger: object = None
+        self,
+        fuzzy_opt: FuzzyOptions,
+        fi_opt: FeatureImportanceOptions,
+        exec_opt: ExecutionOptions,
+        plot_opt: PlottingOptions,
+        ml_opt: argparse.Namespace,
+        logger: Logger | None = None,
     ) -> None:
-        self._opt = opt
+        self._fuzzy_opt = fuzzy_opt
+        self._fi_opt = fi_opt
+        self._exec_opt = exec_opt
+        self._plot_opt = plot_opt
         self._ml_opt = ml_opt
         self._logger = logger
-        self._local_importance_methods = self._opt.local_importance_methods
+        self._local_importance_methods = self._fi_opt.local_importance_methods
         self.importance_type = "local"  # local feature importance
 
     def interpret(self, models, ensemble_results, data):
@@ -43,7 +57,7 @@ class Fuzzy:
         X_train, X_test = data.X_train[0], data.X_test[0]
         self._logger.info(f"-------- Start of fuzzy interpretation logging--------")
         # Step 1: fuzzy feature selection to select top features for fuzzy interpretation
-        if self._opt.fuzzy_feature_selection:
+        if self._fuzzy_opt.fuzzy_feature_selection:
             # Select top features for fuzzy interpretation
             try:
                 topfeatures = self._select_features(ensemble_results["Majority Vote"])
@@ -62,12 +76,12 @@ class Fuzzy:
             # if error occurs, use Mean ensemble results
 
         # Step 2: Assign granularity to features e.g. low, medium, high categories
-        if self._opt.is_granularity:
+        if self._fuzzy_opt.is_granularity:
             X_train = self._fuzzy_granularity(X_train)
             X_test = self._fuzzy_granularity(X_test)
 
         # Step 3: Train and evaluate models
-        if self._opt.fuzzy_feature_selection or self._opt.is_granularity:
+        if self._fuzzy_opt.fuzzy_feature_selection or self._fuzzy_opt.is_granularity:
             # Update data object with new features
             data.X_train[0], data.X_test[0] = X_train, X_test
             # use parser to update ml_opt
@@ -80,18 +94,27 @@ class Fuzzy:
         # Step 5: Extract fuzzy rules from master dataframe
         fuzzy_rules_df = self._fuzzy_rule_extraction(master_importance_df)
         save_importance_results(
-            fuzzy_rules_df, None, "fuzzy", "fuzzy rules", self._opt, self._logger
+            feature_importance_df=fuzzy_rules_df,
+            model_type=None,
+            importance_type="fuzzy",
+            feature_importance_type="top contextual rules",
+            experiment_name=self._exec_opt.experiment_name,
+            fi_opt=self._fi_opt,
+            plot_opt=self._plot_opt,
+            logger=self._logger,
         )
 
         # Step 6: Identify the synergy of important features by context (e.g. target category:low, medium, high)
         df_contextual_rules = self._contextual_synergy_analysis(fuzzy_rules_df)
         save_importance_results(
-            df_contextual_rules,
-            None,
-            "fuzzy",
-            "top contextual rules",
-            self._opt,
-            self._logger,
+            feature_importance_df=df_contextual_rules,
+            model_type=None,
+            importance_type="fuzzy",
+            feature_importance_type="top contextual rules",
+            experiment_name=self._exec_opt.experiment_name,
+            fi_opt=self._fi_opt,
+            plot_opt=self._plot_opt,
+            logger=self._logger,
         )
 
         # local_importance_results = self._local_feature_importance(models, X, y)
@@ -108,11 +131,11 @@ class Fuzzy:
             list: List of top features.
         """
         self._logger.info(
-            f"Selecting top {self._opt.number_fuzzy_features} features..."
+            f"Selecting top {self._fuzzy_opt.number_fuzzy_features} features..."
         )
         fi = majority_vote_results.sort_values(by=0, ascending=False)
         # Select top n features for fuzzy interpretation
-        topfeatures = fi.index[: self._opt.number_fuzzy_features].tolist()
+        topfeatures = fi.index[: self._fuzzy_opt.number_fuzzy_features].tolist()
         return topfeatures
 
     def _fuzzy_granularity(self, X):
@@ -221,7 +244,7 @@ class Fuzzy:
                 "high": high_mf,
             }
         save_fuzzy_sets_plots(
-            universe, membership_functions, X.columns, self._opt, self._logger
+            universe, membership_functions, X.columns, self._fuzzy_opt, self._logger
         )
 
         # Create granular features using membership values
@@ -290,11 +313,11 @@ class Fuzzy:
         import skfuzzy as fuzz
 
         self._logger.info(f"Extracting fuzzy rules...")
-        if self._opt.problem_type == ProblemTypes.Regression:
+        if self._fuzzy_opt.problem_type == ProblemTypes.Regression:
             target = np.array(df[df.columns[-1]])
             centers, membership_matrix, _, _, _, _, _ = fuzz.cluster.cmeans(
                 data=target.reshape(1, -1),
-                c=self._opt.number_clusters,
+                c=self._fuzzy_opt.number_clusters,
                 m=2,  # Fuzziness parameter
                 error=0.005,
                 maxiter=1000,
@@ -307,11 +330,11 @@ class Fuzzy:
 
             cluster_averages = [
                 np.mean(target[primary_cluster_assignment == i])
-                for i in range(self._opt.number_clusters)
+                for i in range(self._fuzzy_opt.number_clusters)
             ]
 
             # Replace cluser numbers by cluster names based on their average values
-            cluster_names = self._opt.names_clusters
+            cluster_names = self._fuzzy_opt.names_clusters
 
             # Create a list of tuples where each tuple contains a cluster number and its corresponding average
             clusters = list(zip(cluster_numbers, cluster_averages))
@@ -340,7 +363,7 @@ class Fuzzy:
                 }
             )
 
-            save_target_clusters_plots(df_cluster, self._opt, self._logger)
+            save_target_clusters_plots(df_cluster, self._fuzzy_opt, self._logger)
             # Assign labels to target
             df.loc[:, df.columns[-1]] = primary_cluster_assignment
 
@@ -421,7 +444,7 @@ class Fuzzy:
         for category in fuzzy_rules_grouped[fuzzy_rules_grouped.columns[-2]].unique():
             top_rules[category] = fuzzy_rules_grouped[
                 fuzzy_rules_grouped[fuzzy_rules_grouped.columns[-2]] == category
-            ].head(self._opt.number_rules)
+            ].head(self._fuzzy_opt.number_rules)
 
         synergy_features = {}
         for category, rules in top_rules.items():
@@ -474,7 +497,7 @@ class Fuzzy:
                         if feature_importance_type == "LIME":
                             # Run LIME importance
                             lime_importance_df = calculate_lime_values(
-                                model[0], X, self._opt, self._logger
+                                model[0], X, self._fuzzy_opt, self._logger
                             )
                             # Normalise LIME coefficients between 0 and 1 (0 being the lowest impact and 1 being the highest impact)
                             lime_importance_df = lime_importance_df.abs()
@@ -493,7 +516,11 @@ class Fuzzy:
                         if feature_importance_type == "SHAP":
                             # Run SHAP
                             shap_df, shap_values = calculate_shap_values(
-                                model[0], X, value["type"], self._opt, self._logger
+                                model[0],
+                                X,
+                                value["type"],
+                                self._fuzzy_opt,
+                                self._logger,
                             )
                             # Normalise SHAP values between 0 and 1 (0 being the lowest impact and 1 being the highest impact)
                             shap_df = shap_df.abs()
