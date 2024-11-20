@@ -78,7 +78,9 @@ def build_configuration() -> (
             ],
             granular_features=st.session_state[ConfigStateKeys.GranularFeatures],
             num_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
-            cluster_names=st.session_state[ConfigStateKeys.ClusterNames],
+            cluster_names=st.session_state.get(ConfigStateKeys.ClusterNames, "").split(
+                ", "
+            ),
             num_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
             save_fuzzy_set_plots=plotting_options.save_plots,
             fuzzy_log_dir=log_dir(
