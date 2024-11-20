@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
@@ -13,6 +14,7 @@ from biofefi.options.file_paths import (
     fuzzy_plot_dir,
     fuzzy_result_dir,
 )
+from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.plotting import PlottingOptions
 from biofefi.utils.logging_utils import Logger
 from biofefi.utils.utils import log_options
@@ -143,53 +145,57 @@ def save_importance_results(
 
 
 def save_fuzzy_sets_plots(
-    universe, membership_functions, x_cols, opt: argparse.Namespace, logger
+    universe,
+    membership_functions,
+    x_cols,
+    exec_opt: ExecutionOptions,
+    plot_opt: PlottingOptions,
+    logger: Logger,
 ):
     # Plot the membership functions
-    if opt.save_fuzzy_set_plots:
-        logger.info(f"Saving fuzzy set plots ...")
-        save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / opt.experiment_name)
-        if not save_dir.exists():
-            save_dir.mkdir(exist_ok=True, parents=True)
+    logger.info(f"Saving fuzzy set plots ...")
+    save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / exec_opt.experiment_name)
+    if not save_dir.exists():
+        save_dir.mkdir(exist_ok=True, parents=True)
 
-        plt.style.use(opt.plot_colour_scheme)
-        for feature in x_cols:
-            fig, ax = plt.subplots(layout="constrained")
-            ax.plot(
-                universe[feature],
-                membership_functions[feature]["low"],
-                "r",
-                label="Small",
-            )
-            ax.plot(
-                universe[feature],
-                membership_functions[feature]["medium"],
-                "g",
-                label="Moderate",
-            )
-            ax.plot(
-                universe[feature],
-                membership_functions[feature]["high"],
-                "b",
-                label="Large",
-            )
-            ax.set_title(
-                f"{feature} Membership Functions",
-                family=opt.plot_font_family,
-            )
-            ax.set_xticklabels(
-                ax.get_xticklabels(),
-                rotation=opt.angle_rotate_xaxis_labels,
-                family=opt.plot_font_family,
-            )
-            ax.set_yticklabels(
-                ax.get_yticklabels(),
-                rotation=opt.angle_rotate_yaxis_labels,
-                family=opt.plot_font_family,
-            )
-            ax.legend(prop={"family": opt.plot_font_family})
-            fig.savefig(save_dir / f"{feature}.png")
-        plt.close()
+    plt.style.use(plot_opt.plot_colour_scheme)
+    for feature in x_cols:
+        fig, ax = plt.subplots(layout="constrained")
+        ax.plot(
+            universe[feature],
+            membership_functions[feature]["low"],
+            "r",
+            label="Small",
+        )
+        ax.plot(
+            universe[feature],
+            membership_functions[feature]["medium"],
+            "g",
+            label="Moderate",
+        )
+        ax.plot(
+            universe[feature],
+            membership_functions[feature]["high"],
+            "b",
+            label="Large",
+        )
+        ax.set_title(
+            f"{feature} Membership Functions",
+            family=plot_opt.plot_font_family,
+        )
+        ax.set_xticklabels(
+            ax.get_xticklabels(),
+            rotation=plot_opt.angle_rotate_xaxis_labels,
+            family=plot_opt.plot_font_family,
+        )
+        ax.set_yticklabels(
+            ax.get_yticklabels(),
+            rotation=plot_opt.angle_rotate_yaxis_labels,
+            family=plot_opt.plot_font_family,
+        )
+        ax.legend(prop={"family": plot_opt.plot_font_family})
+        fig.savefig(save_dir / f"{feature}.png")
+    plt.close()
 
 
 def save_target_clusters_plots(df_cluster, opt: argparse.Namespace, logger):

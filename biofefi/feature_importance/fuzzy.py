@@ -243,9 +243,15 @@ class Fuzzy:
                 "medium": medium_mf,
                 "high": high_mf,
             }
-        save_fuzzy_sets_plots(
-            universe, membership_functions, X.columns, self._fuzzy_opt, self._logger
-        )
+        if self._fuzzy_opt.save_fuzzy_set_plots:
+            save_fuzzy_sets_plots(
+                universe=universe,
+                membership_functions=membership_functions,
+                x_cols=X.columns,
+                exec_opt=self._exec_opt,
+                plot_opt=self._plot_opt,
+                logger=self._logger,
+            )
 
         # Create granular features using membership values
         new_df_features = []
