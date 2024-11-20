@@ -32,14 +32,14 @@ class Fuzzy:
         fi_opt: FeatureImportanceOptions,
         exec_opt: ExecutionOptions,
         plot_opt: PlottingOptions,
-        ml_opt: argparse.Namespace,
+        # ml_opt: argparse.Namespace,
         logger: Logger | None = None,
     ) -> None:
         self._fuzzy_opt = fuzzy_opt
         self._fi_opt = fi_opt
         self._exec_opt = exec_opt
         self._plot_opt = plot_opt
-        self._ml_opt = ml_opt
+        # self._ml_opt = ml_opt
         self._logger = logger
         self._local_importance_methods = self._fi_opt.local_importance_methods
         self.importance_type = "local"  # local feature importance
