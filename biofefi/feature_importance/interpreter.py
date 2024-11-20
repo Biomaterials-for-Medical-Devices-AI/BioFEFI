@@ -229,7 +229,7 @@ class Interpreter:
                     if ensemble_type == "Mean":
                         # Calculate mean of feature importance results
                         mean_results = calculate_ensemble_mean(
-                            feature_importance_results, self._fi_opt, self._logger
+                            feature_importance_results, self._logger
                         )
                         save_importance_results(
                             feature_importance_df=mean_results,
@@ -246,7 +246,7 @@ class Interpreter:
                     if ensemble_type == "Majority Vote":
                         # Calculate majority vote of feature importance results
                         majority_vote_results = calculate_ensemble_majorityvote(
-                            feature_importance_results, self._fi_opt, self._logger
+                            feature_importance_results, self._logger
                         )
                         save_importance_results(
                             feature_importance_df=majority_vote_results,
