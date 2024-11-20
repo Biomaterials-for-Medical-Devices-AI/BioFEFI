@@ -116,7 +116,7 @@ def cancel_pipeline(p: Process):
         p.terminate()
 
 
-def delete_dir(path: Path):
+def delete_directory(path: Path):
     """Delete the previous results from the log_dir
 
     Returns:
