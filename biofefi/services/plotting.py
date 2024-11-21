@@ -6,18 +6,9 @@ from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 import pandas as pd
 import shap
+import seaborn as sns
 
-from biofefi.options.fi import FeatureImportanceOptions
-from biofefi.options.file_paths import (
-    biofefi_experiments_base_dir,
-    fi_options_dir,
-    fi_plot_dir,
-    fi_result_dir,
-    fuzzy_result_dir,
-)
 from biofefi.options.plotting import PlottingOptions
-from biofefi.utils.logging_utils import Logger
-from biofefi.utils.utils import log_options
 
 
 def save_plot_options(path: Path, options: PlottingOptions):
@@ -147,24 +138,16 @@ def plot_lime_importance(
     Returns:
         Figure: The LIME plot.
     """
+    # Calculate most important features
+    most_importance_features = (
+        df.abs().mean().head(num_features_to_plot).index.to_list()
+    )
+
     plt.style.use(plot_opts.plot_colour_scheme)
     fig, ax = plt.subplots(layout="constrained")
 
-    # df.sort_values(by=0, ascending=False).head(num_features_to_plot).plot(
-    #     kind="bar",
-    #     legend=False,
-    #     ax=ax,
-    #     title=title,
-    #     ylabel="Importance",
-    # )
-    df.plot(
-        kind="box",
-        legend=False,
-        ax=ax,
-        title=title,
-        ylabel="Importance",
-    )
-    # rotate x-axis labels for better readability
+    sns.violinplot(data=df.loc[:, most_importance_features], fill=True, ax=ax)
+
     ax.set_xticklabels(
         ax.get_xticklabels(),
         rotation=plot_opts.angle_rotate_xaxis_labels,
@@ -176,6 +159,6 @@ def plot_lime_importance(
         family=plot_opts.plot_font_family,
     )
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
-    ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
-    ax.set_title(ax.get_title(), family=plot_opts.plot_font_family)
+    ax.set_ylabel("Importance", family=plot_opts.plot_font_family)
+    ax.set_title(title, family=plot_opts.plot_font_family)
     return fig
