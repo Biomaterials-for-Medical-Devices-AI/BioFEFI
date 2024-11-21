@@ -2,6 +2,7 @@ import json, dataclasses
 from pathlib import Path
 
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 import pandas as pd
 import shap
 
@@ -150,3 +151,48 @@ def save_importance_results(
         if not options_path.exists():
             options_path.mkdir(parents=True, exist_ok=True)
         log_options(options_path, fi_opt)
+
+
+def plot_inidvidual_importance(
+    df: pd.DataFrame,
+    plot_opts: PlottingOptions,
+    num_features_to_plot: int,
+    title: str,
+) -> Figure:
+    """Plot individual feature importance as a bar chart.
+
+    Args:
+        df (pd.DataFrame): The data to plot
+        plot_opts (PlottingOptions): The plotting options.
+        num_features_to_plot (int): The number of features to plot importance.
+        title (str): The title of the plot.
+
+    Returns:
+        Figure: The bar chart showing the top `num_features_to_plot`.
+    """
+
+    plt.style.use(plot_opts.plot_colour_scheme)
+    fig, ax = plt.subplots(layout="constrained")
+
+    df.sort_values(by=0, ascending=False).head(num_features_to_plot).plot(
+        kind="bar",
+        legend=False,
+        ax=ax,
+        title=title,
+        ylabel="Importance",
+    )
+    # rotate x-axis labels for better readability
+    ax.set_xticklabels(
+        ax.get_xticklabels(),
+        rotation=plot_opts.angle_rotate_xaxis_labels,
+        family=plot_opts.plot_font_family,
+    )
+    ax.set_yticklabels(
+        ax.get_yticklabels(),
+        rotation=plot_opts.angle_rotate_yaxis_labels,
+        family=plot_opts.plot_font_family,
+    )
+    ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
+    ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
+    ax.set_title(ax.get_title(), family=plot_opts.plot_font_family)
+    return fig
