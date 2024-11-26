@@ -214,10 +214,7 @@ class Interpreter:
                                 feature_importance_type
                             ] = lime_importance_df
 
-                        if (
-                            feature_importance_type == "SHAP"
-                            and value["type"] == "local"
-                        ):
+                        if feature_importance_type == "SHAP":
                             # Run SHAP
                             shap_df, shap_values = calculate_local_shap_values(
                                 model=model[0],

@@ -58,7 +58,11 @@ def plot_lime_importance(
     """
     # Calculate most important features
     most_importance_features = (
-        df.abs().mean().head(num_features_to_plot).index.to_list()
+        df.abs()
+        .mean()
+        .sort_values(ascending=False)
+        .head(num_features_to_plot)
+        .index.to_list()
     )
 
     plt.style.use(plot_opts.plot_colour_scheme)
@@ -145,8 +149,10 @@ def plot_global_shap_importance(
         title,
         family=plot_opts.plot_font_family,
     )
-
-    sns.barplot(data=shap_values.head(num_features_to_plot).T, fill=True, ax=ax)
+    plot_data = (
+        shap_values.sort_values(by=0, ascending=False).head(num_features_to_plot).T
+    )
+    sns.barplot(data=plot_data, fill=True, ax=ax)
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
     ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
     ax.set_xticklabels(
