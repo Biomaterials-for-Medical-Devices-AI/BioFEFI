@@ -5,8 +5,8 @@ from typing import Any
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 import pandas as pd
-import shap
 import seaborn as sns
+import shap
 
 from biofefi.options.plotting import PlottingOptions
 
@@ -79,4 +79,31 @@ def plot_lime_importance(
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
     ax.set_ylabel("Importance", family=plot_opts.plot_font_family)
     ax.set_title(title, family=plot_opts.plot_font_family)
+    return fig
+
+
+def plot_local_shap_importance(
+    shap_values: Any,
+    plot_opts: PlottingOptions,
+    num_features_to_plot: int,
+    title: str,
+) -> Figure:
+    # Plot bee swarm plot
+    fig, ax = plt.subplots(layout="constrained")
+    ax.set_title(
+        title,
+        family=plot_opts.plot_font_family,
+    )
+    shap.plots.beeswarm(shap_values, max_display=num_features_to_plot, show=False)
+    ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
+    ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
+    ax.set_xticklabels(
+        ax.get_xticklabels(),
+        family=plot_opts.plot_font_family,
+    )
+    ax.set_yticklabels(
+        ax.get_yticklabels(),
+        family=plot_opts.plot_font_family,
+    )
+
     return fig
