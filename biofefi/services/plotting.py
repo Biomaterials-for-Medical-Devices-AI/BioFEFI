@@ -100,6 +100,7 @@ def plot_local_shap_importance(
         Figure: The beeswarm plot of local SHAP values.
     """
     # Plot bee swarm plot
+    plt.style.use(plot_opts.plot_colour_scheme)
     fig, ax = plt.subplots(layout="constrained")
     ax.set_title(
         title,
@@ -137,21 +138,25 @@ def plot_global_shap_importance(
     Returns:
         Figure: The bar chart of global SHAP values.
     """
-    # Plot bee swarm plot
+    # Plot bar chart
+    plt.style.use(plot_opts.plot_colour_scheme)
     fig, ax = plt.subplots(layout="constrained")
     ax.set_title(
         title,
         family=plot_opts.plot_font_family,
     )
-    sns.barplot(data=shap_values.head(num_features_to_plot), fill=True, ax=ax)
+
+    sns.barplot(data=shap_values.head(num_features_to_plot).T, fill=True, ax=ax)
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
     ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
     ax.set_xticklabels(
         ax.get_xticklabels(),
+        rotation=plot_opts.angle_rotate_xaxis_labels,
         family=plot_opts.plot_font_family,
     )
     ax.set_yticklabels(
         ax.get_yticklabels(),
+        rotation=plot_opts.angle_rotate_yaxis_labels,
         family=plot_opts.plot_font_family,
     )
 
