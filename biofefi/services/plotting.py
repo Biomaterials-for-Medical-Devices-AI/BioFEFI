@@ -83,11 +83,22 @@ def plot_lime_importance(
 
 
 def plot_local_shap_importance(
-    shap_values: Any,
+    shap_values: shap.Explainer,
     plot_opts: PlottingOptions,
     num_features_to_plot: int,
     title: str,
 ) -> Figure:
+    """Plot a beeswarm plot of the local SHAP values.
+
+    Args:
+        shap_values (shap.Explainer): The SHAP explainer to produce the plot from.
+        plot_opts (PlottingOptions): The plotting options.
+        num_features_to_plot (int): The number of top features to plot.
+        title (str): The plot title.
+
+    Returns:
+        Figure: The beeswarm plot of local SHAP values.
+    """
     # Plot bee swarm plot
     fig, ax = plt.subplots(layout="constrained")
     ax.set_title(
@@ -95,6 +106,44 @@ def plot_local_shap_importance(
         family=plot_opts.plot_font_family,
     )
     shap.plots.beeswarm(shap_values, max_display=num_features_to_plot, show=False)
+    ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
+    ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
+    ax.set_xticklabels(
+        ax.get_xticklabels(),
+        family=plot_opts.plot_font_family,
+    )
+    ax.set_yticklabels(
+        ax.get_yticklabels(),
+        family=plot_opts.plot_font_family,
+    )
+
+    return fig
+
+
+def plot_global_shap_importance(
+    shap_values: pd.DataFrame,
+    plot_opts: PlottingOptions,
+    num_features_to_plot: int,
+    title: str,
+) -> Figure:
+    """Produce a bar chart of global SHAP values.
+
+    Args:
+        shap_values (pd.DataFrame): The `DataFrame` containing the global SHAP values.
+        plot_opts (PlottingOptions): The plotting options.
+        num_features_to_plot (int): The number of top features to plot.
+        title (str): The plot title.
+
+    Returns:
+        Figure: The bar chart of global SHAP values.
+    """
+    # Plot bee swarm plot
+    fig, ax = plt.subplots(layout="constrained")
+    ax.set_title(
+        title,
+        family=plot_opts.plot_font_family,
+    )
+    sns.barplot(data=shap_values.head(num_features_to_plot), fill=True, ax=ax)
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
     ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
     ax.set_xticklabels(
