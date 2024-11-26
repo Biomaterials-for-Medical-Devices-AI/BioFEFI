@@ -9,7 +9,6 @@ from biofefi.feature_importance.ensemble_methods import (
 )
 from biofefi.feature_importance.feature_importance_methods import (
     calculate_permutation_importance,
-    calculate_shap_values,
     calculate_lime_values,
 )
 from biofefi.machine_learning.data import TabularData
