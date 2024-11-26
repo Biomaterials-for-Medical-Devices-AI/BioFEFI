@@ -154,7 +154,7 @@ def plot_global_shap_importance(
     )
     sns.barplot(data=plot_data, fill=True, ax=ax)
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
-    ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
+    ax.set_ylabel("Abs. SHAP Importance", family=plot_opts.plot_font_family)
     ax.set_xticklabels(
         ax.get_xticklabels(),
         rotation=plot_opts.angle_rotate_xaxis_labels,
