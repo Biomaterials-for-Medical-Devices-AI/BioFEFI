@@ -13,7 +13,6 @@ def save_ml_options(path: Path, options: MachineLearningOptions):
         options (MachineLearningOptions): The options to save.
     """
     options_json = dataclasses.asdict(options)
-    print(options_json)
     with open(path, "w") as json_file:
         json.dump(options_json, json_file, indent=4)
 
