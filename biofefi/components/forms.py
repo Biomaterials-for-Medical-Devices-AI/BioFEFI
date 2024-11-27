@@ -105,7 +105,7 @@ def fi_options_form():
     )
 
     # global methods need to be set to perform ensemble methods
-    ensemble_is_disabled = not (use_permutation and use_shap)
+    ensemble_is_disabled = not (use_permutation or use_shap)
     if ensemble_is_disabled:
         st.warning(
             "You must configure at least one global feature importance method to perform ensemble methods.",
