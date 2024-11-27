@@ -67,6 +67,10 @@ def calculate_ensemble_majorityvote(feature_importance_results, logger: Logger):
             # Add the scaled values to the ensemble_mean dataframe
             ensemble_majorityvote = pd.concat([ensemble_majorityvote, result], axis=1)
 
+    # return early if no feature importances were empty
+    if ensemble_majorityvote.empty:
+        return ensemble_majorityvote
+
     # Rank the features based on their importance in each model and method
     rank_feature_importance = ensemble_majorityvote.rank(
         axis=0, method="dense", ascending=False
