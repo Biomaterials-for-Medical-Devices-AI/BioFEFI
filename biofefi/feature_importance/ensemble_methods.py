@@ -27,6 +27,10 @@ def calculate_ensemble_mean(feature_importance_results, logger: Logger):
             # Add the scaled values to the ensemble_mean dataframe
             ensemble_mean = pd.concat([ensemble_mean, result], axis=1)
 
+    # return early if no feature importances were empty
+    if ensemble_mean.empty:
+        return ensemble_mean
+
     # Calculate the mean of the feature importance values across models
     ensemble_mean = ensemble_mean.mean(axis=1).to_frame()
 
