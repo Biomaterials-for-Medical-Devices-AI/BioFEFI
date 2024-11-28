@@ -2,19 +2,10 @@ import json, dataclasses
 from pathlib import Path
 
 from biofefi.options.execution import ExecutionOptions
+from biofefi.options.fi import FeatureImportanceOptions
+from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.ml import MachineLearningOptions
-
-
-def save_execution_options(path: Path, options: ExecutionOptions):
-    """Save experiment execution options as a `json` file at the given path.
-
-    Args:
-        path (Path): The path to save the options.
-        options (ExecutionOptions): The options to save.
-    """
-    options_json = dataclasses.asdict(options)
-    with open(path, "w") as json_file:
-        json.dump(options_json, json_file)
+from biofefi.options.plotting import PlottingOptions
 
 
 def load_execution_options(path: Path) -> ExecutionOptions:
@@ -33,12 +24,21 @@ def load_execution_options(path: Path) -> ExecutionOptions:
     return options
 
 
-def save_ml_options(path: Path, options: MachineLearningOptions):
-    """Save plot options to a `json` file at the specified path.
+def save_options(
+    path: Path,
+    options: (
+        ExecutionOptions
+        | MachineLearningOptions
+        | PlottingOptions
+        | FeatureImportanceOptions
+        | FuzzyOptions
+    ),
+):
+    """Save options to a `json` file at the specified path.
 
     Args:
         path (Path): The path to the `json` file.
-        options (MachineLearningOptions): The options to save.
+        options (ExecutionOptions  |  MachineLearningOptions  |  PlottingOptions  |  FeatureImportanceOptions  |  FuzzyOptions): The options to save.
     """
     options_json = dataclasses.asdict(options)
     with open(path, "w") as json_file:

@@ -24,7 +24,7 @@ from biofefi.options.file_paths import (
 )
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
-from biofefi.services.configuration import load_execution_options, save_ml_options
+from biofefi.services.configuration import load_execution_options, save_options
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
@@ -162,7 +162,7 @@ if experiment_name:
             delete_directory(ml_plot_dir(biofefi_base_dir / experiment_name))
 
         config = build_configuration()
-        save_ml_options(ml_options_path(biofefi_base_dir / experiment_name), config[0])
+        save_options(ml_options_path(biofefi_base_dir / experiment_name), config[0])
         process = Process(target=pipeline, args=config, daemon=True)
         process.start()
         cancel_button = st.button("Cancel", on_click=cancel_pipeline, args=(process,))
