@@ -24,11 +24,14 @@ from biofefi.options.file_paths import (
 )
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
-from biofefi.services.configuration import load_execution_options, save_options
+from biofefi.services.configuration import (
+    load_execution_options,
+    save_options,
+    load_plot_options,
+)
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
-from biofefi.services.plotting import load_plot_options
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import cancel_pipeline, set_seed, delete_directory
 

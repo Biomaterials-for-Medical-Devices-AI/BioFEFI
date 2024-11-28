@@ -8,7 +8,6 @@ from biofefi.options.file_paths import (
 )
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.configuration import save_options
-from biofefi.services.plotting import save_plot_options
 from biofefi.utils.utils import create_directory
 
 
@@ -43,6 +42,6 @@ def create_experiment(
     """
     create_directory(save_dir)
     plot_file_path = plot_options_path(save_dir)
-    save_plot_options(plot_file_path, plotting_options)
+    save_options(plot_file_path, plotting_options)
     execution_file_path = execution_options_path(save_dir)
     save_options(execution_file_path, execution_options)

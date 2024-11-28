@@ -32,7 +32,7 @@ from biofefi.options.file_paths import (
     log_dir,
     ml_model_dir,
 )
-from biofefi.services.plotting import load_plot_options
+from biofefi.services.configuration import load_plot_options
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import set_seed, cancel_pipeline
 from biofefi.components.experiments import (
@@ -83,10 +83,13 @@ def build_configuration() -> (
             ),
             number_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
             save_fuzzy_set_plots=plotting_options.save_plots,
-            fuzzy_log_dir=log_dir(
-                biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
-            )
-            / "fuzzy",
+            fuzzy_log_dir=str(
+                log_dir(
+                    biofefi_base_dir
+                    / st.session_state[ViewExperimentKeys.ExperimentName]
+                )
+                / "fuzzy"
+            ),
         )
 
     # Set up feature importance options
@@ -102,10 +105,12 @@ def build_configuration() -> (
         ],
         shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
         save_feature_importance_plots=plotting_options.save_plots,
-        fi_log_dir=log_dir(
-            biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
-        )
-        / "fi",
+        fi_log_dir=str(
+            log_dir(
+                biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
+            )
+            / "fi"
+        ),
         save_feature_importance_options=st.session_state[
             ConfigStateKeys.SaveFeatureImportanceOptions
         ],

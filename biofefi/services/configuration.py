@@ -34,6 +34,22 @@ def load_execution_options(path: Path) -> ExecutionOptions:
     return options
 
 
+def load_plot_options(path: Path) -> PlottingOptions:
+    """Load plotting options from the given path.
+    The path will be to a `json` file containing the plot options.
+
+    Args:
+        path (Path): The path the `json` file containing the options.
+
+    Returns:
+        PlottingOptions: The plotting options.
+    """
+    with open(path, "r") as json_file:
+        options_json = json.load(json_file)
+    options = PlottingOptions(**options_json)
+    return options
+
+
 def save_options(path: Path, options: T):
     """Save options to a `json` file at the specified path.
 
