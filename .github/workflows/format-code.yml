@@ -24,6 +24,8 @@ jobs:
         with:
           submodules: 'recursive'
           ref: ${{ github.ref }}
+      - name: Install poetry
+        run: pipx install poetry
       - name: Setup Python
         uses: actions/setup-python@v5.3.0
         with:
@@ -32,5 +34,5 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run Flake8
-        run: flake8 biofefi
+        run: poetry run flake8 biofefi
 
