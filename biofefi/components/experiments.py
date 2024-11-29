@@ -3,7 +3,6 @@ from pathlib import Path
 import streamlit as st
 
 from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
-from biofefi.options.file_paths import biofefi_experiments_base_dir
 
 
 def experiment_selector(options: list) -> str:
