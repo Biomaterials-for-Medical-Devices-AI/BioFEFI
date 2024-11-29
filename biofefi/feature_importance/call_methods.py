@@ -1,5 +1,4 @@
 import argparse
-import os
 import pickle
 
 import matplotlib.pyplot as plt
@@ -17,7 +16,6 @@ from biofefi.options.file_paths import (
     fuzzy_plot_dir,
     fuzzy_result_dir,
 )
-from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.plotting import PlottingOptions
 from biofefi.utils.logging_utils import Logger
 from biofefi.utils.utils import log_options
@@ -37,7 +35,7 @@ def load_model(model_name, folder):
 
 
 def load_data(opt: argparse.Namespace):
-    raise NotImplementedError(f"Funtion load_data is not implemented")
+    raise NotImplementedError("Funtion load_data is not implemented")
 
 
 def save_importance_results(
@@ -160,7 +158,7 @@ def save_fuzzy_sets_plots(
     logger: Logger,
 ):
     # Plot the membership functions
-    logger.info(f"Saving fuzzy set plots ...")
+    logger.info("Saving fuzzy set plots ...")
     save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / exec_opt.experiment_name)
     if not save_dir.exists():
         save_dir.mkdir(exist_ok=True, parents=True)
@@ -209,7 +207,7 @@ def save_target_clusters_plots(
     df_cluster, exec_opt: ExecutionOptions, plot_opt: PlottingOptions, logger: Logger
 ):
     # Plot the target clusters
-    logger.info(f"Saving target clusters plot ...")
+    logger.info("Saving target clusters plot ...")
     save_dir = fuzzy_plot_dir(biofefi_experiments_base_dir() / exec_opt.experiment_name)
     if not save_dir.exists():
         save_dir.mkdir(exist_ok=True, parents=True)
@@ -232,5 +230,5 @@ def save_target_clusters_plots(
         "Target Clusters",
         family=plot_opt.plot_font_family,
     )
-    fig.savefig(save_dir / f"target_clusters.png")
+    fig.savefig(save_dir / "target_clusters.png")
     plt.close()
