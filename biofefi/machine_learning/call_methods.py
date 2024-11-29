@@ -1,8 +1,9 @@
 import argparse
 import os
+
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
+import seaborn as sns
 
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import ProblemTypes

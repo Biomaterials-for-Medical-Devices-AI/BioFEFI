@@ -1,4 +1,5 @@
 import streamlit as st
+
 from biofefi.components.images.logos import header_logo, sidebar_logo
 
 st.set_page_config(

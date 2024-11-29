@@ -8,8 +8,8 @@ from biofefi.feature_importance.ensemble_methods import (
     calculate_ensemble_mean,
 )
 from biofefi.feature_importance.feature_importance_methods import (
-    calculate_permutation_importance,
     calculate_lime_values,
+    calculate_permutation_importance,
 )
 from biofefi.machine_learning.data import TabularData
 from biofefi.options.execution import ExecutionOptions

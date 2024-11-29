@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
+
 import streamlit as st
+
 from biofefi.components.configuration import execution_options_box, plot_options_box
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.enums import (

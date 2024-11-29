@@ -1,9 +1,12 @@
 import argparse
-import pickle
 import os
+import pickle
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import shap
+
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.file_paths import (
@@ -18,7 +21,6 @@ from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.plotting import PlottingOptions
 from biofefi.utils.logging_utils import Logger
 from biofefi.utils.utils import log_options
-import shap
 
 
 def load_model(model_name, folder):

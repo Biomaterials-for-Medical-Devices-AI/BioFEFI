@@ -1,20 +1,18 @@
+import os
 from multiprocessing import Process
+
+import streamlit as st
+
+from biofefi.components.experiments import experiment_selector, model_selector
+from biofefi.components.forms import fi_options_form
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
-from biofefi.components.forms import fi_options_form
-from biofefi.options.execution import ExecutionOptions
-from biofefi.options.fi import FeatureImportanceOptions
-from biofefi.options.plotting import PlottingOptions
-from biofefi.services.configuration import load_execution_options, save_options
-from biofefi.services.experiments import get_experiments
-from biofefi.services.logs import get_logs
-from biofefi.services.ml_models import load_models_to_explain
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
-from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
-
+from biofefi.options.execution import ExecutionOptions
+from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     execution_options_path,
@@ -23,24 +21,21 @@ from biofefi.options.file_paths import (
     fuzzy_options_path,
     fuzzy_plot_dir,
     log_dir,
+    ml_model_dir,
     plot_options_path,
 )
-
-from biofefi.options.file_paths import (
-    fi_plot_dir,
-    fuzzy_plot_dir,
-    log_dir,
-    ml_model_dir,
+from biofefi.options.fuzzy import FuzzyOptions
+from biofefi.options.plotting import PlottingOptions
+from biofefi.services.configuration import (
+    load_execution_options,
+    load_plot_options,
+    save_options,
 )
-from biofefi.services.configuration import load_plot_options
+from biofefi.services.experiments import get_experiments
+from biofefi.services.logs import get_logs
+from biofefi.services.ml_models import load_models_to_explain
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import set_seed, cancel_pipeline
-from biofefi.components.experiments import (
-    experiment_selector,
-    model_selector,
-)
-import streamlit as st
-import os
+from biofefi.utils.utils import cancel_pipeline, set_seed
 
 
 def build_configuration() -> (

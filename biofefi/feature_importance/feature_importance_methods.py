@@ -1,10 +1,11 @@
+import warnings
 from typing import Any
-from sklearn.base import is_classifier
+
 import pandas as pd
 import shap
-from sklearn.inspection import permutation_importance
 from lime.lime_tabular import LimeTabularExplainer
-import warnings
+from sklearn.base import is_classifier
+from sklearn.inspection import permutation_importance
 
 from biofefi.options.enums import ProblemTypes
 from biofefi.options.fi import FeatureImportanceOptions

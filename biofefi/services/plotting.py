@@ -1,12 +1,13 @@
-import json, dataclasses
+import dataclasses
+import json
 from pathlib import Path
 from typing import Any
 
-from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
 import pandas as pd
 import seaborn as sns
 import shap
+from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 
 from biofefi.options.plotting import PlottingOptions
 

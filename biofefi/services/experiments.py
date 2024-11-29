@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,

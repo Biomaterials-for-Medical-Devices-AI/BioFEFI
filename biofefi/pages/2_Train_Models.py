@@ -1,6 +1,8 @@
-from multiprocessing import Process
 import os
+from multiprocessing import Process
+
 import streamlit as st
+
 from biofefi.components.experiments import experiment_selector
 from biofefi.components.forms import ml_options_form
 from biofefi.components.images.logos import sidebar_logo
@@ -8,32 +10,29 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import (
-    ConfigStateKeys,
-    PlotOptionKeys,
-)
+from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     execution_options_path,
     log_dir,
     ml_model_dir,
+    ml_options_path,
     ml_plot_dir,
     plot_options_path,
-    ml_options_path,
 )
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.configuration import (
     load_execution_options,
-    save_options,
     load_plot_options,
+    save_options,
 )
 from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import save_model
 from biofefi.utils.logging_utils import Logger, close_logger
-from biofefi.utils.utils import cancel_pipeline, set_seed, delete_directory
+from biofefi.utils.utils import cancel_pipeline, delete_directory, set_seed
 
 
 def build_configuration() -> (

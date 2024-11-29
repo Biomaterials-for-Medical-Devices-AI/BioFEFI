@@ -1,17 +1,17 @@
 import argparse
+
 import pandas as pd
 
-from biofefi.feature_importance.call_methods import save_importance_results
-from biofefi.feature_importance.feature_importance_methods import (
-    calculate_shap_values,
-    calculate_lime_values,
-)
-from biofefi.machine_learning import train
 from biofefi.feature_importance.call_methods import (
-    save_importance_results,
     save_fuzzy_sets_plots,
+    save_importance_results,
     save_target_clusters_plots,
 )
+from biofefi.feature_importance.feature_importance_methods import (
+    calculate_lime_values,
+    calculate_shap_values,
+)
+from biofefi.machine_learning import train
 from biofefi.options.enums import ProblemTypes
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
@@ -139,9 +139,10 @@ class Fuzzy:
         Returns:
             pd.DataFrame: Features with granularity.
         """
+        import warnings
+
         import numpy as np
         import skfuzzy as fuzz
-        import warnings
 
         # Suppress all warnings
         warnings.filterwarnings("ignore")
