@@ -42,7 +42,8 @@ def build_configuration() -> (
 
     Returns:
         tuple[MachineLearningOptions, ExecutionOptions, PlottingOptions, str]:
-        The machine learning options, general execution options, plotting options, experiment name
+        The machine learning options, general execution options, plotting options,
+        experiment name
     """
 
     path_to_plot_opts = plot_options_path(
@@ -137,12 +138,16 @@ sidebar_logo()
 st.header("Train Models")
 st.write(
     """
-    This page is where you can train new machine learning models. First, you select an experiment
-    to add your data. Then, you can give a name to your dependent variable. This will appear on your
-    plots. Next, you choose a CSV containing your data and specify how you wish it to be standardised
-    and spit into training and test data. After that, you select the type of problem you are trying
-    to solve, followed by the models you wish to train - you may choose more than one. Finally,
-    you choose which outputs to save and hit **"Run Training"**, and wait for the pipeline to finish.
+    This page is where you can train new machine learning models.
+    First, you select an experiment to add your data.
+    Then, you can give a name to your dependent variable. This will appear on your
+    plots.
+    Next, you choose a CSV containing your data and specify how you wish it
+    to be standardised and spit into training and test data.
+    After that, you select the type of problem you are trying to solve,
+    followed by the models you wish to train - you may choose more than one.
+    Finally, you choose which outputs to save and hit **"Run Training"**,
+    and wait for the pipeline to finish.
     """
 )
 
@@ -184,5 +189,6 @@ if experiment_name:
 
     elif not st.session_state[ConfigStateKeys.RerunML]:
         st.success(
-            "You have chosen not to rerun the machine learning experiments. You can proceed to feature importance analysis."
+            "You have chosen not to rerun the machine learning experiments. "
+            "You can proceed to feature importance analysis."
         )
