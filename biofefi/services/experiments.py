@@ -35,7 +35,8 @@ def create_experiment(
     plotting_options: PlottingOptions,
     execution_options: ExecutionOptions,
 ):
-    """Create an experiment on disk with it's global plotting options saved as a `json` file.
+    """Create an experiment on disk with it's global plotting options
+    saved as a `json` file.
 
     Args:
         save_dir (Path): The path to where the experiment will be created.
