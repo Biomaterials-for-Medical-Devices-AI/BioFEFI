@@ -1,9 +1,7 @@
 name: Code Quality Check
 
 on:
-  pull_request:
-    paths:
-      - "**.py"
+  - pull_request
 
 jobs:
   format_python_code:
