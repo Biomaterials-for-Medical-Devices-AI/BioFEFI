@@ -3,7 +3,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from biofefi.options.choices import PROBLEM_TYPES, SVM_KERNELS
+from biofefi.options.choices import SVM_KERNELS
 from biofefi.options.enums import (
     ConfigStateKeys,
     ExecutionStateKeys,
@@ -306,7 +306,7 @@ def ml_options_form():
         else:
             st.session_state[ConfigStateKeys.RerunML] = True
 
-    except:
+    except Exception:
         st.session_state[ConfigStateKeys.RerunML] = True
 
     if st.session_state[ConfigStateKeys.RerunML]:
