@@ -1,4 +1,3 @@
-import argparse
 import os
 
 import matplotlib.pyplot as plt
@@ -8,7 +7,6 @@ import seaborn as sns
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import ProblemTypes
 from biofefi.options.execution import ExecutionOptions
-from biofefi.options.file_paths import ml_plot_dir
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
 
@@ -33,7 +31,8 @@ def plot_scatter(
         dependent_variable (str): The name of the dependent variable.
         model_name (str): Name of the model.
         directory (str): The directory to save the plot.
-        plot_opts (PlottingOptions | None, optional): Options for styling the plot. Defaults to None.
+        plot_opts (PlottingOptions | None, optional):
+        Options for styling the plot. Defaults to None.
     """
 
     # Create a scatter plot using Seaborn
