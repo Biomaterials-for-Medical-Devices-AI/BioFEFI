@@ -35,6 +35,10 @@ flake8 = "^7.1.1"
 isort = "^5.13.2"
 flake8-isort = "^6.1.1"
 
+[tool.isort]
+profile = "black"
+line_length = 88
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
