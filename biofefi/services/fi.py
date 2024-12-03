@@ -1,10 +1,21 @@
 from typing import Any
-
+import os
 import pandas as pd
 import shap
 from pathlib import Path
 import json
 from biofefi.utils.logging_utils import Logger
+from biofefi.utils.utils import delete_directory
+from biofefi.options.file_paths import (
+    log_dir,
+    fi_plot_dir,
+    fi_result_dir,
+    fi_options_dir,
+    fuzzy_plot_dir,
+    fuzzy_result_dir,
+    fi_options_path,
+    fuzzy_options_path,
+)
 
 
 def calculate_global_shap_values(
@@ -81,16 +92,15 @@ def calculate_local_shap_values(
     return shap_df, shap_values
 
 
-def load_fi_options(path: Path) -> dict:    
+def load_fi_options(path: Path) -> dict:
     """Load feature importance options.
-    
+
     Args:
         path (Path): The path to the feature importance options file.
-    
+
     Returns:
         dict: The feature importance options.
     """
-
 
     try:
         with open(path, "r") as file:
@@ -99,3 +109,29 @@ def load_fi_options(path: Path) -> dict:
         fi_options = None
 
     return fi_options
+
+
+def delete_previous_FI_results(experiment_path: Path):
+    """Delete previous feature importance results.
+
+    Args:
+        experiment_path (Path): The path to the experiment.
+    """
+    if os.path.exists(fi_plot_dir(experiment_path)):
+        delete_directory(fi_plot_dir(experiment_path))
+    if os.path.exists(fi_result_dir(experiment_path)):
+        delete_directory(fi_result_dir(experiment_path))
+    if os.path.exists(fi_options_dir(experiment_path)):
+        delete_directory(fi_options_dir(experiment_path))
+    if os.path.exists(fuzzy_plot_dir(experiment_path)):
+        delete_directory(fuzzy_plot_dir(experiment_path))
+    if os.path.exists(fuzzy_result_dir(experiment_path)):
+        delete_directory(fuzzy_result_dir(experiment_path))
+    if os.path.exists(fuzzy_options_path(experiment_path)):
+        delete_directory(fuzzy_options_path(experiment_path))
+    if os.path.exists(fi_options_path(experiment_path)):
+        delete_directory(fi_options_path(experiment_path))
+    if os.path.exists(log_dir(experiment_path) / "fi"):
+        delete_directory(log_dir(experiment_path) / "fi")
+    if os.path.exists(log_dir(experiment_path) / "fuzzy"):
+        delete_directory(log_dir(experiment_path) / "fuzzy")
