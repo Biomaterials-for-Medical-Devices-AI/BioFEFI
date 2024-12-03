@@ -293,7 +293,7 @@ if experiment_name:
                 # save Fuzzy options if configured
                 if config[0] is not None:
                     fuzzy_options_file = fuzzy_options_path(base_dir / experiment_name)
-                    save_options(fi_options_file, config[0])
+                    save_options(fuzzy_options_file, config[0])
 
                 process = Process(target=pipeline, args=config, daemon=True)
                 process.start()
