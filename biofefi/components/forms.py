@@ -274,14 +274,14 @@ def fi_options_form():
         "Save feature importance options",
         help="Save the selected configuration of feature importance methods.",
         key=ConfigStateKeys.SaveFeatureImportanceOptions,
-        value=True
+        value=True,
     )
 
     st.toggle(
         "Save feature importance results",
         help="Store the results from feature importance computations.",
         key=ConfigStateKeys.SaveFeatureImportanceResults,
-        value=True
+        value=True,
     )
 
 
