@@ -55,14 +55,20 @@ if experiment_name:
         st.session_state[ConfigStateKeys.MLLogBox] = get_logs(
             log_dir(experiment_path) / "ml"
         )
+        log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
+    except NotADirectoryError:
+        pass
+    try:
         st.session_state[ConfigStateKeys.FILogBox] = get_logs(
             log_dir(experiment_path) / "fi"
         )
+        log_box(box_title="Feature Importance Logs", key=ConfigStateKeys.FILogBox)
+    except NotADirectoryError:
+        pass
+    try:
         st.session_state[ConfigStateKeys.FuzzyLogBox] = get_logs(
             log_dir(experiment_path) / "fuzzy"
         )
-        log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
-        log_box(box_title="Feature Importance Logs", key=ConfigStateKeys.FILogBox)
         log_box(box_title="Fuzzy FI Logs", key=ConfigStateKeys.FuzzyLogBox)
     except NotADirectoryError:
         pass
