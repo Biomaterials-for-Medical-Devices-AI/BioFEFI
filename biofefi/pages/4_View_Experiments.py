@@ -14,6 +14,7 @@ from biofefi.options.file_paths import (
     log_dir,
     ml_plot_dir,
 )
+from biofefi.services.experiments import get_experiments
 from biofefi.services.logs import get_logs
 
 st.set_page_config(
@@ -35,16 +36,11 @@ st.write(
     """
 )
 
-# Get the base directory of all experiments
-base_dir = biofefi_experiments_base_dir()
-choices = os.listdir(base_dir)
-# Filter out hidden files and directories
-choices = filter(lambda x: not x.startswith("."), choices)
-# Filter out files
-choices = filter(lambda x: os.path.isdir(os.path.join(base_dir, x)), choices)
 
+choices = get_experiments()
 experiment_name = experiment_selector(choices)
 if experiment_name:
+    base_dir = biofefi_experiments_base_dir()
     experiment_path = base_dir / experiment_name
     ml_plots = ml_plot_dir(experiment_path)
     if ml_plots.exists():
