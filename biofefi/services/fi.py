@@ -1,21 +1,23 @@
-from typing import Any
+import json
 import os
+from pathlib import Path
+from typing import Any
+
 import pandas as pd
 import shap
-from pathlib import Path
-import json
-from biofefi.utils.logging_utils import Logger
-from biofefi.utils.utils import delete_directory
+
 from biofefi.options.file_paths import (
-    log_dir,
+    fi_options_dir,
+    fi_options_path,
     fi_plot_dir,
     fi_result_dir,
-    fi_options_dir,
+    fuzzy_options_path,
     fuzzy_plot_dir,
     fuzzy_result_dir,
-    fi_options_path,
-    fuzzy_options_path,
+    log_dir,
 )
+from biofefi.utils.logging_utils import Logger
+from biofefi.utils.utils import delete_directory
 
 
 def calculate_global_shap_values(
@@ -106,6 +108,24 @@ def load_fi_options(path: Path) -> dict:
         with open(path, "r") as file:
             fi_options = json.load(file)
     except FileNotFoundError:
+        fi_options = None
+
+    return fi_options
+
+
+def find_previous_fi_results(experiment_path: Path) -> tuple[dict, dict]:
+    """Find previous feature importance results.
+
+    Args:
+        experiment_path (Path): The path to the experiment.
+
+    Returns:
+        tuple[dict, dict]: The feature importance options and results.
+    """
+    try:
+        fi_options = load_fi_options(fi_options_path(experiment_path))
+
+    except Exception:
         fi_options = None
 
     return fi_options
