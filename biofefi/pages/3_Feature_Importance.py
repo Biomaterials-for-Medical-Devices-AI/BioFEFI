@@ -32,9 +32,9 @@ from biofefi.services.configuration import (
     save_options,
 )
 from biofefi.services.experiments import get_experiments
+from biofefi.services.fi import delete_previous_FI_results, find_previous_fi_results
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models_to_explain
-from biofefi.services.fi import load_fi_options, delete_previous_FI_results
 from biofefi.utils.logging_utils import Logger, close_logger
 from biofefi.utils.utils import cancel_pipeline, set_seed
 
@@ -241,25 +241,18 @@ base_dir = biofefi_experiments_base_dir()
 
 if experiment_name:
 
-    try:
-        fi_options = load_fi_options(
-            fi_options_path(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
+    fi_options = find_previous_fi_results(
+        biofefi_experiments_base_dir() / experiment_name
+    )
+
+    if fi_options:
+        st.warning("You have run feature importance in this experiment previously.")
+        st.checkbox(
+            "Would you like to rerun feature importance? This will overwrite the existing results.",
+            value=True,
+            key=ConfigStateKeys.RerunFI,
         )
-
-        if fi_options:
-            st.warning("You have run feature importance in this experiment previously.")
-            st.checkbox(
-                "Would you like to rerun feature importance? This will overwrite the existing results.",
-                value=True,
-                key=ConfigStateKeys.RerunFI,
-            )
-        else:
-            st.session_state[ConfigStateKeys.RerunFI] = True
-
-    except Exception:
+    else:
         st.session_state[ConfigStateKeys.RerunFI] = True
 
     if st.session_state[ConfigStateKeys.RerunFI]:
