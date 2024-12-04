@@ -1,22 +1,9 @@
-import os
-from pathlib import Path
 from typing import Any
 
 import pandas as pd
 import shap
 
-from biofefi.options.file_paths import (
-    fi_options_dir,
-    fi_options_path,
-    fi_plot_dir,
-    fi_result_dir,
-    fuzzy_options_path,
-    fuzzy_plot_dir,
-    fuzzy_result_dir,
-    log_dir,
-)
 from biofefi.utils.logging_utils import Logger
-from biofefi.utils.utils import delete_directory
 
 
 def calculate_global_shap_values(
@@ -91,29 +78,3 @@ def calculate_local_shap_values(
 
     # Return the DataFrame
     return shap_df, shap_values
-
-
-def delete_previous_FI_results(experiment_path: Path):
-    """Delete previous feature importance results.
-
-    Args:
-        experiment_path (Path): The path to the experiment.
-    """
-    if os.path.exists(fi_plot_dir(experiment_path)):
-        delete_directory(fi_plot_dir(experiment_path))
-    if os.path.exists(fi_result_dir(experiment_path)):
-        delete_directory(fi_result_dir(experiment_path))
-    if os.path.exists(fi_options_dir(experiment_path)):
-        delete_directory(fi_options_dir(experiment_path))
-    if os.path.exists(fuzzy_plot_dir(experiment_path)):
-        delete_directory(fuzzy_plot_dir(experiment_path))
-    if os.path.exists(fuzzy_result_dir(experiment_path)):
-        delete_directory(fuzzy_result_dir(experiment_path))
-    if os.path.exists(fuzzy_options_path(experiment_path)):
-        delete_directory(fuzzy_options_path(experiment_path))
-    if os.path.exists(fi_options_path(experiment_path)):
-        delete_directory(fi_options_path(experiment_path))
-    if os.path.exists(log_dir(experiment_path) / "fi"):
-        delete_directory(log_dir(experiment_path) / "fi")
-    if os.path.exists(log_dir(experiment_path) / "fuzzy"):
-        delete_directory(log_dir(experiment_path) / "fuzzy")

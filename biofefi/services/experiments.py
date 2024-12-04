@@ -17,7 +17,7 @@ from biofefi.options.file_paths import (
 )
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.configuration import save_options
-from biofefi.utils.utils import create_directory
+from biofefi.utils.utils import create_directory, delete_directory
 
 
 def get_experiments() -> list[str]:
@@ -87,3 +87,27 @@ def find_previous_fi_results(experiment_path: Path) -> bool:
             break
 
     return previous_results
+
+
+def delete_previous_FI_results(experiment_path: Path):
+    """Delete previous feature importance results.
+
+    Args:
+        experiment_path (Path): The path to the experiment.
+    """
+
+    directories = [
+        fi_plot_dir(experiment_path),
+        fi_result_dir(experiment_path),
+        fi_options_dir(experiment_path),
+        fuzzy_plot_dir(experiment_path),
+        fuzzy_result_dir(experiment_path),
+        fuzzy_options_path(experiment_path),
+        fi_options_path(experiment_path),
+        log_dir(experiment_path) / "fi",
+        log_dir(experiment_path) / "fuzzy",
+    ]
+
+    for directory in directories:
+        if directory.exists():
+            delete_directory(directory)
