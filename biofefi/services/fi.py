@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 from typing import Any
@@ -92,25 +91,6 @@ def calculate_local_shap_values(
 
     # Return the DataFrame
     return shap_df, shap_values
-
-
-def load_fi_options(path: Path) -> dict:
-    """Load feature importance options.
-
-    Args:
-        path (Path): The path to the feature importance options file.
-
-    Returns:
-        dict: The feature importance options.
-    """
-
-    try:
-        with open(path, "r") as file:
-            fi_options = json.load(file)
-    except FileNotFoundError:
-        fi_options = None
-
-    return fi_options
 
 
 def find_previous_fi_results(experiment_path: Path) -> tuple[dict, dict]:

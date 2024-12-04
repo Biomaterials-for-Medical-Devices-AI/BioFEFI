@@ -61,3 +61,22 @@ def save_options(path: Path, options: T):
     options_json = dataclasses.asdict(options)
     with open(path, "w") as json_file:
         json.dump(options_json, json_file, indent=4)
+
+
+def load_fi_options(path: Path) -> FeatureImportanceOptions:
+    """Load feature importance options.
+
+    Args:
+        path (Path): The path to the feature importance options file.
+
+    Returns:
+        dict: The feature importance options.
+    """
+
+    try:
+        with open(path, "r") as file:
+            fi_options = json.load(file)
+    except FileNotFoundError:
+        fi_options = None
+
+    return fi_options
