@@ -31,8 +31,11 @@ from biofefi.services.configuration import (
     load_plot_options,
     save_options,
 )
-from biofefi.services.experiments import get_experiments
-from biofefi.services.fi import delete_previous_FI_results, find_previous_fi_results
+from biofefi.services.experiments import (
+    delete_previous_FI_results,
+    find_previous_fi_results,
+    get_experiments,
+)
 from biofefi.services.logs import get_logs
 from biofefi.services.ml_models import load_models_to_explain
 from biofefi.utils.logging_utils import Logger, close_logger
@@ -258,9 +261,6 @@ if experiment_name:
     if st.session_state[ConfigStateKeys.RerunFI]:
 
         st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
-
-        data_choices = os.listdir(base_dir / experiment_name)
-        data_choices = filter(lambda x: x.endswith(".csv"), data_choices)
 
         model_choices = os.listdir(ml_model_dir(base_dir / experiment_name))
         model_choices = [x for x in model_choices if x.endswith(".pkl")]
