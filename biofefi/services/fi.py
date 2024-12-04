@@ -93,24 +93,6 @@ def calculate_local_shap_values(
     return shap_df, shap_values
 
 
-def find_previous_fi_results(experiment_path: Path) -> tuple[dict, dict]:
-    """Find previous feature importance results.
-
-    Args:
-        experiment_path (Path): The path to the experiment.
-
-    Returns:
-        tuple[dict, dict]: The feature importance options and results.
-    """
-    try:
-        fi_options = load_fi_options(fi_options_path(experiment_path))
-
-    except Exception:
-        fi_options = None
-
-    return fi_options
-
-
 def delete_previous_FI_results(experiment_path: Path):
     """Delete previous feature importance results.
 

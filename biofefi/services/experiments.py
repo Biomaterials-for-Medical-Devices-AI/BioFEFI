@@ -5,6 +5,14 @@ from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     execution_options_path,
+    fi_options_dir,
+    fi_options_path,
+    fi_plot_dir,
+    fi_result_dir,
+    fuzzy_options_path,
+    fuzzy_plot_dir,
+    fuzzy_result_dir,
+    log_dir,
     plot_options_path,
 )
 from biofefi.options.plotting import PlottingOptions
@@ -47,3 +55,35 @@ def create_experiment(
     save_options(plot_file_path, plotting_options)
     execution_file_path = execution_options_path(save_dir)
     save_options(execution_file_path, execution_options)
+
+
+def find_previous_fi_results(experiment_path: Path) -> bool:
+    """Find previous feature importance results.
+
+    Args:
+        experiment_path (Path): The path to the experiment.
+
+    Returns:
+        bool: whether previous experiments exist or not.
+    """
+
+    previous_results = False
+
+    directories = [
+        fi_plot_dir(experiment_path),
+        fi_result_dir(experiment_path),
+        fi_options_dir(experiment_path),
+        fuzzy_plot_dir(experiment_path),
+        fuzzy_result_dir(experiment_path),
+        fuzzy_options_path(experiment_path),
+        fi_options_path(experiment_path),
+        log_dir(experiment_path) / "fi",
+        log_dir(experiment_path) / "fuzzy",
+    ]
+
+    for directory in directories:
+        if directory.exists():
+            previous_results = True
+            break
+
+    return previous_results
