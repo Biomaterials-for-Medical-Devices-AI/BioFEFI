@@ -63,14 +63,14 @@ def save_options(path: Path, options: T):
         json.dump(options_json, json_file, indent=4)
 
 
-def load_fi_options(path: Path) -> FeatureImportanceOptions:
+def load_fi_options(path: Path) -> FeatureImportanceOptions | None:
     """Load feature importance options.
 
     Args:
         path (Path): The path to the feature importance options file.
 
     Returns:
-        FeatureImportanceOptions: The feature importance options.
+        FeatureImportanceOptions | None: The feature importance options.
     """
 
     try:
@@ -78,6 +78,8 @@ def load_fi_options(path: Path) -> FeatureImportanceOptions:
             fi_json_options = json.load(file)
             fi_options = FeatureImportanceOptions(**fi_json_options)
     except FileNotFoundError:
+        fi_options = None
+    except TypeError:
         fi_options = None
 
     return fi_options
