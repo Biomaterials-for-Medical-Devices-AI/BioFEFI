@@ -117,7 +117,7 @@ def cancel_pipeline(p: Process):
 
 
 def delete_directory(path: Path):
-    """Delete the previous results from the log_dir
+    """Delete a directory and all of its contents.
 
     Returns:
         None
@@ -130,7 +130,7 @@ def delete_directory(path: Path):
 
 
 def delete_file(path: Path):
-    """Delete the previous results from the log_dir
+    """Delete a file.
 
     Returns:
         None
