@@ -4,12 +4,20 @@ on:
   push:
     branches:
       - main
-    paths:
-      - docs/**
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build docs
+      uses: ./.github/workflows/docs-builder.yml
+      with:
+        artifact_name: sphinx-html
+
   deploy:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
     - name: Checkout repository
