@@ -125,7 +125,18 @@ def delete_directory(path: Path):
     Args:
         path: The path to the log directory
     """
+    if path.is_dir():
+        shutil.rmtree(path, ignore_errors=True)  # Remove the directory
+
+
+def delete_file(path: Path):
+    """Delete the previous results from the log_dir
+
+    Returns:
+        None
+
+    Args:
+        path: The path to the log directory
+    """
     if path.is_file():
         path.unlink()  # Remove the file
-    elif path.is_dir():
-        shutil.rmtree(path, ignore_errors=True)  # Remove the directory
