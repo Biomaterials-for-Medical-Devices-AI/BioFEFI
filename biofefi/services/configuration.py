@@ -70,12 +70,13 @@ def load_fi_options(path: Path) -> FeatureImportanceOptions:
         path (Path): The path to the feature importance options file.
 
     Returns:
-        dict: The feature importance options.
+        FeatureImportanceOptions: The feature importance options.
     """
 
     try:
         with open(path, "r") as file:
-            fi_options = json.load(file)
+            fi_json_options = json.load(file)
+            fi_options = FeatureImportanceOptions(**fi_json_options)
     except FileNotFoundError:
         fi_options = None
 
