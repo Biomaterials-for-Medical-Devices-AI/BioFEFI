@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: build docs
+    - name: Build docs
       uses: ./.github/workflows/docs-builder.yml
       with:
         artifact_name: sphinx-html
