@@ -17,7 +17,7 @@ from biofefi.options.file_paths import (
 )
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.configuration import save_options
-from biofefi.utils.utils import create_directory, delete_directory
+from biofefi.utils.utils import create_directory, delete_directory, delete_file
 
 
 def get_experiments() -> list[str]:
@@ -67,8 +67,6 @@ def find_previous_fi_results(experiment_path: Path) -> bool:
         bool: whether previous experiments exist or not.
     """
 
-    previous_results = False
-
     directories = [
         fi_plot_dir(experiment_path),
         fi_result_dir(experiment_path),
@@ -81,12 +79,7 @@ def find_previous_fi_results(experiment_path: Path) -> bool:
         log_dir(experiment_path) / "fuzzy",
     ]
 
-    for directory in directories:
-        if directory.exists():
-            previous_results = True
-            break
-
-    return previous_results
+    return any([d.exists() for d in directories])
 
 
 def delete_previous_FI_results(experiment_path: Path):
@@ -110,4 +103,7 @@ def delete_previous_FI_results(experiment_path: Path):
 
     for directory in directories:
         if directory.exists():
-            delete_directory(directory)
+            if directory.is_file():
+                delete_file(directory)
+            elif directory.is_dir():
+                delete_directory(directory)
