@@ -10,6 +10,7 @@ Welcome to BioFEFI's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   users/index.md
    apidocs/modules
 
 Indices and tables
