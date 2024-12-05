@@ -44,3 +44,12 @@ conda create -n <env_name> python=3.11
 conda activate <env_name>
 pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
+
+### Running BioFEFI
+Once you have installed BioFEFI, you can run it from the terminal like so:
+```shell
+biofefi
+```
+A browser window will open to the main page of the app.
+
+<!-- insert image here -->
