@@ -16,7 +16,7 @@ from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     execution_options_path,
     log_dir,
-    ml_metrics_dir,
+    ml_metrics_path,
     ml_model_dir,
     ml_options_path,
     ml_plot_dir,
@@ -128,8 +128,7 @@ def pipeline(
 
     save_models_metrics(
         metrics_stats,
-        ml_metrics_dir(biofefi_experiments_base_dir() / experiment_name)
-        / "metrics.json",
+        ml_metrics_path(biofefi_experiments_base_dir() / experiment_name),
     )
     # Close the logger
     close_logger(logger_instance, logger)
@@ -189,7 +188,7 @@ if experiment_name:
             log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
         except NotADirectoryError:
             pass
-        metrics = ml_metrics_dir(biofefi_base_dir / experiment_name)
+        metrics = ml_metrics_path(biofefi_base_dir / experiment_name)
         if metrics.exists():
             display_metrics_table(metrics)
         ml_plots = ml_plot_dir(biofefi_base_dir / experiment_name)
