@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 from pickle import UnpicklingError, dump, load
 
+from biofefi.utils.utils import create_directory
+
 
 def save_models_metrics(metrics: dict, path: Path):
     """Save the statistical metrics of the models to the given file path.
@@ -12,7 +14,7 @@ def save_models_metrics(metrics: dict, path: Path):
         path (Path): The file path to save the metrics.
     """
 
-    path.parent.mkdir(exist_ok=True, parents=True)
+    create_directory(path.parent)
     with open(path, "w") as f:
         json.dump(metrics, f, indent=4)
 
