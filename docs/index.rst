@@ -11,6 +11,7 @@ Welcome to BioFEFI's documentation!
    :caption: Contents:
 
    users/index.md
+   users/installation.md
    apidocs/modules
 
 Indices and tables
