@@ -244,11 +244,11 @@ base_dir = biofefi_experiments_base_dir()
 
 if experiment_name:
 
-    fi_options = find_previous_fi_results(
+    previous_results_exist = find_previous_fi_results(
         biofefi_experiments_base_dir() / experiment_name
     )
 
-    if fi_options:
+    if previous_results_exist:
         st.warning("You have run feature importance in this experiment previously.")
         st.checkbox(
             "Would you like to rerun feature importance? This will overwrite the existing results.",
