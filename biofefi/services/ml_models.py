@@ -1,6 +1,20 @@
+import json
 import os
 from pathlib import Path
 from pickle import UnpicklingError, dump, load
+
+
+def save_models_metrics(metrics: dict, path: Path):
+    """Save the statistical metrics of the models to the given file path.
+
+    Args:
+        metrics (dict): The metrics to save.
+        path (Path): The file path to save the metrics.
+    """
+
+    path.parent.mkdir(exist_ok=True, parents=True)
+    with open(path, "w") as f:
+        json.dump(metrics, f, indent=4)
 
 
 def save_model(model, path: Path):
