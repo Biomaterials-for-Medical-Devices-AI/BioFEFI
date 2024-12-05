@@ -12,6 +12,7 @@ Welcome to BioFEFI's documentation!
 
    users/index.md
    users/installation.md
+   users/create_experiment.md
    apidocs/modules
 
 Indices and tables
