@@ -29,8 +29,7 @@ def display_metrics_table(metrics_path: Path):
         metrics_path (Path): The path to the metrics file.
     """
     # Load the metrics from the file
-    json_file_path = metrics_path / "metrics.json"
-    with open(json_file_path, "r") as f:
+    with open(metrics_path, "r") as f:
         metrics_dict = json.load(f)
 
     # Prepare data for the table
