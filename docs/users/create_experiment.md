@@ -39,3 +39,60 @@ In BioFEFI, you must create an experiment before you can train models and perfor
 - Specify the number of bootstraps. This will train a model *n* times, where *n* is the number of bootstraps. The data will be randomly split *n* times into new bataches of training and testing sets. Defaults to 10.
 
 - Specify the random seed. Data splitting is pseudo-random and this setting helps make an experiment repeatable, while reducing bias in the training and testing sets.
+
+## Configure experiment plots
+- Save all plots. Defaults to `True`. Sometimes you may not want the plots, but you can produce them for publications, presentations, reports, etc.
+
+- Angle to rotate X-axis labels. Rotate X-axis labels for better legibility. Defaults to 10 degrees.
+
+- Angle to rotate Y-axis labels. Rotate Y-axis labels for better legibility. Defaults to 60 degrees.
+
+- Title font size. Defaults to 20px.
+
+- Axis font size. Defaults to 8px.
+
+- Axis tick size. Defaults to 8px.
+
+- Colour scheme. Defaults to "Solarize_Light2".
+
+  Options:
+  - Solarize_Light2
+  - _classic_test_patch
+  - _mpl-gallery
+  - _mpl-gallery-nogrid
+  - bmh
+  - classic
+  - dark_background
+  - fast
+  - fivethirtyeight
+  - ggplot
+  - grayscale
+  - seaborn-v0_8
+  - seaborn-v0_8-bright
+  - seaborn-v0_8-colorblind
+  - seaborn-v0_8-dark
+  - seaborn-v0_8-dark-palette
+  - seaborn-v0_8-darkgrid
+  - seaborn-v0_8-deep
+  - seaborn-v0_8-muted
+  - seaborn-v0_8-notebook
+  - seaborn-v0_8-paper
+  - seaborn-v0_8-pastel
+  - seaborn-v0_8-poster
+  - seaborn-v0_8-talk
+  - seaborn-v0_8-ticks
+  - seaborn-v0_8-white
+  - seaborn-v0_8-whitegrid
+  - tableau-colorblind10
+
+- Font. Defaults to "sans-serif".
+
+  Options:
+  - serif
+  - sans-serif
+  - cursive
+  - fantasy
+  - monospace
+
+## Press Create
+Once you're happy with your experiment set-up, press the **"Create"** button and your experiment configurations will be saved, ready to be used to train models and run feature importance analyses.
