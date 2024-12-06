@@ -15,7 +15,7 @@ On Windows, this doesn't seem to be a problem. You should be able to proceed wit
 
 ---
 
-### Mac/Linux
+## Mac/Linux
 ```shell
 # Create a virtual environment with venv
 python -m venv <path/to/env>
@@ -30,7 +30,7 @@ conda activate <env_name>
 pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
-### Windows
+## Windows
 ```shell
 # Create a virtual environment with venv
 python -m venv <path\to\env>
@@ -45,7 +45,7 @@ conda activate <env_name>
 pip install git+https://github.com/Biomaterials-for-Medical-Devices-AI/BioFEFI.git
 ```
 
-### Running BioFEFI
+## Running BioFEFI
 Once you have installed BioFEFI, you can run it from the terminal like so:
 ```shell
 biofefi
