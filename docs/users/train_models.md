@@ -1,14 +1,14 @@
 # Training models
 You can train new models in BioFEFI by clicking on **"Train Models"** on the left hand side of the screen.
 
-<!-- insert image here -->
+![train models page](../_static/train-models-page.png)
 
 To begin, select your experiment from the dropdown menu where it says **"Select an experiment"**.
 
 ## Selecting models to train
 To select which models you wish to train, click the toggles next to the model type you wish to train. When you click a toggle, that model's configurable hyper-parameters will appear underneath that toggle.
 
-<!-- insert image here -->
+![select model](../_static/select-model-to-train.png)
 
 Depending on whether your problem type, which was configured on the [New Experiment page](../users/create_experiment.md), the models will either be a **classifier** or a **regressor**.
 
@@ -47,3 +47,8 @@ Depending on whether your problem type, which was configured on the [New Experim
 
 ## Saving the outputs
 You have the option to save the models and the plots to disk. Click the toggles to turn on/off.
+
+![save models and plots](../_static/save-models-and-plots.png)
+
+## Train
+Once you have configured which models to train, hit the **"Run Training"** button.
