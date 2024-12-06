@@ -6,7 +6,7 @@ You can train new models in BioFEFI by clicking on **"Train Models"** on the lef
 To begin, select your experiment from the dropdown menu where it says **"Select an experiment"**.
 
 ## Selecting models to train
-To select which models you wish to train, click the toggles next to the model type you wish to train. When you click a toggle, that model's configurable hyper-parameters will appear underneath that toggle.
+To select which models you wish to train, click the toggles next to the model type you wish to train. When you click a toggle, that model's configurable hyper-parameters will appear underneath that toggle. You may train more than one model at a time.
 
 ![select model](../_static/select-model-to-train.png)
 
