@@ -1,11 +1,12 @@
 import os
 import sys
-import torch
-
-import torch.nn as nn
 from typing import Tuple
-from biofefi.utils.weights_init import normal_init, xavier_init, kaiming_init
-from biofefi.options.enums import ProblemTypes, OptimiserTypes
+
+import torch
+import torch.nn as nn
+
+from biofefi.options.enums import OptimiserTypes, ProblemTypes
+from biofefi.utils.weights_init import kaiming_init, normal_init, xavier_init
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

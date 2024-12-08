@@ -1,12 +1,12 @@
 from typing import Dict, Tuple
 
 import numpy as np
+from options.enums import ModelNames
 
 from biofefi.machine_learning.get_models import get_models
 from biofefi.machine_learning.metrics import get_metrics
 from biofefi.options.enums import Normalisations, ProblemTypes
 from biofefi.utils.logging_utils import Logger
-from options.enums import ModelNames
 
 
 class Learner:

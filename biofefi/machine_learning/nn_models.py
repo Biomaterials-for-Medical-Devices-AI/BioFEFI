@@ -4,8 +4,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+
 from biofefi.machine_learning.nn_networks import BaseNetwork
-from biofefi.options.enums import ProblemTypes, ModelNames, OptimiserTypes
+from biofefi.options.enums import ModelNames, OptimiserTypes, ProblemTypes
 from biofefi.options.ml import BrnnOptions
 from biofefi.utils.custom_loss import compute_brnn_loss
 
@@ -83,7 +84,7 @@ class BayesianRegularisedNN(
         Given the features (X) and target (y), determine the
         input and output dimensions.
 
-        Parameters:
+        Args:
         - X: Features (numpy array or tensor)
         - y: Target values (numpy array or tensor)
 
@@ -156,7 +157,8 @@ class BayesianRegularisedNN(
         Predict outputs for the given input data.
 
         Args:
-            X: The input data features for prediction (DataFrame, numpy array, or tensor).
+            X: The input data features for prediction
+            (DataFrame, numpy array, or tensor).
             return_probs (bool): Whether to return probabilities instead of class labels.
 
         Returns:

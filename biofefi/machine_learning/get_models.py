@@ -4,8 +4,8 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.svm import SVC, SVR
 from xgboost import XGBClassifier, XGBRegressor
-from biofefi.machine_learning.nn_models import BayesianRegularisedNN
 
+from biofefi.machine_learning.nn_models import BayesianRegularisedNN
 from biofefi.options.enums import ModelNames, ProblemTypes
 from biofefi.utils.utils import assert_model_param
 
