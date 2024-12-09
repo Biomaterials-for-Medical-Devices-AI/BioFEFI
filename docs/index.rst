@@ -14,6 +14,7 @@ Welcome to BioFEFI's documentation!
    users/installation.md
    users/create_experiment.md
    users/train_models.md
+   users/feature_importance.md
    apidocs/modules
 
 Indices and tables
