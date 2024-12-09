@@ -55,6 +55,12 @@ class ExecutionStateKeys(StrEnum):
     RunPipeline = "run_pipeline"
 
 
+class OptimiserTypes(StrEnum):
+    Adam = "adam"
+    SGD = "sgd"
+    RMSprop = "rmsprop"
+
+
 class ProblemTypes(StrEnum):
     Auto = "auto"
     Classification = "classification"
@@ -80,6 +86,7 @@ class ModelNames(StrEnum):
     RandomForest = "random forest"
     XGBoost = "xgboost"
     SVM = "svm"
+    BRNN = "BayesianRegularisedNN"
 
 
 class DataSplitMethods(StrEnum):

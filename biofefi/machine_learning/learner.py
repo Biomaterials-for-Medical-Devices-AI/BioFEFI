@@ -1,6 +1,7 @@
 from typing import Dict, Tuple
 
 import numpy as np
+from options.enums import ModelNames
 
 from biofefi.machine_learning.get_models import get_models
 from biofefi.machine_learning.metrics import get_metrics
@@ -57,7 +58,13 @@ class Learner:
             for model_name, model in self._models.items():
                 res[i][model_name] = {}
                 self._logger.info(f"Fitting {model_name} for bootstrap sample {i+1}...")
-                model.fit(X_train, y_train)
+
+                if model_name == ModelNames.BRNN:
+                    X_train_np, y_train_np = X_train.to_numpy(), y_train.to_numpy()
+                    model.fit_model(X_train_np, y_train_np)
+                else:
+                    model.fit(X_train, y_train)
+
                 y_pred_train = model.predict(X_train)
                 res[i][model_name]["y_pred_train"] = y_pred_train
                 y_pred_test = model.predict(X_test)
