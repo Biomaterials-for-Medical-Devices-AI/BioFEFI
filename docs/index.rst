@@ -22,6 +22,7 @@ Welcome to BioFEFI's documentation!
    :caption: Developer documentation:
 
    devs/index.md
+   devs/installation.md
    apidocs/modules
 
 Indices and tables
