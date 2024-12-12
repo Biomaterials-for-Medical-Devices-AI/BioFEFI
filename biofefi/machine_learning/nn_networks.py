@@ -2,11 +2,15 @@ import os
 import sys
 from typing import Tuple
 
+import numpy as np
 import torch
 import torch.nn as nn
 
 from biofefi.options.enums import OptimiserTypes, ProblemTypes
-from biofefi.utils.weights_init import kaiming_init, normal_init, xavier_init
+from biofefi.services.weights_init import kaiming_init, normal_init, xavier_init
+
+from biofefi.options.ml import BrnnOptions
+from biofefi.services.custom_loss import compute_brnn_loss
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -40,7 +44,9 @@ class BaseNetwork(nn.Module):
         Compute the total loss based on the problem type.
 
         Args:
-            problem_type (ProblemTypes): The type of problem (Regression or Classification).
+            problem_type (ProblemTypes): The type of problem (
+                Regression or Classification
+            ).
             outputs (torch.Tensor): The predicted outputs from the model.
             targets (torch.Tensor): The true target values.
 
@@ -125,6 +131,41 @@ class BaseNetwork(nn.Module):
             raise NotImplementedError(
                 f"Optimizer type {optimizer_type} not implemented"
             )
+
+    def train_brnn(self, X: np.ndarray, y: np.ndarray) -> None:
+        """
+        Trains the Bayesian Regularized Neural Network.
+
+        Args:
+            X (np.ndarray): The input data.
+            y (np.ndarray): The target data.
+        """
+
+        self.train()
+        dataset = torch.utils.data.TensorDataset(
+            torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
+        )
+        dataloader = torch.utils.data.DataLoader(
+            dataset, batch_size=BrnnOptions.batch_size, shuffle=True
+        )
+
+        for epoch in range(BrnnOptions.epochs):
+            epoch_loss = 0.0
+
+            for batch_X, batch_y in dataloader:
+                batch_X, batch_y = batch_X.to(self.device), batch_y.to(self.device)
+                self.optimizer.zero_grad()
+                outputs = self(batch_X)
+
+                # Compute total loss
+                loss = compute_brnn_loss(self, outputs, batch_y)
+                loss.backward()
+                self.optimizer.step()
+                epoch_loss += loss.item()
+
+            print(f"Epoch {epoch + 1}/{BrnnOptions.epochs}, Loss: {epoch_loss:.4f}")
+
+        return self
 
     def __str__(self) -> str:
         """

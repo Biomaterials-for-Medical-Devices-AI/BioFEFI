@@ -84,7 +84,8 @@ class ModelNames(StrEnum):
     RandomForest = "random forest"
     XGBoost = "xgboost"
     SVM = "svm"
-    BRNN = "BayesianRegularisedNN"
+    BRNNClassifier = "bayesianRegularised nn classifier"
+    BRNNRegressor = "bayesianRegularised nn regressor"
 
 
 class DataSplitMethods(StrEnum):

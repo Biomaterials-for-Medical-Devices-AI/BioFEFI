@@ -8,26 +8,27 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from biofefi.machine_learning.nn_networks import BaseNetwork
 from biofefi.options.enums import ModelNames, OptimiserTypes, ProblemTypes
 from biofefi.options.ml import BrnnOptions
-from biofefi.utils.custom_loss import compute_brnn_loss
 
 
-class BayesianRegularisedNN(
-    BaseNetwork, BaseEstimator, ClassifierMixin, RegressorMixin
-):
+class BayesianRegularisedNNClassifier(BaseNetwork, BaseEstimator, ClassifierMixin):
     """
-    This class defines a Bayesian Regularized Neural Network
-    for regression and classification tasks.
+    This class defines a Bayesian Regularized Neural
+    Network for classification tasks.
 
-    Attributes:
-    - problem_type: The type of problem (Regression or Classification).
-    - layer1: The first linear layer of the network.
-    - layer2: The second linear layer of the network.
-    - output_layer: The output linear layer of the network.
+    Args:
+        problem_type (ProblemTypes): The type of problem
+        (Classification).
+        - layer1: The first linear layer of the network.
+        - layer2: The second linear layer of the network.
+        - output_layer: The output linear layer of the network.
     """
 
     def __init__(self, problem_type: ProblemTypes):
+        """
+        Initializes the BayesianRegularisedNNClassifier class.
+        """
         super().__init__()
-        self._name = ModelNames.BRNN
+        self._name = ModelNames.BRNNClassifier
         self.problem_type = problem_type
         self.layer1, self.layer2, self.output_layer = None, None, None
 
@@ -56,142 +57,219 @@ class BayesianRegularisedNN(
         Defines the forward pass of the network.
 
         Args:
-            x (torch.Tensor): The input data to the network.
+            x (torch.Tensor): The input data.
 
         Returns:
             torch.Tensor: The output after applying the forward
             pass through the network.
 
         Raises:
-            ValueError: If an unsupported problem type is specified.
+            ValueError: If an error occurs during the forward pass.
         """
-        # Apply LeakyReLU activation to hidden layers
-        x = F.leaky_relu(self.layer1(x), negative_slope=0.01)
-        x = F.leaky_relu(self.layer2(x), negative_slope=0.01)
-        x = self.output_layer(x)
-
-        # Apply appropriate activation based on problem type
         if self.problem_type == ProblemTypes.Classification:
-            return torch.sigmoid(x) if x.size(1) == 1 else torch.softmax(x, dim=1)
-
-        elif self.problem_type == ProblemTypes.Regression:
-            return x
-        else:
-            raise ValueError(f"Unsupported problem type: {self.problem_type}")
-
-    def _get_input_output_dims(self, X, y):
-        """
-        Given the features (X) and target (y), determine the
-        input and output dimensions.
-
-        Args:
-        - X: Features (numpy array or tensor)
-        - y: Target values (numpy array or tensor)
-
-        Returns:
-        - input_dim: Number of features (columns in X)
-        - output_dim: Number of classes (classification) or
-        1 (regression)
-        """
-        # Convert to tensor if not already
-        X = torch.tensor(X, dtype=torch.float32)
-        y = torch.tensor(y, dtype=torch.float32)
-
-        # Adjust target `y` for classification tasks
-        if self.problem_type == ProblemTypes.Classification:
-            y = y.squeeze().long()
-
-        input_dim = X.shape[1]
-
-        # Determine number of output classes
-        if self.problem_type == ProblemTypes.Classification:
-            output_dim = len(torch.unique(y))  # Number of unique classes
-        else:
-            output_dim = 1  # Regression has one output
-
-        return input_dim, output_dim
+            try:
+                x = F.leaky_relu(self.layer1(x), negative_slope=0.01)
+                x = F.leaky_relu(self.layer2(x), negative_slope=0.01)
+                x = self.output_layer(x)
+                return torch.sigmoid(x) if x.size(1) == 1 else torch.softmax(x, dim=1)
+            except Exception as e:
+                raise ValueError(
+                    f"Error occured during forward pass of BRNN Classifier: {e}"
+                )
 
     def fit_model(self, X: np.ndarray, y: np.ndarray) -> None:
         """
         Train the Bayesian Regularized Neural Network.
 
         Args:
-            X (np.ndarray): The input training data.
-            y (np.ndarray): The target training data.
+            X (np.ndarray): The input data.
+            y (np.ndarray): The target data.
 
-        Returns:
-            self: The trained model.
+        Raises:
+            ValueError: If an error occurs during training.
         """
-        input_dim, output_dim = self._get_input_output_dims(X, y)
-        self._initialize_network(input_dim, output_dim)
+        X = torch.tensor(X, dtype=torch.float32)
+        y = torch.tensor(y, dtype=torch.float32).squeeze().long()
+        input_dim = X.shape[1]
 
-        # Set the model to training mode
-        self.train()
-        dataset = torch.utils.data.TensorDataset(
-            torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
-        )
-        dataloader = torch.utils.data.DataLoader(
-            dataset, batch_size=BrnnOptions.batch_size, shuffle=True
-        )
+        if self.problem_type == ProblemTypes.Classification:
+            output_dim = len(torch.unique(y))
 
-        for epoch in range(BrnnOptions.epochs):
-            epoch_loss = 0.0
-
-            for batch_X, batch_y in dataloader:
-                batch_X, batch_y = batch_X.to(self.device), batch_y.to(self.device)
-                self.optimizer.zero_grad()
-                outputs = self(batch_X)
-
-                # Compute total loss
-                loss = compute_brnn_loss(self, outputs, batch_y)
-                loss.backward()
-                self.optimizer.step()
-                epoch_loss += loss.item()
-
-            print(f"Epoch {epoch + 1}/{BrnnOptions.epochs}, Loss: {epoch_loss:.4f}")
-
-        return self
+        if self.problem_type == ProblemTypes.Classification:
+            try:
+                self._initialize_network(input_dim, output_dim)
+                self.train()
+                self.train_brnn(X, y)
+            except Exception as e:
+                raise ValueError(
+                    f"Error occured during fitting of BRNN Classifier: {e}"
+                )
 
     def predict(self, X, return_probs=False) -> np.ndarray:
         """
-        Predict outputs for the given input data.
+        Predict the target values using the trained BRNN Regressor.
 
         Args:
-            X: The input data features for prediction
-            (DataFrame, numpy array, or tensor).
-            return_probs (bool): Whether to return probabilities instead of class labels.
+            X (np.ndarray): The input data.
+            return_probs (bool): Whether to return the predicted
 
         Returns:
-            np.ndarray: The predicted outputs as a numpy array.
+            np.ndarray: The predicted target values.
+
+        Raises:
+            ValueError: If an error occurs during prediction.
         """
-        # Convert DataFrame to numpy array if necessary
         if isinstance(X, pd.DataFrame):
             X = X.to_numpy()
-
-        # Convert to tensor
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
-        self.eval()
 
-        with torch.no_grad():
-            outputs = self(X)
-            if self.problem_type == ProblemTypes.Classification:
-                if outputs.size(1) == 1:  # Binary classification
-                    probabilities = torch.sigmoid(outputs).cpu().numpy()
-                    return (
-                        probabilities
-                        if return_probs
-                        else (probabilities > BrnnOptions.classification_cutoff).astype(
-                            int
+        if self.problem_type == ProblemTypes.Classification:
+            try:
+                self.eval()
+                with torch.no_grad():
+                    outputs = self(X)
+
+                    if outputs.size(1) == 1:  # Binary classification
+                        probabilities = torch.sigmoid(outputs).cpu().numpy()
+                        return (
+                            probabilities
+                            if return_probs
+                            else (
+                                probabilities > BrnnOptions.classification_cutoff
+                            ).astype(int)
                         )
-                    )
-                else:  # Multi-class classification
-                    probabilities = torch.softmax(outputs, dim=1).cpu().numpy()
-                    return (
-                        probabilities
-                        if return_probs
-                        else np.argmax(probabilities, axis=1)
-                    )
-            elif self.problem_type == ProblemTypes.Regression:
-                return outputs.cpu().numpy()
-            else:
-                raise ValueError(f"Unsupported problem type: {self.problem_type}")
+
+                    else:  # Multi-class classification
+                        probabilities = torch.softmax(outputs, dim=1).cpu().numpy()
+                        return (
+                            probabilities
+                            if return_probs
+                            else np.argmax(probabilities, axis=1)
+                        )
+
+            except Exception as e:
+                raise ValueError(
+                    f"Error occured during prediction of BRNN Classifier: {e}"
+                )
+
+
+class BayesianRegularisedNNRegressor(BaseNetwork, BaseEstimator, RegressorMixin):
+    """
+    This class defines a Bayesian Regularized Neural
+    Network for regression tasks.
+
+    Args:
+        problem_type (ProblemTypes): The type of problem
+        (Regression).
+        - layer1: The first linear layer of the network.
+        - layer2: The second linear layer of the network.
+        - output_layer: The output linear layer of the network.
+    """
+
+    def __init__(self, problem_type: ProblemTypes):
+        """
+        Initializes the BayesianRegularisedNNRegressor class.
+        """
+        super().__init__()
+        self.problem_type = problem_type
+        self._name = ModelNames.BRNNRegressor
+        self.layer1, self.layer2, self.output_layer = None, None, None
+
+    def _initialize_network(self, input_dim, output_dim):
+        """
+        Initializes the network layers for BRNN regression.
+
+        Args:
+            input_dim (int): The input dimension of the data.
+            output_dim (int): The output dimension of the
+            data, determined dynamically.
+        """
+        # Define hidden layers and output layer
+        self.layer1 = nn.Linear(input_dim, BrnnOptions.hidden_dim)
+        self.layer2 = nn.Linear(BrnnOptions.hidden_dim, BrnnOptions.hidden_dim)
+        self.output_layer = nn.Linear(BrnnOptions.hidden_dim, output_dim)
+
+        # Initialize weights and optimizer
+        self._initialise_weights()
+        self._get_num_params()
+        self._make_optimizer(OptimiserTypes.Adam, BrnnOptions.lr)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Defines the forward pass of the network.
+
+        Args:
+            x (torch.Tensor): The input data.
+
+        Returns:
+            torch.Tensor: The output after applying the forward
+            pass through the network.
+
+        Raises:
+            ValueError: If an error occurs during the forward pass.
+        """
+        if self.problem_type == ProblemTypes.Regression:
+            try:
+                x = F.leaky_relu(self.layer1(x), negative_slope=0.01)
+                x = F.leaky_relu(self.layer2(x), negative_slope=0.01)
+                x = self.output_layer(x)
+                return x
+            except Exception as e:
+                raise ValueError(
+                    f"Error occured during forward pass of BRNN Regressor: {e}"
+                )
+
+    def fit_model(self, X: np.ndarray, y: np.ndarray) -> None:
+        """
+        Train the Bayesian Regularized Neural Network.
+
+        Args:
+            X (np.ndarray): The input data.
+            y (np.ndarray): The target data.
+
+        Raises:
+            ValueError: If an error occurs during training.
+        """
+
+        X = torch.tensor(X, dtype=torch.float32)
+        y = torch.tensor(y, dtype=torch.float32).squeeze().long()
+        input_dim = X.shape[1]
+
+        if self.problem_type == ProblemTypes.Regression:
+            output_dim = 1
+
+        if self.problem_type == ProblemTypes.Regression:
+            try:
+                self._initialize_network(input_dim, output_dim)
+                self.train()
+                self.train_brnn(X, y)
+            except Exception as e:
+                raise ValueError(f"Error occured during fitting of BRNN Regressor: {e}")
+
+    def predict(self, X) -> np.ndarray:
+        """
+        Predict the target values using the trained BRNN Regressor.
+
+        Args:
+            X (np.ndarray): The input data.
+
+        Returns:
+            np.ndarray: The predicted target values.
+
+        Raises:
+            ValueError: If an error occurs during prediction.
+        """
+        if isinstance(X, pd.DataFrame):
+            X = X.to_numpy()
+        X = torch.tensor(X, dtype=torch.float32).to(self.device)
+
+        if self.problem_type == ProblemTypes.Regression:
+            try:
+                self.eval()
+                with torch.no_grad():
+                    outputs = self(X)
+                    return outputs.cpu().numpy()
+            except Exception as e:
+                raise ValueError(
+                    f"Error occured during prediction of BRNN Regressor: {e}"
+                )
