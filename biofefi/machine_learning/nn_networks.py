@@ -7,10 +7,9 @@ import torch
 import torch.nn as nn
 
 from biofefi.options.enums import OptimiserTypes, ProblemTypes
-from biofefi.services.weights_init import kaiming_init, normal_init, xavier_init
-
 from biofefi.options.ml import BrnnOptions
 from biofefi.services.custom_loss import compute_brnn_loss
+from biofefi.services.weights_init import kaiming_init, normal_init, xavier_init
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
