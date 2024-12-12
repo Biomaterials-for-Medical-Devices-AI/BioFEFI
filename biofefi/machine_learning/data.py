@@ -5,7 +5,10 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
+from biofefi.components.synthetic_data import CreateSyntheticData
 from biofefi.options.enums import DataSplitMethods, Normalisations
+from biofefi.options.synthetic_data_opts import SyntheticDataOptions
+from biofefi.utils.assertion import DataLoaderChecker
 
 
 class DataBuilder:
@@ -34,20 +37,71 @@ class DataBuilder:
         self._normalization = normalization
         self._numerical_cols = "all"
         self._n_bootstraps = n_bootstraps
+        self._create_synthetic_data = False
+
+    class DataBuilderError(Exception):
+        """
+        Custom exception raised when data loading or
+        generation fails in DataBuilder.
+        """
+
+        pass
 
     def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
-        Load data from a csv file
+        Load data from a csv file or
+        generate synthetic data
 
-        Returns
-        -------
-        Tuple[pd.DataFrame, pd.DataFrame]
-            The training data (X) and the targets (y)
+        Returns:
+            if synthetic data is used:
+                - Tuple: The training data and prediction targets
+                which are created artificially.
+
+            if csv file is used:
+                - Tuple: The training data and prediction targets
+                loaded from a csv file.
+
+        Raises:
+            - DataBuilderError: If an error occurs during data
+            loading or generation.
         """
-        df = pd.read_csv(self._path)
-        X = df.iloc[:, :-1]
-        y = df.iloc[:, -1]
-        return X, y
+        if SyntheticDataOptions.use_synthetic_data:
+            self._create_synthetic_data = True
+            DataLoaderChecker.assert_synthetic_data_options(SyntheticDataOptions)
+
+            try:
+                synthetic_data_creator = CreateSyntheticData(
+                    problem_type=SyntheticDataOptions.problem_type,
+                    synthetic_options=SyntheticDataOptions,
+                    logger=self._logger,
+                )
+                X, y = synthetic_data_creator.data_initialisation()
+
+                self._logger.info(
+                    f"Synthetic data generated: {X.shape[0]} samples, {X.shape[1]} features."
+                )
+
+                return X, y
+            except Exception as e:
+                raise self.DataBuilderError(f"Error generating synthetic data: {e}")
+
+        else:
+            try:
+                self._logger.info(f"Loading data from {self._path}")
+
+                df = pd.read_csv(self._path)
+                X = df.iloc[:, :-1]
+                y = df.iloc[:, -1]
+
+                self._logger.info(
+                    f"Data loaded Successfully: {X.shape[0]} samples, {X.shape[1]} features."
+                )
+
+                data_checker = DataLoaderChecker(X, y)
+                data_checker.perform_data_checks()
+                return X, y
+            except Exception as e:
+                raise self.DataBuilderError(f"Error loading data from CSV file: {e}")
 
     def _generate_data_splits(
         self, X: pd.DataFrame, y: pd.DataFrame
