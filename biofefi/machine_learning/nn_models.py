@@ -77,7 +77,7 @@ class BayesianRegularisedNNClassifier(BaseNetwork, BaseEstimator, ClassifierMixi
                     f"Error occured during forward pass of BRNN Classifier: {e}"
                 )
 
-    def fit_model(self, X: np.ndarray, y: np.ndarray) -> None:
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """
         Train the Bayesian Regularized Neural Network.
 
@@ -123,34 +123,31 @@ class BayesianRegularisedNNClassifier(BaseNetwork, BaseEstimator, ClassifierMixi
             X = X.to_numpy()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
 
-        if self.problem_type == ProblemTypes.Classification:
-            try:
-                self.eval()
-                with torch.no_grad():
-                    outputs = self(X)
+        try:
+            self.eval()
+            with torch.no_grad():
+                outputs = self(X)
 
-                    if outputs.size(1) == 1:  # Binary classification
-                        probabilities = torch.sigmoid(outputs).cpu().numpy()
-                        return (
-                            probabilities
-                            if return_probs
-                            else (
-                                probabilities > BrnnOptions.classification_cutoff
-                            ).astype(int)
+                if outputs.size(1) == 1:  # Binary classification
+                    probabilities = torch.sigmoid(outputs).cpu().numpy()
+                    return (
+                        probabilities
+                        if return_probs
+                        else (probabilities > BrnnOptions.classification_cutoff).astype(
+                            int
                         )
+                    )
 
-                    else:  # Multi-class classification
-                        probabilities = torch.softmax(outputs, dim=1).cpu().numpy()
-                        return (
-                            probabilities
-                            if return_probs
-                            else np.argmax(probabilities, axis=1)
-                        )
+                else:  # Multi-class classification
+                    probabilities = torch.softmax(outputs, dim=1).cpu().numpy()
+                    return (
+                        probabilities
+                        if return_probs
+                        else np.argmax(probabilities, axis=1)
+                    )
 
-            except Exception as e:
-                raise ValueError(
-                    f"Error occured during prediction of BRNN Classifier: {e}"
-                )
+        except Exception as e:
+            raise ValueError(f"Error occured during prediction of BRNN Classifier: {e}")
 
 
 class BayesianRegularisedNNRegressor(BaseNetwork, BaseEstimator, RegressorMixin):
@@ -208,18 +205,17 @@ class BayesianRegularisedNNRegressor(BaseNetwork, BaseEstimator, RegressorMixin)
         Raises:
             ValueError: If an error occurs during the forward pass.
         """
-        if self.problem_type == ProblemTypes.Regression:
-            try:
-                x = F.leaky_relu(self.layer1(x), negative_slope=0.01)
-                x = F.leaky_relu(self.layer2(x), negative_slope=0.01)
-                x = self.output_layer(x)
-                return x
-            except Exception as e:
-                raise ValueError(
-                    f"Error occured during forward pass of BRNN Regressor: {e}"
-                )
+        try:
+            x = F.leaky_relu(self.layer1(x), negative_slope=0.01)
+            x = F.leaky_relu(self.layer2(x), negative_slope=0.01)
+            x = self.output_layer(x)
+            return x
+        except Exception as e:
+            raise ValueError(
+                f"Error occured during forward pass of BRNN Regressor: {e}"
+            )
 
-    def fit_model(self, X: np.ndarray, y: np.ndarray) -> None:
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """
         Train the Bayesian Regularized Neural Network.
 
