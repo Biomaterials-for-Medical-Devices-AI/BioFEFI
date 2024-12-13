@@ -216,7 +216,7 @@ def save_target_clusters_plots(
     # Plot boxplot of the target (continuous values) and target clusters (categories) using seaborn
     plt.style.use(plot_opt.plot_colour_scheme)
     fig, ax = plt.subplots(layout="constrained")
-    sns.boxplot(data=df_cluster, x="cluster", y="target", ax=ax)
+    sns.boxplot(data=df_cluster, x="cluster", y="target", hue="cluster", ax=ax)
     ax.set_xticklabels(
         ax.get_xticklabels(),
         rotation=plot_opt.angle_rotate_xaxis_labels,
