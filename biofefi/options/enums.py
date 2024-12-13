@@ -49,6 +49,18 @@ class ConfigStateKeys(StrEnum):
     FILogBox = "fi_log_box"
     FuzzyLogBox = "fuzzy_log_box"
     UploadedModels = "uploaded_models"
+    # Data Analysis options
+    TargetVarDistribution = "target_var_distribution"
+    ShowKDE = "show_kde"
+    NBins = "n_bins"
+    CorrelationHeatmap = "correlation_heatmap"
+    DescriptorCorrelation = "descriptor_correlation"
+    SelectAllDescriptorsCorrelation = "select_all_descriptors_correlation"
+    PairPlot = "pair_plot"
+    SelectAllDescriptorsPairPlot = "select_all_descriptors_pair_plot"
+    DescriptorPairPlot = "descriptor_pair_plot"
+    tSNEPlot = "tsne_plot"
+    SavePlots = "save_plots"
 
 
 class ExecutionStateKeys(StrEnum):
