@@ -53,14 +53,17 @@ class ConfigStateKeys(StrEnum):
     TargetVarDistribution = "target_var_distribution"
     ShowKDE = "show_kde"
     NBins = "n_bins"
+    SaveTargetVarDistribution = "save_target_var_distribution"
     CorrelationHeatmap = "correlation_heatmap"
     DescriptorCorrelation = "descriptor_correlation"
     SelectAllDescriptorsCorrelation = "select_all_descriptors_correlation"
+    SaveHeatmap = "save_heatmap"
     PairPlot = "pair_plot"
     SelectAllDescriptorsPairPlot = "select_all_descriptors_pair_plot"
     DescriptorPairPlot = "descriptor_pair_plot"
+    SavePairPlot = "save_pair_plot"
     tSNEPlot = "tsne_plot"
-    SavePlots = "save_plots"
+    SaveTSNEPlot = "save_tsne_plot"
 
 
 class ExecutionStateKeys(StrEnum):
