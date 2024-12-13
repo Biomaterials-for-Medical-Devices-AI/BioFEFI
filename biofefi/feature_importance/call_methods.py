@@ -164,6 +164,7 @@ def save_fuzzy_sets_plots(
         save_dir.mkdir(exist_ok=True, parents=True)
 
     plt.style.use(plot_opt.plot_colour_scheme)
+    plt.rcParams["font.family"] = plot_opt.plot_font_family
     for feature in x_cols:
         fig, ax = plt.subplots(layout="constrained")
         ax.plot(
@@ -198,7 +199,7 @@ def save_fuzzy_sets_plots(
             rotation=plot_opt.angle_rotate_yaxis_labels,
             family=plot_opt.plot_font_family,
         )
-        ax.legend(prop={"family": plot_opt.plot_font_family})
+        ax.legend()
         fig.savefig(save_dir / f"{feature}.png")
     plt.close()
 
