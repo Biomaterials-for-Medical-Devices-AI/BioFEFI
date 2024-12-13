@@ -46,10 +46,9 @@ if experiment_name:
     if data_analysis.exists():
         plot_box(data_analysis, "Data Analysis Plots")
     ml_metrics = ml_metrics_path(experiment_path)
-    if ml_metrics.exists():
-        display_metrics_table(ml_metrics)
     ml_plots = ml_plot_dir(experiment_path)
-    if ml_plots.exists():
+    if ml_plots.exists() and ml_metrics.exists():
+        display_metrics_table(ml_metrics)
         plot_box(ml_plots, "Machine learning plots")
     fi_plots = fi_plot_dir(experiment_path)
     if fi_plots.exists():
