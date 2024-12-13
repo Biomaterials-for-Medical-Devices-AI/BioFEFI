@@ -5,9 +5,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-from biofefi.components.synthetic_data import CreateSyntheticData
 from biofefi.options.enums import DataSplitMethods, Normalisations
-from biofefi.options.synthetic_data_opts import SyntheticDataOptions
 from biofefi.utils.assertion import DataLoaderChecker
 
 
@@ -65,43 +63,21 @@ class DataBuilder:
             - DataBuilderError: If an error occurs during data
             loading or generation.
         """
-        if SyntheticDataOptions.use_synthetic_data:
-            self._create_synthetic_data = True
-            DataLoaderChecker.assert_synthetic_data_options(SyntheticDataOptions)
+        try:
+            self._logger.info(f"Loading data from {self._path}")
+            df = pd.read_csv(self._path)
+            X = df.iloc[:, :-1]
+            y = df.iloc[:, -1]
 
-            try:
-                synthetic_data_creator = CreateSyntheticData(
-                    problem_type=SyntheticDataOptions.problem_type,
-                    synthetic_options=SyntheticDataOptions,
-                    logger=self._logger,
-                )
-                X, y = synthetic_data_creator.data_initialisation()
+            self._logger.info(
+                f"Data loaded Successfully: {X.shape[0]} samples, {X.shape[1]} features."
+            )
 
-                self._logger.info(
-                    f"Synthetic data generated: {X.shape[0]} samples, {X.shape[1]} features."
-                )
-
-                return X, y
-            except Exception as e:
-                raise self.DataBuilderError(f"Error generating synthetic data: {e}")
-
-        else:
-            try:
-                self._logger.info(f"Loading data from {self._path}")
-
-                df = pd.read_csv(self._path)
-                X = df.iloc[:, :-1]
-                y = df.iloc[:, -1]
-
-                self._logger.info(
-                    f"Data loaded Successfully: {X.shape[0]} samples, {X.shape[1]} features."
-                )
-
-                data_checker = DataLoaderChecker(X, y)
-                data_checker.perform_data_checks()
-                return X, y
-            except Exception as e:
-                raise self.DataBuilderError(f"Error loading data from CSV file: {e}")
+            data_checker = DataLoaderChecker(X, y)
+            data_checker.perform_data_checks()
+            return X, y
+        except Exception as e:
+            raise self.DataBuilderError(f"Error loading data from CSV file: {e}")
 
     def _generate_data_splits(
         self, X: pd.DataFrame, y: pd.DataFrame

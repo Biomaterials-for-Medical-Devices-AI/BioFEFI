@@ -1,7 +1,9 @@
+import pandas as pd
 from sklearn.datasets import make_classification, make_regression
 
 from biofefi.options.enums import ProblemTypes
 from biofefi.options.synthetic_data_opts import SyntheticDataOptions
+from biofefi.utils.assertion import DataLoaderChecker
 
 
 class CreateSyntheticData:
@@ -33,6 +35,7 @@ class CreateSyntheticData:
         self.initialise = False
         self.X = None
         self.y = None
+        self._output_file_name = "synthetic_data.csv"
 
     def _create_classification_data(self) -> None:
         """
@@ -45,10 +48,7 @@ class CreateSyntheticData:
             - ValueError: If an error occurs during the data creation.
         """
 
-        if (
-            self.synthetic_options.use_synthetic_data
-            and self._problem_type == ProblemTypes.Classification
-        ):
+        if self._problem_type == ProblemTypes.Classification:
             self._logger.info(
                 "Requested to create synthetic data for Classification..."
             )
@@ -69,8 +69,7 @@ class CreateSyntheticData:
                     class_sep=self.synthetic_options.class_sep,
                     scale=self.synthetic_options.data_scale,
                 )
-                return X, y
-
+                return pd.DataFrame(X), pd.Series(y, name="target")
             except Exception as e:
                 raise ValueError(
                     f"Error creating synthetic data for classification: {e}"
@@ -87,10 +86,7 @@ class CreateSyntheticData:
             - ValueError: If an error occurs during the data creation.
         """
 
-        if (
-            self.synthetic_options.use_synthetic_data
-            and self._problem_type == ProblemTypes.Regression
-        ):
+        if self._problem_type == ProblemTypes.Regression:
             self._logger.info("Requested to create synthetic data for Regression...")
 
             try:
@@ -105,8 +101,7 @@ class CreateSyntheticData:
                     noise=self.synthetic_options.reg_noise,
                     coef=self.synthetic_options.reg_coef,
                 )
-                return X, y
-
+                return pd.DataFrame(X), pd.Series(y, name="target")
             except Exception as e:
                 raise ValueError(f"Error creating synthetic data for regression: {e}")
 
@@ -118,24 +113,31 @@ class CreateSyntheticData:
             - InitialisationError: If an error occurs during
             the initialisation.
         """
-        if self.synthetic_options.use_synthetic_data:
-            self.initialise = True
-            self._logger.info("Initialising synthetic data creation...")
+        self.initialise = True
+        self._logger.info("Initialising synthetic data creation...")
 
-            try:
-                # Initialise and create synthetic data for classification
-                if self._problem_type == ProblemTypes.Classification:
-                    self.X, self.y = self._create_classification_data()
+        try:
+            # create synthetic data for classification or regression
+            if self._problem_type == ProblemTypes.Classification:
+                self.X, self.y = self._create_classification_data()
+            elif self._problem_type == ProblemTypes.Regression:
+                self.X, self.y = self._create_regression_data()
+            else:
+                raise ValueError(f"Unsupported problem type: {self._problem_type}")
 
-                # Initialise and create synthetic data for regression
-                elif self._problem_type == ProblemTypes.Regression:
-                    self.X, self.y = self._create_regression_data()
+            # Combine features and labels
+            synthetic_data = pd.concat([self.X, self.y], axis=1)
 
-                else:
-                    raise ValueError(f"Unsupported problem type: {self._problem_type}")
+            # Perform assertions on the generated data
+            data_checker = DataLoaderChecker(self.X, self.y)
+            data_checker.perform_data_checks()
 
-            except Exception as e:
-                raise InitialisationError(f"An Error initialising synthetic data: {e}")
+            # Save the synthetic data to a csv file
+            synthetic_data.to_csv(self._output_file_name, index=False)
+            self._logger.info(f"Synthetic data saved to {self.output_file}")
+
+        except Exception as e:
+            raise InitialisationError(f"An Error initialising synthetic data: {e}")
 
 
 class InitialisationError(Exception):
