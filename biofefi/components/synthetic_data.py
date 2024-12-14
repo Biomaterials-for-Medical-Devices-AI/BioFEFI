@@ -6,7 +6,7 @@ from biofefi.options.synthetic_data_opts import SyntheticDataOptions
 from biofefi.utils.assertion import DataLoaderChecker
 
 
-class CreateSyntheticData:
+class SyntheticDataBuilder:
     """
     This class creates synthetic data for classification
     and regression problems.
@@ -110,7 +110,7 @@ class CreateSyntheticData:
         Initialises the synthetic data creation.
 
         Raises:
-            - InitialisationError: If an error occurs during
+            - SyntheticDataInitialisationError: If an error occurs during
             the initialisation.
         """
         self.initialise = True
@@ -137,10 +137,12 @@ class CreateSyntheticData:
             self._logger.info(f"Synthetic data saved to {self.output_file}")
 
         except Exception as e:
-            raise InitialisationError(f"An Error initialising synthetic data: {e}")
+            raise SyntheticDataInitialisationError(
+                f"An Error initialising synthetic data: {e}"
+            )
 
 
-class InitialisationError(Exception):
+class SyntheticDataInitialisationError(Exception):
     """
     Custom exception error will be raised if an
     error occurs during the initialisation

@@ -37,14 +37,6 @@ class DataBuilder:
         self._n_bootstraps = n_bootstraps
         self._create_synthetic_data = False
 
-    class DataBuilderError(Exception):
-        """
-        Custom exception raised when data loading or
-        generation fails in DataBuilder.
-        """
-
-        pass
-
     def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Load data from a csv file or
@@ -77,7 +69,7 @@ class DataBuilder:
             data_checker.perform_data_checks()
             return X, y
         except Exception as e:
-            raise self.DataBuilderError(f"Error loading data from CSV file: {e}")
+            raise DataBuilderError(f"Error loading data from CSV file: {e}")
 
     def _generate_data_splits(
         self, X: pd.DataFrame, y: pd.DataFrame
@@ -187,3 +179,12 @@ class TabularData:
     X_test: list[pd.DataFrame]
     y_train: list[pd.DataFrame]
     y_test: list[pd.DataFrame]
+
+
+class DataBuilderError(Exception):
+    """
+    Custom exception raised when data loading or
+    generation fails in DataBuilder.
+    """
+
+    pass
