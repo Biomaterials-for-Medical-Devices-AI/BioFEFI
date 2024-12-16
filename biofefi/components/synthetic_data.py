@@ -45,35 +45,31 @@ class SyntheticDataBuilder:
             - Tuple: The synthetic data and labels.
 
         Raises:
-            - ValueError: If an error occurs during the data creation.
+            - ValueError: If an error occurs during the data
+            creation.
         """
 
-        if self._problem_type == ProblemTypes.Classification:
-            self._logger.info(
-                "Requested to create synthetic data for Classification..."
-            )
+        self._logger.info("Requested to create synthetic data for Classification...")
 
-            try:
-                X, y = make_classification(
-                    n_samples=self.synthetic_options.n_samples,
-                    n_features=self.synthetic_options.n_features,
-                    shuffle=self.synthetic_options.is_shuffle,
-                    random_state=self.synthetic_options.random_state,
-                    n_informative=self.synthetic_options.n_informative,
-                    n_redundant=self.synthetic_options.n_redudant,
-                    n_repeated=self.synthetic_options.n_repeated,
-                    n_classes=self.synthetic_options.n_classes,
-                    n_clusters_per_class=self.synthetic_options.n_clusters_per_class,
-                    weights=self.synthetic_options.data_weights,
-                    flip_y=self.synthetic_options.flip_y,
-                    class_sep=self.synthetic_options.class_sep,
-                    scale=self.synthetic_options.data_scale,
-                )
-                return pd.DataFrame(X), pd.Series(y, name="target")
-            except Exception as e:
-                raise ValueError(
-                    f"Error creating synthetic data for classification: {e}"
-                )
+        try:
+            X, y = make_classification(
+                n_samples=self.synthetic_options.n_samples,
+                n_features=self.synthetic_options.n_features,
+                shuffle=self.synthetic_options.is_shuffle,
+                random_state=self.synthetic_options.random_state,
+                n_informative=self.synthetic_options.n_informative,
+                n_redundant=self.synthetic_options.n_redudant,
+                n_repeated=self.synthetic_options.n_repeated,
+                n_classes=self.synthetic_options.n_classes,
+                n_clusters_per_class=self.synthetic_options.n_clusters_per_class,
+                weights=self.synthetic_options.data_weights,
+                flip_y=self.synthetic_options.flip_y,
+                class_sep=self.synthetic_options.class_sep,
+                scale=self.synthetic_options.data_scale,
+            )
+            return pd.DataFrame(X), pd.Series(y, name="target")
+        except Exception as e:
+            raise ValueError(f"Error creating synthetic data for classification: {e}")
 
     def _create_regression_data(self) -> None:
         """
@@ -86,24 +82,23 @@ class SyntheticDataBuilder:
             - ValueError: If an error occurs during the data creation.
         """
 
-        if self._problem_type == ProblemTypes.Regression:
-            self._logger.info("Requested to create synthetic data for Regression...")
+        self._logger.info("Requested to create synthetic data for Regression...")
 
-            try:
-                X, y = make_regression(
-                    n_samples=self.synthetic_options.n_samples,
-                    n_features=self.synthetic_options.n_features,
-                    shuffle=self.synthetic_options.is_shuffle,
-                    random_state=self.synthetic_options.random_state,
-                    n_informative=self.synthetic_options.reg_n_informative,
-                    n_targets=self.synthetic_options.reg_n_targets,
-                    bias=self.synthetic_options.reg_bias,
-                    noise=self.synthetic_options.reg_noise,
-                    coef=self.synthetic_options.reg_coef,
-                )
-                return pd.DataFrame(X), pd.Series(y, name="target")
-            except Exception as e:
-                raise ValueError(f"Error creating synthetic data for regression: {e}")
+        try:
+            X, y = make_regression(
+                n_samples=self.synthetic_options.n_samples,
+                n_features=self.synthetic_options.n_features,
+                shuffle=self.synthetic_options.is_shuffle,
+                random_state=self.synthetic_options.random_state,
+                n_informative=self.synthetic_options.reg_n_informative,
+                n_targets=self.synthetic_options.reg_n_targets,
+                bias=self.synthetic_options.reg_bias,
+                noise=self.synthetic_options.reg_noise,
+                coef=self.synthetic_options.reg_coef,
+            )
+            return pd.DataFrame(X), pd.Series(y, name="target")
+        except Exception as e:
+            raise ValueError(f"Error creating synthetic data for regression: {e}")
 
     def data_initialisation(self) -> None:
         """
