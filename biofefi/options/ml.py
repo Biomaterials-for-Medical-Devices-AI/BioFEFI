@@ -28,5 +28,4 @@ class BrnnOptions:
     prior_mu: int = 0
     prior_sigma: int = 1
     lambda_reg: float = 0.01
-    lambda_reg: float = 0.01
     classification_cutoff: float = 0.5

@@ -62,21 +62,18 @@ def get_models(
         if model_class := _MODEL_PROBLEM_DICT.get(
             (model.lower(), problem_type.lower())
         ):
-            if model in [ModelNames.BRNNClassifier, ModelNames.BRNNRegressor]:
-                models[model] = model_class(problem_type=problem_type, **model_param)
-
+            if problem_type.lower() == ProblemTypes.Classification:
+                model_param = assert_model_param(
+                    model_class, model_param, logger=logger
+                )
+                model_param["class_weight"] = "balanced"
+                models[model] = model_class(**model_param)
             else:
-                if problem_type.lower() == ProblemTypes.Classification:
-                    model_param = assert_model_param(
-                        model_class, model_param, logger=logger
-                    )
-                    model_param["class_weight"] = "balanced"
-                    models[model] = model_class(**model_param)
-                else:
-                    model_param = assert_model_param(
-                        model_class, model_param, logger=logger
-                    )
-                    models[model] = model_class(**model_param)
+                model_param = assert_model_param(
+                    model_class, model_param, logger=logger
+                )
+                models[model] = model_class(**model_param)
+
         else:
             raise ValueError(f"Model type {model} not recognized")
     return models

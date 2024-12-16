@@ -34,7 +34,7 @@ def bayesian_regularization_loss(
 
 
 def compute_brnn_loss(
-    model, outputs: torch.Tensor, targets: torch.Tensor
+    model, outputs: torch.Tensor, targets: torch.Tensor, brnn_options: BrnnOptions
 ) -> torch.Tensor:
     """
     Compute the total loss based on the problem type
@@ -54,9 +54,9 @@ def compute_brnn_loss(
 
     # Compute regularization loss
     reg_loss = bayesian_regularization_loss(
-        model, prior_mu=BrnnOptions.prior_mu, prior_sigma=BrnnOptions.prior_sigma
+        model, prior_mu=brnn_options.prior_mu, prior_sigma=brnn_options.prior_sigma
     )
 
     # Combine both losses
-    total_loss = predictive_loss + BrnnOptions.lambda_reg * reg_loss
+    total_loss = predictive_loss + brnn_options.lambda_reg * reg_loss
     return total_loss

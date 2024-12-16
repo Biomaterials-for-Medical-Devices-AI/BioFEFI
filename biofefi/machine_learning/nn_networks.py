@@ -19,12 +19,13 @@ class BaseNetwork(nn.Module):
     This class is an abstract class for networks
     """
 
-    def __init__(self) -> None:
+    def __init__(self, brnn_options: BrnnOptions) -> None:
         """
         Initializes the BaseNetwork class
         """
         super().__init__()
         self._name = "BaseNetwork"
+        self._brnn_options = brnn_options
         self.device = (
             torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
         )
@@ -145,10 +146,10 @@ class BaseNetwork(nn.Module):
             torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
         )
         dataloader = torch.utils.data.DataLoader(
-            dataset, batch_size=BrnnOptions.batch_size, shuffle=True
+            dataset, batch_size=self._brnn_options.batch_size, shuffle=True
         )
 
-        for epoch in range(BrnnOptions.epochs):
+        for epoch in range(self._brnn_options.epochs):
             epoch_loss = 0.0
 
             for batch_X, batch_y in dataloader:
@@ -157,12 +158,14 @@ class BaseNetwork(nn.Module):
                 outputs = self(batch_X)
 
                 # Compute total loss
-                loss = compute_brnn_loss(self, outputs, batch_y)
+                loss = compute_brnn_loss(self, outputs, batch_y, self._brnn_options)
                 loss.backward()
                 self.optimizer.step()
                 epoch_loss += loss.item()
 
-            print(f"Epoch {epoch + 1}/{BrnnOptions.epochs}, Loss: {epoch_loss:.4f}")
+            print(
+                f"Epoch {epoch + 1}/{self._brnn_options.epochs}, Loss: {epoch_loss:.4f}"
+            )
 
         return self
 
