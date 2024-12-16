@@ -1,10 +1,13 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
 import streamlit as st
 
 from biofefi.components.experiments import experiment_selector
+from biofefi.components.forms import (
+    correlation_heatmap_form,
+    pairplot_form,
+    target_variable_dist_form,
+    tSNE_plot_form,
+)
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.plots import plot_box
 from biofefi.options.enums import ConfigStateKeys
@@ -24,169 +27,6 @@ st.set_page_config(
 )
 
 sidebar_logo()
-
-
-@st.experimental_fragment
-def target_variable_dist_form():
-    """
-    Form to create the target variable distribution plot.
-    """
-
-    if st.checkbox(
-        "Create Target Variable Distribution Plot",
-        key=ConfigStateKeys.TargetVarDistribution,
-    ):
-        show_kde = st.toggle("Show KDE", value=True, key=ConfigStateKeys.ShowKDE)
-        n_bins = st.slider(
-            "Number of Bins",
-            min_value=5,
-            max_value=50,
-            value=10,
-            key=ConfigStateKeys.NBins,
-        )
-
-        if st.button(
-            "Create and Save Plot", key=ConfigStateKeys.SaveTargetVarDistribution
-        ):
-            displot = sns.displot(
-                data=data, x=data.columns[-1], kde=show_kde, bins=n_bins
-            )
-            displot.set(title=f"{exec_opt.dependent_variable} Distribution")
-            displot.savefig(
-                data_analysis_plot_dir
-                / f"{exec_opt.dependent_variable}_distribution.png"
-            )
-            plt.clf()
-            st.success("Plot created and saved successfully.")
-
-
-@st.experimental_fragment
-def correlation_heatmap_form():
-    """
-    Form to create the correlation heatmap plot.
-    """
-    if st.checkbox(
-        "Create Correlation Heatmap Plot", key=ConfigStateKeys.CorrelationHeatmap
-    ):
-
-        if st.toggle(
-            "Select All Descriptors",
-            value=False,
-            key=ConfigStateKeys.SelectAllDescriptorsCorrelation,
-        ):
-            default_corr = list(data.columns[:-1])
-        else:
-            default_corr = []
-
-        corr_descriptors = st.multiselect(
-            "Select columns to include in the correlation heatmap",
-            data.columns[:-1],
-            default=default_corr,
-            key=ConfigStateKeys.DescriptorCorrelation,
-        )
-
-        corr_data = data[corr_descriptors + [data.columns[-1]]]
-
-        if len(corr_descriptors) < 1:
-            st.warning(
-                "Please select at least one descriptor to create the correlation heatmap."
-            )
-
-        if st.button("Create and Save Plot", key=ConfigStateKeys.SaveHeatmap):
-            corr = corr_data.corr()
-            # Generate a mask for the upper triangle
-            mask = np.triu(np.ones_like(corr, dtype=bool))
-
-            # Set up the matplotlib figure
-            fig, ax = plt.subplots(figsize=(11, 9))
-
-            # Generate a custom diverging colormap
-            cmap = sns.diverging_palette(230, 20, as_cmap=True)
-
-            # Draw the heatmap with the mask and correct aspect ratio
-            _ = sns.heatmap(
-                corr,
-                mask=mask,
-                cmap=cmap,
-                vmax=0.3,
-                center=0,
-                square=True,
-                linewidths=0.5,
-                annot=True,
-                cbar_kws={"shrink": 0.5},
-            )
-            fig.savefig(data_analysis_plot_dir / "correlation_heatmap.png")
-            plt.clf()
-            st.success("Plot created and saved successfully.")
-
-
-@st.experimental_fragment
-def pairplot_form():
-    """
-    Form to create the pairplot plot.
-    """
-
-    if st.checkbox("Create Pairplot", key=ConfigStateKeys.PairPlot):
-
-        if st.toggle(
-            "Select All Descriptors",
-            value=False,
-            key=ConfigStateKeys.SelectAllDescriptorsPairPlot,
-        ):
-            default_corr = list(data.columns[:-1])
-        else:
-            default_corr = None
-
-        descriptors = st.multiselect(
-            "Select columns to include in the pairplot",
-            data.columns[:-1],
-            default=default_corr,
-            key=ConfigStateKeys.DescriptorPairPlot,
-        )
-
-        pairplot_data = data[descriptors + [data.columns[-1]]]
-
-        if len(descriptors) < 1:
-            st.warning(
-                "Please select at least one descriptor to create the correlation plot."
-            )
-
-        if st.button("Create and Save Plot", key=ConfigStateKeys.SavePairPlot):
-            pairplot = sns.pairplot(pairplot_data, corner=True)
-            pairplot.savefig(data_analysis_plot_dir / "pairplot.png")
-            plt.clf()
-            st.success("Plot created and saved successfully.")
-
-
-@st.experimental_fragment
-def tSNE_plot_form():
-
-    if st.checkbox("Create t-SNE Plot", key=ConfigStateKeys.tSNEPlot):
-        from sklearn.manifold import TSNE
-        from sklearn.preprocessing import StandardScaler
-
-        X = data.drop(columns=[data.columns[-1]])
-        y = data[data.columns[-1]]
-
-        X = StandardScaler().fit_transform(X)
-
-        if st.button("Create and Save Plot", key=ConfigStateKeys.SaveTSNEPlot):
-
-            tsne = TSNE(n_components=2, random_state=exec_opt.random_state)
-            X_embedded = tsne.fit_transform(X)
-
-            df = pd.DataFrame(X_embedded, columns=["x", "y"])
-            df["target"] = y
-
-            fig = plt.figure(figsize=(8, 8))
-            sns.scatterplot(data=df, x="x", y="y", hue="target", palette="viridis")
-            plt.title("t-SNE Plot")
-            plt.ylabel("t-SNE Component 2")
-            plt.xlabel("t-SNE Component 1")
-            fig.savefig(data_analysis_plot_dir / "tsne_plot.png")
-            plt.clf()
-            st.success("Plots created and saved successfully.")
-
 
 st.header("Data Visualisation")
 st.write(
@@ -235,18 +75,18 @@ if experiment_name:
 
     st.write("#### Target Variable Distribution")
 
-    target_variable_dist_form()
+    target_variable_dist_form(data, exec_opt.dependent_variable, data_analysis_plot_dir)
 
     st.write("#### Correlation Heatmap")
 
-    correlation_heatmap_form()
+    correlation_heatmap_form(data, data_analysis_plot_dir)
 
     st.write("#### Pairplot")
 
-    pairplot_form()
+    pairplot_form(data, data_analysis_plot_dir)
 
     st.write("#### t-SNE Plot")
 
-    tSNE_plot_form()
+    tSNE_plot_form(data, exec_opt.random_state, data_analysis_plot_dir)
 
     plot_box(data_analysis_plot_dir, "Data Visualisation Plots")
