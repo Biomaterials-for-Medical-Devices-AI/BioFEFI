@@ -41,40 +41,8 @@
 <section id="module-biofefi.pages.1_New_Experiment">
 <span id="biofefi-pages-1-new-experiment-module"></span><h2>biofefi.pages.1_New_Experiment module<a class="headerlink" href="#module-biofefi.pages.1_New_Experiment" title="Link to this heading">¶</a></h2>
 </section>
-<section id="module-biofefi.pages.2_Train_Models">
-<span id="biofefi-pages-2-train-models-module"></span><h2>biofefi.pages.2_Train_Models module<a class="headerlink" href="#module-biofefi.pages.2_Train_Models" title="Link to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="biofefi.pages.2_Train_Models.build_configuration">
-<span class="sig-prename descclassname"><span class="pre">biofefi.pages.2_Train_Models.</span></span><span class="sig-name descname"><span class="pre">build_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="biofefi.options.html#biofefi.options.ml.MachineLearningOptions" title="biofefi.options.ml.MachineLearningOptions"><span class="pre">MachineLearningOptions</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="biofefi.options.html#biofefi.options.execution.ExecutionOptions" title="biofefi.options.execution.ExecutionOptions"><span class="pre">ExecutionOptions</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="biofefi.options.html#biofefi.options.plotting.PlottingOptions" title="biofefi.options.plotting.PlottingOptions"><span class="pre">PlottingOptions</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#biofefi.pages.2_Train_Models.build_configuration" title="Link to this definition">¶</a></dt>
-<dd><p>Build the configuration options to run the Machine Learning pipeline.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The machine learning options, general execution options, plotting options,
-experiment name</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple[<a class="reference internal" href="biofefi.options.html#biofefi.options.ml.MachineLearningOptions" title="biofefi.options.ml.MachineLearningOptions">MachineLearningOptions</a>, <a class="reference internal" href="biofefi.options.html#biofefi.options.execution.ExecutionOptions" title="biofefi.options.execution.ExecutionOptions">ExecutionOptions</a>, <a class="reference internal" href="biofefi.options.html#biofefi.options.plotting.PlottingOptions" title="biofefi.options.plotting.PlottingOptions">PlottingOptions</a>, str]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biofefi.pages.2_Train_Models.pipeline">
-<span class="sig-prename descclassname"><span class="pre">biofefi.pages.2_Train_Models.</span></span><span class="sig-name descname"><span class="pre">pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ml_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.ml.MachineLearningOptions" title="biofefi.options.ml.MachineLearningOptions"><span class="pre">MachineLearningOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exec_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.execution.ExecutionOptions" title="biofefi.options.execution.ExecutionOptions"><span class="pre">ExecutionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotting_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.plotting.PlottingOptions" title="biofefi.options.plotting.PlottingOptions"><span class="pre">PlottingOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.pages.2_Train_Models.pipeline" title="Link to this definition">¶</a></dt>
-<dd><p>This function actually performs the steps of the pipeline. It can be wrapped
-in a process it doesn’t block the UI.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ml_opts</strong> (<a class="reference internal" href="biofefi.options.html#biofefi.options.ml.MachineLearningOptions" title="biofefi.options.ml.MachineLearningOptions"><em>MachineLearningOptions</em></a>) – Options for machine learning.</p></li>
-<li><p><strong>exec_opts</strong> (<a class="reference internal" href="biofefi.options.html#biofefi.options.execution.ExecutionOptions" title="biofefi.options.execution.ExecutionOptions"><em>ExecutionOptions</em></a>) – General execution options.</p></li>
-<li><p><strong>plotting_opts</strong> (<a class="reference internal" href="biofefi.options.html#biofefi.options.plotting.PlottingOptions" title="biofefi.options.plotting.PlottingOptions"><em>PlottingOptions</em></a>) – Options for plotting.</p></li>
-<li><p><strong>experiment_name</strong> (<em>str</em>) – The name of the experiment.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="biofefi-pages-2-train-models-module">
+<h2>biofefi.pages.2_Train_Models module<a class="headerlink" href="#biofefi-pages-2-train-models-module" title="Link to this heading">¶</a></h2>
 </section>
 <section id="module-biofefi.pages.3_Feature_Importance">
 <span id="biofefi-pages-3-feature-importance-module"></span><h2>biofefi.pages.3_Feature_Importance module<a class="headerlink" href="#module-biofefi.pages.3_Feature_Importance" title="Link to this heading">¶</a></h2>

@@ -12,6 +12,14 @@ biofefi.services.configuration module
    :undoc-members:
    :show-inheritance:
 
+biofefi.services.custom\_loss module
+------------------------------------
+
+.. automodule:: biofefi.services.custom_loss
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 biofefi.services.experiments module
 -----------------------------------
 
@@ -48,6 +56,14 @@ biofefi.services.plotting module
 --------------------------------
 
 .. automodule:: biofefi.services.plotting
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biofefi.services.weights\_init module
+-------------------------------------
+
+.. automodule:: biofefi.services.weights_init
    :members:
    :undoc-members:
    :show-inheritance:
