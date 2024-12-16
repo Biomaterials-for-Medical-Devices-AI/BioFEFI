@@ -12,26 +12,34 @@ biofefi.pages.1\_New\_Experiment module
    :undoc-members:
    :show-inheritance:
 
-biofefi.pages.2\_Train\_Models module
--------------------------------------
-
-.. automodule:: biofefi.pages.2_Train_Models
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-biofefi.pages.3\_Feature\_Importance module
+biofefi.pages.2\_Data\_Visualisation module
 -------------------------------------------
 
-.. automodule:: biofefi.pages.3_Feature_Importance
+.. automodule:: biofefi.pages.2_Data_Visualisation
    :members:
    :undoc-members:
    :show-inheritance:
 
-biofefi.pages.4\_View\_Experiments module
+biofefi.pages.3\_Train\_Models module
+-------------------------------------
+
+.. automodule:: biofefi.pages.3_Train_Models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biofefi.pages.4\_Feature\_Importance module
+-------------------------------------------
+
+.. automodule:: biofefi.pages.4_Feature_Importance
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biofefi.pages.5\_View\_Experiments module
 -----------------------------------------
 
-.. automodule:: biofefi.pages.4_View_Experiments
+.. automodule:: biofefi.pages.5_View_Experiments
    :members:
    :undoc-members:
    :show-inheritance:
