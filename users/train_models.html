@@ -58,16 +58,16 @@
 <li><p>Number of estimators: The number of decision trees in the forest.</p></li>
 <li><p>Minimum samples split: The minimum number of samples to split an internal node.</p></li>
 <li><p>Minimum samples leaf: The minimum number of samples required to be a leaf node.</p></li>
-<li><p>Maximum depth: The maximum depth of the tree.</p></li>
+<li><p>Maximum depth: The maximum depth of the tree. If disabled or 0, then nodes are expanded until all leaves are pure or until all leaves contain less than ‘Minimum samples split’.,</p></li>
 </ul>
 </li>
 <li><p><strong>XGBoost</strong></p>
-<p>If the problem type is “Classification”, train a <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBClassifier">XGB Classifier</a> model. If the problem type is “Regression”, train a <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBRegressor">XGB Regressor</a> model.</p>
+<p>If the problem type is “Classification”, train a <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBClassifier">XGB Classifier</a> model. If the problem type is “Regression”, train a <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBRegressor">XGB Regressor</a> model. The parameters for this model are all optional. To congiure them, check the “Set XGBoost options” box.</p>
 <ul class="simple">
 <li><p>Number of estimators: The number of boosting rounds.</p></li>
-<li><p>Maximum depth: The maximum depth of the base learners.</p></li>
 <li><p>Learning rate: Boosting learning rate.</p></li>
 <li><p>Subsample size: Subsample ratio of the training instance.</p></li>
+<li><p>Maximum depth: The maximum depth of the base learners. If disabled or 0, then nodes are expanded until all leaves are pure.</p></li>
 </ul>
 </li>
 <li><p><strong>Support Vector Machine</strong></p>

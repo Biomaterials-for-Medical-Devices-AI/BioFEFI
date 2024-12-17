@@ -107,8 +107,59 @@ The path will be to a <cite>json</cite> file containing the plot options.</p>
 </dd></dl>
 
 </section>
-<section id="biofefi-services-custom-loss-module">
-<h2>biofefi.services.custom_loss module<a class="headerlink" href="#biofefi-services-custom-loss-module" title="Link to this heading">¶</a></h2>
+<section id="module-biofefi.services.custom_loss">
+<span id="biofefi-services-custom-loss-module"></span><h2>biofefi.services.custom_loss module<a class="headerlink" href="#module-biofefi.services.custom_loss" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.custom_loss.bayesian_regularization_loss">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.custom_loss.</span></span><span class="sig-name descname"><span class="pre">bayesian_regularization_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#biofefi.services.custom_loss.bayesian_regularization_loss" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the Bayesian Regularization loss.</p>
+<p>The loss is computed as the sum of squared differences
+between model parameters and their prior mean,
+scaled by the prior standard deviation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prior_mu</strong> (<em>float</em><em>, </em><em>optional</em>) – The prior mean. Defaults</p></li>
+<li><p><strong>provided.</strong> (<em>Defaults to self._opt.prior_sigma if not</em>)</p></li>
+<li><p><strong>prior_sigma</strong> (<em>float</em><em>, </em><em>optional</em>) – The prior standard deviation.</p></li>
+<li><p><strong>provided.</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The computed regularization loss.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If both <cite>prior_mu</cite> and <cite>prior_sigma</cite> are not provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.custom_loss.compute_brnn_loss">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.custom_loss.</span></span><span class="sig-name descname"><span class="pre">compute_brnn_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brnn_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.ml.BrnnOptions" title="biofefi.options.ml.BrnnOptions"><span class="pre">BrnnOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#biofefi.services.custom_loss.compute_brnn_loss" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the total loss based on the problem type
+and include regularization loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – The neural network model.</p></li>
+<li><p><strong>outputs</strong> (<em>torch.Tensor</em>) – The predicted outputs from the model.</p></li>
+<li><p><strong>targets</strong> (<em>torch.Tensor</em>) – The true target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total computed loss, including both
+predictive and regularization loss.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-biofefi.services.experiments">
 <span id="biofefi-services-experiments-module"></span><h2>biofefi.services.experiments module<a class="headerlink" href="#module-biofefi.services.experiments" title="Link to this heading">¶</a></h2>
@@ -377,8 +428,62 @@ saved as a <cite>json</cite> file.</p>
 </dd></dl>
 
 </section>
-<section id="biofefi-services-weights-init-module">
-<h2>biofefi.services.weights_init module<a class="headerlink" href="#biofefi-services-weights-init-module" title="Link to this heading">¶</a></h2>
+<section id="module-biofefi.services.weights_init">
+<span id="biofefi-services-weights-init-module"></span><h2>biofefi.services.weights_init module<a class="headerlink" href="#module-biofefi.services.weights_init" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.weights_init.kaiming_init">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.weights_init.</span></span><span class="sig-name descname"><span class="pre">kaiming_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'relu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#biofefi.services.weights_init.kaiming_init" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the weights of Linear layers using Kaiming initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>torch.nn.Module</em>) – The module to initialize.</p></li>
+<li><p><strong>nonlinearity</strong> (<em>str</em>) – The nonlinearity used in the network</p></li>
+<li><p><strong>(</strong><strong>e.g.</strong></p></li>
+<li><p><strong>'relu'</strong></p></li>
+<li><p><strong>&quot;relu&quot;.</strong> (<em>'leaky_relu'</em><em>)</em><em>. Defaults to</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.weights_init.normal_init">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.weights_init.</span></span><span class="sig-name descname"><span class="pre">normal_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.02</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#biofefi.services.weights_init.normal_init" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the weights of Linear layers using a normal distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>torch.nn.Module</em>) – The module to initialize.</p></li>
+<li><p><strong>mean</strong> (<em>float</em>) – The mean of the normal distribution. Defaults to 0.0.</p></li>
+<li><p><strong>std</strong> (<em>float</em>) – The standard deviation of the normal distribution.</p></li>
+<li><p><strong>0.02.</strong> (<em>Defaults to</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.weights_init.xavier_init">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.weights_init.</span></span><span class="sig-name descname"><span class="pre">xavier_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#biofefi.services.weights_init.xavier_init" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the weights of Linear layers using
+Xavier initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<em>torch.nn.Module</em>) – The module to initialize.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-biofefi.services">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-biofefi.services" title="Link to this heading">¶</a></h2>
