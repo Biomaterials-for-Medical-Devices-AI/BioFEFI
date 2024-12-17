@@ -336,11 +336,16 @@ def ml_options_form():
 
             st.write("Options:")
             n_estimators_rf = st.number_input(
-                "Number of estimators", value=300, key="n_estimators_rf"
+                "Number of estimators", value=100, key="n_estimators_rf"
             )
             min_samples_split = st.number_input("Minimum samples split", value=2)
             min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
-            max_depth_rf = st.number_input("Maximum depth", value=6, key="max_depth_rf")
+            if st.toggle("Set max depth", value=False):
+                max_depth_rf = st.number_input(
+                    "Maximum depth", value=0, key="max_depth_rf"
+                )
+            else:
+                max_depth_rf = None
             model_types["Random Forest"] = {
                 "use": use_rf,
                 "params": {
