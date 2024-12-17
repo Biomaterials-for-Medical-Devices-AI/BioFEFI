@@ -342,7 +342,7 @@ def ml_options_form():
             min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
             if st.toggle("Set max depth", value=False):
                 max_depth_rf = st.number_input(
-                    "Maximum depth", value=0, key="max_depth_rf"
+                    "Maximum depth", value=6, key="max_depth_rf"
                 )
             else:
                 max_depth_rf = None
@@ -359,16 +359,25 @@ def ml_options_form():
 
         use_xgb = st.toggle("XGBoost", value=False)
         if use_xgb:
+            if st.toggle("Set XGBoost options"):
+                st.write("Options:")
+                n_estimators_xgb = st.number_input(
+                    "Number of estimators", value=100, key="n_estimators_xgb"
+                )
+                if st.toggle("Set max depth", value=False):
+                    max_depth_xbg = st.number_input(
+                        "Maximum depth", value=6, key="max_depth_xgb"
+                    )
+                else:
+                    max_depth_xbg = None
+                learning_rate = st.number_input("Learning rate", value=0.01)
+                subsample = st.number_input("Subsample size", value=0.5)
+            else:
+                n_estimators_xgb = None
+                max_depth_xbg = None
+                learning_rate = None
+                subsample = None
 
-            st.write("Options:")
-            n_estimators_xgb = st.number_input(
-                "Number of estimators", value=300, key="n_estimators_xgb"
-            )
-            max_depth_xbg = st.number_input(
-                "Maximum depth", value=6, key="max_depth_xgb"
-            )
-            learning_rate = st.number_input("Learning rate", value=0.01)
-            subsample = st.number_input("Subsample size", value=0.5)
             model_types["XGBoost"] = {
                 "use": use_xgb,
                 "params": {
