@@ -1,5 +1,15 @@
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    mean_absolute_error,
+    precision_score,
+    r2_score,
+    recall_score,
+    roc_auc_score,
+    root_mean_squared_error,
+)
 from sklearn.svm import SVC, SVR
 from xgboost import XGBClassifier, XGBRegressor
 from biofefi.machine_learning.nn_models import (
@@ -49,4 +59,16 @@ MODEL_PROBLEM_CHOICES = {
         ProblemTypes.Classification,
     ): BayesianRegularisedNNClassifier,
     (ModelNames.BRNNRegressor, ProblemTypes.Regression): BayesianRegularisedNNRegressor,
+}
+CLASSIFICATION_METRICS = {
+    "accuracy": accuracy_score,
+    "f1_score": f1_score,
+    "precision_score": precision_score,
+    "recall_score": recall_score,
+    "roc_auc_score": roc_auc_score,
+}
+REGRESSION_METRICS = {
+    "MAE": mean_absolute_error,
+    "RMSE": root_mean_squared_error,
+    "R2": r2_score,
 }

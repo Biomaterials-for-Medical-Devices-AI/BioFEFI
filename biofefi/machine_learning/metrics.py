@@ -1,34 +1,36 @@
-from typing import Dict
-
-from sklearn.metrics import (
-    accuracy_score,
-    f1_score,
-    mean_absolute_error,
-    precision_score,
-    r2_score,
-    recall_score,
-    roc_auc_score,
-    root_mean_squared_error,
-)
-
+from biofefi.options.choices import CLASSIFICATION_METRICS, REGRESSION_METRICS
 from biofefi.options.enums import ProblemTypes
 
 
-def get_metrics(problem_type: str, logger: object = None) -> Dict:
+def get_metrics(problem_type: ProblemTypes, logger: object = None) -> dict:
+    """Get the metrics functions for a given problem type.
+
+    For classification:
+    - Accuracy
+    - F1
+    - Precision
+    - Recall
+    - ROC AUC
+
+    For Regression
+    - R2
+    - MAE
+    - RMSE
+
+    Args:
+        problem_type (ProblemTypes): Where the problem is classification or regression.
+        logger (object, optional): The logger. Defaults to None.
+
+    Raises:
+        ValueError: When you give an incorrect problem type.
+
+    Returns:
+        dict: A `dict` of score names and functions.
+    """
     if problem_type.lower() == ProblemTypes.Classification:
-        metrics = {
-            "accuracy": accuracy_score,
-            "f1_score": f1_score,
-            "precision_score": precision_score,
-            "recall_score": recall_score,
-            "roc_auc_score": roc_auc_score,
-        }
+        metrics = CLASSIFICATION_METRICS
     elif problem_type.lower() == ProblemTypes.Regression:
-        metrics = {
-            "MAE": mean_absolute_error,
-            "RMSE": root_mean_squared_error,
-            "R2": r2_score,
-        }
+        metrics = REGRESSION_METRICS
     else:
         raise ValueError(f"Problem type {problem_type} not recognized")
 
