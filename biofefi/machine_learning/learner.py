@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 import numpy as np
 import pandas as pd
 
-from biofefi.machine_learning.get_models import get_models
+from biofefi.services.ml_models import get_models
 from biofefi.machine_learning.metrics import get_metrics
 from biofefi.options.enums import DataSplitMethods, Normalisations, ProblemTypes
 from biofefi.utils.logging_utils import Logger
