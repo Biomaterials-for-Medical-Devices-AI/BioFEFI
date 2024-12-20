@@ -5,7 +5,7 @@ from pathlib import Path
 from pickle import UnpicklingError, dump, load
 
 from biofefi.options.enums import ProblemTypes
-from biofefi.options.model_problems import MODEL_PROBLEM_DICT
+from biofefi.options.model_problems import MODEL_PROBLEM_CHOICES
 from biofefi.utils.utils import create_directory
 
 
@@ -150,7 +150,9 @@ def get_models(
         if model["use"]
     ]
     for model, model_param in model_list:
-        if model_class := MODEL_PROBLEM_DICT.get((model.lower(), problem_type.lower())):
+        if model_class := MODEL_PROBLEM_CHOICES.get(
+            (model.lower(), problem_type.lower())
+        ):
             if problem_type.lower() == ProblemTypes.Classification:
                 model_param = assert_model_param(
                     model_class, model_param, logger=logger

@@ -9,7 +9,7 @@ from biofefi.machine_learning.nn_models import (
 from biofefi.options.enums import ModelNames, ProblemTypes
 
 
-MODEL_PROBLEM_DICT = {
+MODEL_PROBLEM_CHOICES = {
     (ModelNames.LinearModel, ProblemTypes.Classification): LogisticRegression,
     (ModelNames.LinearModel, ProblemTypes.Regression): LinearRegression,
     (ModelNames.RandomForest, ProblemTypes.Classification): RandomForestClassifier,
