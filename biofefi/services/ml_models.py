@@ -4,16 +4,8 @@ import os
 from pathlib import Path
 from pickle import UnpicklingError, dump, load
 
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.svm import SVC, SVR
-from xgboost import XGBClassifier, XGBRegressor
-
-from biofefi.machine_learning.nn_models import (
-    BayesianRegularisedNNClassifier,
-    BayesianRegularisedNNRegressor,
-)
-from biofefi.options.enums import ModelNames, ProblemTypes
+from biofefi.options.enums import ProblemTypes
+from biofefi.options.model_problems import MODEL_PROBLEM_DICT
 from biofefi.utils.utils import create_directory
 
 
@@ -93,24 +85,6 @@ def load_models_to_explain(path: Path, model_names: list) -> dict[str, list]:
     return models
 
 
-# Mapping model types and problem types to specific model classes
-_MODEL_PROBLEM_DICT = {
-    (ModelNames.LinearModel, ProblemTypes.Classification): LogisticRegression,
-    (ModelNames.LinearModel, ProblemTypes.Regression): LinearRegression,
-    (ModelNames.RandomForest, ProblemTypes.Classification): RandomForestClassifier,
-    (ModelNames.RandomForest, ProblemTypes.Regression): RandomForestRegressor,
-    (ModelNames.XGBoost, ProblemTypes.Classification): XGBClassifier,
-    (ModelNames.XGBoost, ProblemTypes.Regression): XGBRegressor,
-    (ModelNames.SVM, ProblemTypes.Classification): SVC,
-    (ModelNames.SVM, ProblemTypes.Regression): SVR,
-    (
-        ModelNames.BRNNClassifier,
-        ProblemTypes.Classification,
-    ): BayesianRegularisedNNClassifier,
-    (ModelNames.BRNNRegressor, ProblemTypes.Regression): BayesianRegularisedNNRegressor,
-}
-
-
 def assert_model_param(model, model_params, logger: object = None) -> None:
     """
     Asserts that the model parameters are valid
@@ -176,9 +150,7 @@ def get_models(
         if model["use"]
     ]
     for model, model_param in model_list:
-        if model_class := _MODEL_PROBLEM_DICT.get(
-            (model.lower(), problem_type.lower())
-        ):
+        if model_class := MODEL_PROBLEM_DICT.get((model.lower(), problem_type.lower())):
             if problem_type.lower() == ProblemTypes.Classification:
                 model_param = assert_model_param(
                     model_class, model_param, logger=logger
