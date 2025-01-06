@@ -9,7 +9,7 @@ To begin, select your experiment from the dropdown menu where it says **"Select 
 The page provides the following visualisation tools:
 
 ### Target Variable Distribution
-Visualize the distribution of your target variable using histograms and KDE (Kernel Density Estimation).
+Visualise the distribution of your target variable using histograms and KDE (Kernel Density Estimation).
 
 - **Show KDE**: Toggle to include a KDE curve.
 - **Number of Bins**: Adjust the number of bins in the histogram.
