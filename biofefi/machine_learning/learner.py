@@ -1,10 +1,19 @@
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
 import numpy as np
 import pandas as pd
+from sklearn.metrics import make_scorer
+from sklearn.model_selection import GridSearchCV
 
+from biofefi.options.choices import (
+    CLASSIFICATION_METRICS,
+    MODEL_PROBLEM_CHOICES,
+    REGRESSION_METRICS,
+)
+from biofefi.options.execution import ExecutionOptions
+from biofefi.options.ml import MachineLearningOptions
 from biofefi.services.ml_models import get_models
-from biofefi.machine_learning.metrics import get_metrics
+from biofefi.services.metrics import get_metrics
 from biofefi.options.enums import DataSplitMethods, Normalisations, ProblemTypes
 from biofefi.utils.logging_utils import Logger
 
@@ -84,7 +93,7 @@ class Learner:
 
         return X_train, X_test, y_train, y_test
 
-    def fit(self, data: Tuple) -> None:
+    def fit(self, data: Tuple):
         """
         Fits machine learning models to the given data
         and applies holdout strategy with bootstrap sampling.
@@ -270,3 +279,61 @@ class Learner:
                 }
 
         return statistics
+
+
+class GridSearchLearner:
+    def __init__(
+        self,
+        model_types: dict,
+        problem_type: ProblemTypes,
+        data_split: dict,
+        normalization: Normalisations,
+        n_bootstraps: int,
+        logger: Logger | None = None,
+    ) -> None:
+        self._logger = logger
+        self._model_types: dict[str, Any] = model_types
+        self._problem_type = problem_type
+        self._data_split = data_split
+        self._normalization = normalization
+        self._n_bootstraps = n_bootstraps
+        self._metrics = get_metrics(self._problem_type, logger=self._logger)
+        self._models = []
+
+    def fit(self, X_train: np.ndarray, y_train: np.ndarray) -> GridSearchCV:
+        """_summary_
+
+        Args:
+            X_train (np.ndarray): _description_
+            y_train (np.ndarray): _description_
+
+        Returns:
+            GridSearchCV: _description_
+        """
+        # Make grid search compatible scorers
+        scorers = (
+            # Copy the dicts to not affect global versions
+            REGRESSION_METRICS.copy()
+            if self._problem_type == ProblemTypes.Regression
+            else CLASSIFICATION_METRICS.copy()
+        )
+        scorers = {key: make_scorer(value) for key, value in scorers.items()}
+
+        # Fit models
+        for mt in self._model_types:
+            # Set up grid search
+            model = MODEL_PROBLEM_CHOICES.get((mt.lower(), self._problem_type.lower()))
+            refit = (
+                "R2" if self._problem_type == ProblemTypes.Regression else "accuracy"
+            )
+            gs = GridSearchCV(
+                estimator=model(),
+                param_grid=self._model_types["params"],
+                scoring=scorers,
+                refit=refit,
+                n_jobs=-1,
+            )
+
+            # Fit the model
+            gs.fit(X_train, y_train)
+            self._models.append(gs)
