@@ -33,7 +33,7 @@ Generate pairwise scatter plots for selected features to identify trends and int
 ![Pairplot](../_static/pairplot.png)
 
 ### t-SNE Plot
-Visualize high-dimensional data in two dimensions using t-SNE.
+Visualise high-dimensional data in two dimensions using t-SNE.
 
 ![t-SNE Plot](../_static/tsne-plot.png)
 
