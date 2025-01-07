@@ -11,9 +11,9 @@ from biofefi.options.choices import (
     MODEL_PROBLEM_CHOICES,
     REGRESSION_METRICS,
 )
-from biofefi.services.ml_models import get_models
-from biofefi.services.metrics import get_metrics
 from biofefi.options.enums import DataSplitMethods, Normalisations, ProblemTypes
+from biofefi.services.metrics import get_metrics
+from biofefi.services.ml_models import get_models
 from biofefi.utils.logging_utils import Logger
 
 

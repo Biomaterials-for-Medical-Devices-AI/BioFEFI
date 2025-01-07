@@ -12,6 +12,7 @@ from sklearn.metrics import (
 )
 from sklearn.svm import SVC, SVR
 from xgboost import XGBClassifier, XGBRegressor
+
 from biofefi.machine_learning.nn_models import (
     BayesianRegularisedNNClassifier,
     BayesianRegularisedNNRegressor,

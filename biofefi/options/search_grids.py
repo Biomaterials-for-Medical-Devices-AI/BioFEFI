@@ -1,6 +1,5 @@
 from biofefi.options.choices import SVM_KERNELS
 
-
 LINEAR_MODEL_GRID = {
     "fit_intercept": [True, False],
 }

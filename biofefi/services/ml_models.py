@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from pickle import UnpicklingError, dump, load
 
-from biofefi.options.enums import ProblemTypes
 from biofefi.options.choices import MODEL_PROBLEM_CHOICES
+from biofefi.options.enums import ProblemTypes
 from biofefi.utils.utils import create_directory
 
 
