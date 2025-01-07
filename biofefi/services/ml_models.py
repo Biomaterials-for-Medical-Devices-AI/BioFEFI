@@ -122,7 +122,10 @@ def assert_model_param(model, model_params, logger: object = None) -> None:
 
 
 def get_models(
-    model_types: dict[str, dict], problem_type: str, logger: object = None
+    model_types: dict[str, dict],
+    problem_type: str,
+    logger: object = None,
+    use_params: bool = True,
 ) -> list:
     """
     Constructs and initializes machine learning models
@@ -134,14 +137,15 @@ def get_models(
         problem_type (str): Type of problem (
             classification or regression).
         logger (object): Logger object to log messages.
-
-    Returns:
-        - list: A dictionary of initialized models where th
-        keys are model names and the values are instances
-        of the corresponding models.
+        use_params (bool, optional): Add the parameters to models or leave them blank. Defaults to True.
 
     Raises:
-        - ValueError: If a model type is not recognized or unsupported
+        ValueError: If a model type is not recognized or unsupported
+
+    Returns:
+        list: A dictionary of initialized models where th
+        keys are model names and the values are instances
+        of the corresponding models.
     """
     models = {}
     model_list = [
@@ -153,17 +157,10 @@ def get_models(
         if model_class := MODEL_PROBLEM_CHOICES.get(
             (model.lower(), problem_type.lower())
         ):
+            model_param = assert_model_param(model_class, model_param, logger=logger)
             if problem_type.lower() == ProblemTypes.Classification:
-                model_param = assert_model_param(
-                    model_class, model_param, logger=logger
-                )
                 model_param["class_weight"] = "balanced"
-                models[model] = model_class(**model_param)
-            else:
-                model_param = assert_model_param(
-                    model_class, model_param, logger=logger
-                )
-                models[model] = model_class(**model_param)
+            models[model] = model_class(**model_param) if use_params else model_class()
 
         else:
             raise ValueError(f"Model type {model} not recognized")
