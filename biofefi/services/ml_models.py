@@ -126,7 +126,7 @@ def get_models(
     problem_type: str,
     logger: object = None,
     use_params: bool = True,
-) -> list:
+) -> dict:
     """
     Constructs and initializes machine learning models
     based on the given configuration.
@@ -143,7 +143,7 @@ def get_models(
         ValueError: If a model type is not recognized or unsupported
 
     Returns:
-        list: A dictionary of initialized models where th
+        dict: A dictionary of initialized models where th
         keys are model names and the values are instances
         of the corresponding models.
     """

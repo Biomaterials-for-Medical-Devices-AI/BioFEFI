@@ -1,17 +1,16 @@
-from typing import Any, Dict, Tuple
+from typing import Any, Tuple
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import GridSearchCV
 
+from biofefi.machine_learning.data import TabularData
 from biofefi.options.choices import (
     CLASSIFICATION_METRICS,
     MODEL_PROBLEM_CHOICES,
     REGRESSION_METRICS,
 )
-from biofefi.options.execution import ExecutionOptions
-from biofefi.options.ml import MachineLearningOptions
 from biofefi.services.ml_models import get_models
 from biofefi.services.metrics import get_metrics
 from biofefi.options.enums import DataSplitMethods, Normalisations, ProblemTypes
@@ -208,7 +207,7 @@ class Learner:
         y_pred_train: np.ndarray,
         y_test: np.ndarray,
         y_pred_test: np.ndarray,
-    ) -> Dict:
+    ) -> dict:
         """
         Evaluates the performance of a model using specified metrics.
 
@@ -234,16 +233,16 @@ class Learner:
             }
         return eval_res
 
-    def _compute_metrics_statistics(self, metric_res: Dict) -> Dict:
+    def _compute_metrics_statistics(self, metric_res: dict) -> dict:
         """
         Compute metric statistics for each model.
 
         Args:
-            - metric_res (Dict): Dictionary containing metric values
+            - metric_res (dict): Dictionary containing metric values
             for each bootstrap sample.
 
         Returns:
-            - Dict: Dictionary containing metric statistics for
+            - dict: Dictionary containing metric statistics for
             each model.
         """
         statistics = {}
@@ -298,31 +297,47 @@ class GridSearchLearner:
         self._normalization = normalization
         self._n_bootstraps = n_bootstraps
         self._metrics = get_metrics(self._problem_type, logger=self._logger)
-        self._models = []
+        self._models: dict = {}
 
-    def fit(self, X_train: np.ndarray, y_train: np.ndarray) -> GridSearchCV:
+    def fit(self, data: TabularData) -> GridSearchCV:
         """_summary_
 
         Args:
-            X_train (np.ndarray): _description_
-            y_train (np.ndarray): _description_
+            data (TabularData): _description_
 
         Returns:
             GridSearchCV: _description_
         """
+        self._logger.info("Fitting models using Grid Search...")
+        self._models = get_models(
+            self._model_types,
+            self._problem_type,
+            logger=self._logger,
+            use_params=False,
+        )
+        # Extract the data
+        X_train = data.X_train[0]
+        X_test = data.X_test[0]
+        y_train = data.y_train[0]
+        y_test = data.y_test[0]
+
         # Make grid search compatible scorers
         scorers = (
-            # Copy the dicts to not affect global versions
-            REGRESSION_METRICS.copy()
+            REGRESSION_METRICS
             if self._problem_type == ProblemTypes.Regression
-            else CLASSIFICATION_METRICS.copy()
+            else CLASSIFICATION_METRICS
         )
         scorers = {key: make_scorer(value) for key, value in scorers.items()}
 
         # Fit models
-        for mt in self._model_types:
+        res = {}
+        metric_res = {}
+        trained_models = {model_name: [] for model_name in self._models.keys()}
+        for model_name, model in self._models.items():
             # Set up grid search
-            model = MODEL_PROBLEM_CHOICES.get((mt.lower(), self._problem_type.lower()))
+            model = MODEL_PROBLEM_CHOICES.get(
+                (model_name.lower(), self._problem_type.lower())
+            )
             refit = (
                 "R2" if self._problem_type == ProblemTypes.Regression else "accuracy"
             )
@@ -335,5 +350,98 @@ class GridSearchLearner:
             )
 
             # Fit the model
+            self._logger(f"Fitting {model_name}...")
             gs.fit(X_train, y_train)
-            self._models.append(gs)
+
+            # Make predictions for evaluation
+            y_pred_train = gs.predict(X_train)
+            res[0][model_name]["y_pred_train"] = y_pred_train
+            y_pred_test = gs.predict(X_test)
+            res[0][model_name]["y_pred_test"] = y_pred_test
+            if model_name not in metric_res:
+                metric_res[model_name] = []
+            metric_res[model_name].append(
+                self._evaluate(model_name, y_train, y_pred_train, y_test, y_pred_test)
+            )
+            trained_models[model_name].append(model)
+        metric_res_stats = self._compute_metrics_statistics(metric_res)
+        return res, metric_res, metric_res_stats, trained_models
+
+    def _evaluate(
+        self,
+        model_name: str,
+        y_train: np.ndarray,
+        y_pred_train: np.ndarray,
+        y_test: np.ndarray,
+        y_pred_test: np.ndarray,
+    ) -> dict:
+        """
+        Evaluates the performance of a model using specified metrics.
+
+        Args:
+            - model_name (str): Name of the model being evaluated.
+            - y_train (np.ndarray): True labels for the training set.
+            - y_pred_train (np.ndarray): Predicted labels for the training set.
+            - y_test (np.ndarray): True labels for the test set.
+            - y_pred_test (np.ndarray): Predicted labels for the test set.
+        """
+        self._logger.info(f"Evaluating {model_name}...")
+        eval_res = {}
+        for metric_name, metric in self._metrics.items():
+            eval_res[metric_name] = {}
+            self._logger.info(f"Evaluating {model_name} on {metric_name}...")
+            metric_train = metric(y_train, y_pred_train)
+            metric_test = metric(y_test, y_pred_test)
+            eval_res[metric_name]["train"] = {
+                "value": metric_train,
+            }
+            eval_res[metric_name]["test"] = {
+                "value": metric_test,
+            }
+        return eval_res
+
+    def _compute_metrics_statistics(self, metric_res: dict) -> dict:
+        """
+        Compute metric statistics for each model.
+
+        Args:
+            - metric_res (dict): Dictionary containing metric values
+            for each bootstrap sample.
+
+        Returns:
+            - dict: Dictionary containing metric statistics for
+            each model.
+        """
+        statistics = {}
+
+        for model_name, metrics_list in metric_res.items():
+            # Initialize dictionaries to store metric values for train and test sets
+            train_metrics = {}
+            test_metrics = {}
+
+            # Aggregate metric values from each bootstrap sample
+            for metrics in metrics_list:
+                for metric_name, metric_values in metrics.items():
+                    if metric_name not in train_metrics:
+                        train_metrics[metric_name] = []
+                        test_metrics[metric_name] = []
+
+                    train_metrics[metric_name].append(metric_values["train"]["value"])
+                    test_metrics[metric_name].append(metric_values["test"]["value"])
+
+            # Compute average and standard deviation for each metric
+            statistics[model_name] = {"train": {}, "test": {}}
+            for metric_name in train_metrics.keys():
+                train_values = np.array(train_metrics[metric_name])
+                test_values = np.array(test_metrics[metric_name])
+
+                statistics[model_name]["train"][metric_name] = {
+                    "mean": np.mean(train_values),
+                    "std": np.std(train_values),
+                }
+                statistics[model_name]["test"][metric_name] = {
+                    "mean": np.mean(test_values),
+                    "std": np.std(test_values),
+                }
+
+        return statistics
