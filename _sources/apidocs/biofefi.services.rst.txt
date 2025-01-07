@@ -44,6 +44,14 @@ biofefi.services.logs module
    :undoc-members:
    :show-inheritance:
 
+biofefi.services.metrics module
+-------------------------------
+
+.. automodule:: biofefi.services.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 biofefi.services.ml\_models module
 ----------------------------------
 

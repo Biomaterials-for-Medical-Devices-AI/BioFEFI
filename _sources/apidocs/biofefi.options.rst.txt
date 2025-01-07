@@ -68,6 +68,14 @@ biofefi.options.plotting module
    :undoc-members:
    :show-inheritance:
 
+biofefi.options.search\_grids module
+------------------------------------
+
+.. automodule:: biofefi.options.search_grids
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
