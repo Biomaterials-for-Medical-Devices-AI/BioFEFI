@@ -232,14 +232,22 @@ class GridSearchLearner:
         self._metrics = get_metrics(self._problem_type, logger=self._logger)
         self._models: dict = {}
 
-    def fit(self, data: TabularData) -> GridSearchCV:
-        """_summary_
+    def fit(self, data: TabularData) -> tuple[dict, dict, dict, dict]:
+        """Fit models to the data using Grid Search with cross validation. Evaluates them
+        and returns metrics and statistics with the models.
 
         Args:
-            data (TabularData): _description_
+            data (TabularData): The data to fit the models with.
 
         Returns:
-            GridSearchCV: _description_
+            res (dict): Dictionary containing model predictions for
+            each bootstrap sample.
+            metric_res (dict): Dictionary containing metric values for
+            each bootstrap sample.
+            metric_res_stats (dict): Dictionary containing average and
+            standard deviation of metric values across bootstrap samples.
+            trained_models (dict): Dictionary containing
+            trained models for each model type.
         """
         self._logger.info("Fitting models using Grid Search...")
         self._models = get_models(
