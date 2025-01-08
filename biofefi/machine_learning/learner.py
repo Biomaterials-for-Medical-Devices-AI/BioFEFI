@@ -220,7 +220,6 @@ class GridSearchLearner:
         problem_type: ProblemTypes,
         data_split: dict,
         normalization: Normalisations,
-        n_bootstraps: int,
         logger: Logger | None = None,
     ) -> None:
         self._logger = logger
@@ -228,7 +227,6 @@ class GridSearchLearner:
         self._problem_type = problem_type
         self._data_split = data_split
         self._normalization = normalization
-        self._n_bootstraps = n_bootstraps
         self._metrics = get_metrics(self._problem_type, logger=self._logger)
         self._models: dict = {}
 
