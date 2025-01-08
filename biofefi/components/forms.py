@@ -327,7 +327,8 @@ def ml_options_form(use_hyperparam_search: bool):
         st.session_state[ConfigStateKeys.RerunML] = True
 
     if st.session_state[ConfigStateKeys.RerunML]:
-        st.success("**✨ Hyper-parameters will be searched automatically**")
+        if use_hyperparam_search:
+            st.success("**✨ Hyper-parameters will be searched automatically**")
 
         model_types = {}
         use_linear = st.toggle("Linear Model", value=False)
