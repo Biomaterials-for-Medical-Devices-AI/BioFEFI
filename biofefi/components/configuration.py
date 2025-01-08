@@ -11,11 +11,7 @@ from biofefi.options.choices import (
     PROBLEM_TYPES,
     SVM_KERNELS,
 )
-from biofefi.options.enums import (
-    ConfigStateKeys,
-    DataSplitMethods,
-    PlotOptionKeys,
-)
+from biofefi.options.enums import ConfigStateKeys, DataSplitMethods, PlotOptionKeys
 
 
 @st.experimental_fragment
