@@ -14,7 +14,6 @@ from biofefi.options.choices import (
 from biofefi.options.enums import (
     ConfigStateKeys,
     DataSplitMethods,
-    Normalisations,
     PlotOptionKeys,
 )
 
@@ -441,6 +440,7 @@ def execution_options_box_auto():
         max_value=1.0,
         value=0.2,
     )
+    # Set data split to none for grid search but specify the test size
     st.session_state[ConfigStateKeys.DataSplit] = {
         "type": DataSplitMethods.NoSplit,
         "test_size": split_size,
