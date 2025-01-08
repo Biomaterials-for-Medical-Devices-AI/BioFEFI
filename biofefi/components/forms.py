@@ -15,6 +15,7 @@ from biofefi.options.enums import (
     ProblemTypes,
 )
 from biofefi.options.file_paths import biofefi_experiments_base_dir, ml_model_dir
+from biofefi.options.search_grids import LINEAR_MODEL_GRID, RANDOM_FOREST_GRID
 from biofefi.services.ml_models import load_models
 
 
@@ -290,8 +291,13 @@ def fi_options_form():
 
 
 @st.experimental_fragment
-def ml_options_form():
-    """The form for setting up the machine learning pipeline."""
+def ml_options_form(use_hyperparam_search: bool):
+    """
+    The form for setting up the machine learning pipeline.
+
+    Args:
+        use_hyperparam_search (bool): Is the user using hyper-parameter search?
+    """
     st.subheader("Select and cofigure which models to train")
 
     try:
@@ -316,20 +322,25 @@ def ml_options_form():
         st.session_state[ConfigStateKeys.RerunML] = True
 
     if st.session_state[ConfigStateKeys.RerunML]:
+        st.success("**✨ Hyper-parameters will be searched automatically**")
 
         model_types = {}
         use_linear = st.toggle("Linear Model", value=False)
         if use_linear:
 
-            st.write("Options:")
-            fit_intercept = st.checkbox("Fit intercept")
+            if not use_hyperparam_search:
+                st.write("Options:")
+                fit_intercept = st.checkbox("Fit intercept")
+                params = {
+                    "fit_intercept": fit_intercept,
+                }
+                st.divider()
+            else:
+                params = LINEAR_MODEL_GRID
             model_types["Linear Model"] = {
                 "use": use_linear,
-                "params": {
-                    "fit_intercept": fit_intercept,
-                },
+                "params": params,
             }
-            st.divider()
 
         use_rf = st.toggle("Random Forest", value=False)
         if use_rf:
