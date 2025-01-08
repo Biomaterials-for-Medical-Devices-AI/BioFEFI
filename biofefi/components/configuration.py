@@ -386,23 +386,6 @@ def execution_options_box_manual():
             "type": DataSplitMethods.KFold,
             "n_splits": split_size,
         }
-    else:
-        test_split = st.number_input(
-            "Test split",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.2,
-        )
-        split_size = st.number_input(
-            "n splits",
-            min_value=0,
-            value=5,
-        )
-        st.session_state[ConfigStateKeys.DataSplit] = {
-            "type": DataSplitMethods.NoSplit,
-            "n_splits": split_size,
-            "test_size": test_split,
-        }
     st.number_input(
         "Number of bootstraps",
         min_value=1,
