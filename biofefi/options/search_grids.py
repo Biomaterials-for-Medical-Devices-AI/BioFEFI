@@ -21,5 +21,5 @@ XGB_GRID = {
 SVM_GRID = {
     "kernel": [k.lower() for k in SVM_KERNELS],
     "degree": [2, 3, 4],
-    "C": [0.0, 1.0, 100],
+    "C": [1.0, 10.0, 100],
 }
