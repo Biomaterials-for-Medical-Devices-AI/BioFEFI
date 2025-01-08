@@ -387,7 +387,22 @@ def execution_options_box_manual():
             "n_splits": split_size,
         }
     else:
-        split_size = None
+        test_split = st.number_input(
+            "Test split",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.2,
+        )
+        split_size = st.number_input(
+            "n splits",
+            min_value=0,
+            value=5,
+        )
+        st.session_state[ConfigStateKeys.DataSplit] = {
+            "type": DataSplitMethods.NoSplit,
+            "n_splits": split_size,
+            "test_size": test_split,
+        }
     st.number_input(
         "Number of bootstraps",
         min_value=1,
@@ -434,16 +449,22 @@ def execution_options_box_auto():
         NORMALISATIONS,
         key=ConfigStateKeys.Normalization,
     )
-    split_size = st.number_input(
+    test_split = st.number_input(
         "Test split",
         min_value=0.0,
         max_value=1.0,
         value=0.2,
     )
+    split_size = st.number_input(
+        "n splits",
+        min_value=0,
+        value=5,
+    )
     # Set data split to none for grid search but specify the test size
     st.session_state[ConfigStateKeys.DataSplit] = {
         "type": DataSplitMethods.NoSplit,
-        "test_size": split_size,
+        "n_splits": split_size,
+        "test_size": test_split,
     }
     st.number_input(
         "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
