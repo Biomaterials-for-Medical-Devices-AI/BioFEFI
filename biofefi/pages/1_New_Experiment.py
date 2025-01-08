@@ -82,7 +82,7 @@ def _entrypoint(save_dir: Path):
         random_state=st.session_state[ConfigStateKeys.RandomSeed],
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
-        n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
+        n_bootstraps=st.session_state.get(ConfigStateKeys.NumberOfBootstraps, 0),
         use_hyperparam_search=st.session_state[ConfigStateKeys.UseHyperParamSearch],
     )
     plot_opts = PlottingOptions(
