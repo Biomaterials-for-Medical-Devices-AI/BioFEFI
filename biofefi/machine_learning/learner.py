@@ -286,7 +286,7 @@ class GridSearchLearner:
                 param_grid=self._model_types[model_name]["params"],
                 scoring=scorers,
                 refit=refit,
-                n_jobs=-1,
+                cv=self._data_split["n_splits"],
             )
 
             # Fit the model
