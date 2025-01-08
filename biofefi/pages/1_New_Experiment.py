@@ -83,6 +83,7 @@ def _entrypoint(save_dir: Path):
         dependent_variable=st.session_state[ConfigStateKeys.DependentVariableName],
         experiment_name=st.session_state[ConfigStateKeys.ExperimentName],
         n_bootstraps=st.session_state[ConfigStateKeys.NumberOfBootstraps],
+        use_hyperparam_search=st.session_state[ConfigStateKeys.UseHyperParamSearch],
     )
     plot_opts = PlottingOptions(
         plot_axis_font_size=st.session_state[PlotOptionKeys.AxisFontSize],
