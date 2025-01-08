@@ -345,38 +345,42 @@ def ml_options_form(use_hyperparam_search: bool):
         use_rf = st.toggle("Random Forest", value=False)
         if use_rf:
 
-            st.write("Options:")
-            n_estimators_rf = st.number_input(
-                "Number of estimators", value=100, key="n_estimators_rf"
-            )
-            min_samples_split = st.number_input("Minimum samples split", value=2)
-            min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
-            col1, col2 = st.columns(
-                [0.25, 0.75], vertical_alignment="bottom", gap="small"
-            )
-            use_rf_max_depth = col1.checkbox(
-                "Set max depth",
-                value=False,
-                help="If disabled or 0, then nodes are expanded until all leaves are pure"
-                " or until all leaves contain less than 'Minimum samples split'.",
-            )
-            max_depth_rf = col2.number_input(
-                "Maximum depth",
-                value="min",
-                min_value=0,
-                key="max_depth_rf",
-                disabled=not use_rf_max_depth,
-            )
-            model_types["Random Forest"] = {
-                "use": use_rf,
-                "params": {
+            if not use_hyperparam_search:
+                st.write("Options:")
+                n_estimators_rf = st.number_input(
+                    "Number of estimators", value=100, key="n_estimators_rf"
+                )
+                min_samples_split = st.number_input("Minimum samples split", value=2)
+                min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
+                col1, col2 = st.columns(
+                    [0.25, 0.75], vertical_alignment="bottom", gap="small"
+                )
+                use_rf_max_depth = col1.checkbox(
+                    "Set max depth",
+                    value=False,
+                    help="If disabled or 0, then nodes are expanded until all leaves are pure"
+                    " or until all leaves contain less than 'Minimum samples split'.",
+                )
+                max_depth_rf = col2.number_input(
+                    "Maximum depth",
+                    value="min",
+                    min_value=0,
+                    key="max_depth_rf",
+                    disabled=not use_rf_max_depth,
+                )
+                params = {
                     "n_estimators": n_estimators_rf,
                     "min_samples_split": min_samples_split,
                     "min_samples_leaf": min_samples_leaf,
                     "max_depth": max_depth_rf if max_depth_rf > 0 else None,
-                },
+                }
+                st.divider()
+            else:
+                params = RANDOM_FOREST_GRID
+            model_types["Random Forest"] = {
+                "use": use_rf,
+                "params": params,
             }
-            st.divider()
 
         use_xgb = st.toggle("XGBoost", value=False)
         if use_xgb:
