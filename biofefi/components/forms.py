@@ -21,7 +21,7 @@ from biofefi.options.search_grids import (
     SVM_GRID,
     XGB_GRID,
 )
-from biofefi.services.ml_models import load_models
+from biofefi.services.ml_models import models_exist
 
 
 def data_upload_form():
@@ -305,25 +305,19 @@ def ml_options_form(use_hyperparam_search: bool):
     """
     st.subheader("Select and cofigure which models to train")
 
-    try:
-        trained_models = load_models(
-            ml_model_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
+    if models_exist(
+        ml_model_dir(
+            biofefi_experiments_base_dir()
+            / st.session_state[ConfigStateKeys.ExperimentName]
         )
-
-        if trained_models:
-            st.warning("You have trained models in this experiment.")
-            st.checkbox(
-                "Would you like to rerun the experiments? This will overwrite the existing models.",
-                value=True,
-                key=ConfigStateKeys.RerunML,
-            )
-        else:
-            st.session_state[ConfigStateKeys.RerunML] = True
-
-    except Exception:
+    ):
+        st.warning("You have trained models in this experiment.")
+        st.checkbox(
+            "Would you like to rerun the experiments? This will overwrite the existing models.",
+            value=True,
+            key=ConfigStateKeys.RerunML,
+        )
+    else:
         st.session_state[ConfigStateKeys.RerunML] = True
 
     if st.session_state[ConfigStateKeys.RerunML]:
