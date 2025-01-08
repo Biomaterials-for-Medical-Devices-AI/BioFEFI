@@ -15,7 +15,12 @@ from biofefi.options.enums import (
     ProblemTypes,
 )
 from biofefi.options.file_paths import biofefi_experiments_base_dir, ml_model_dir
-from biofefi.options.search_grids import LINEAR_MODEL_GRID, RANDOM_FOREST_GRID, XGB_GRID
+from biofefi.options.search_grids import (
+    LINEAR_MODEL_GRID,
+    RANDOM_FOREST_GRID,
+    SVM_GRID,
+    XGB_GRID,
+)
 from biofefi.services.ml_models import load_models
 
 
@@ -432,19 +437,24 @@ def ml_options_form(use_hyperparam_search: bool):
         use_svm = st.toggle("Support Vector Machine", value=False)
         if use_svm:
 
-            st.write("Options:")
-            kernel = st.selectbox("Kernel", options=SVM_KERNELS)
-            degree = st.number_input("Degree", min_value=0, value=3)
-            c = st.number_input("C", value=1.0, min_value=0.0)
-            model_types["SVM"] = {
-                "use": use_svm,
-                "params": {
+            if not use_hyperparam_search:
+                st.write("Options:")
+                kernel = st.selectbox("Kernel", options=SVM_KERNELS)
+                degree = st.number_input("Degree", min_value=0, value=3)
+                c = st.number_input("C", value=1.0, min_value=0.0)
+                params = {
                     "kernel": kernel.lower(),
                     "degree": degree,
                     "C": c,
-                },
+                }
+                st.divider()
+            else:
+                params = SVM_GRID
+
+            model_types["SVM"] = {
+                "use": use_svm,
+                "params": params,
             }
-            st.divider()
 
         st.session_state[ConfigStateKeys.ModelTypes] = model_types
         st.subheader("Select outputs to save")
