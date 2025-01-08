@@ -45,6 +45,7 @@ PLOT_FONT_FAMILIES = ["serif", "sans-serif", "cursive", "fantasy", "monospace"]
 DATA_SPLITS = [
     DataSplitMethods.Holdout.capitalize(),
     DataSplitMethods.KFold.capitalize(),
+    DataSplitMethods.NoSplit.capitalize(),
 ]
 MODEL_PROBLEM_CHOICES = {
     (ModelNames.LinearModel, ProblemTypes.Classification): LogisticRegression,
