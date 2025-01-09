@@ -332,90 +332,13 @@ def ml_options_form(use_hyperparam_search: bool):
 
         use_rf = st.toggle("Random Forest", value=False)
         if use_rf:
-
-            if not use_hyperparam_search:
-                st.write("Options:")
-                n_estimators_rf = st.number_input(
-                    "Number of estimators", value=100, key="n_estimators_rf"
-                )
-                min_samples_split = st.number_input("Minimum samples split", value=2)
-                min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
-                col1, col2 = st.columns(
-                    [0.25, 0.75], vertical_alignment="bottom", gap="small"
-                )
-                use_rf_max_depth = col1.checkbox(
-                    "Set max depth",
-                    value=False,
-                    help="If disabled or 0, then nodes are expanded until all leaves are pure"
-                    " or until all leaves contain less than 'Minimum samples split'.",
-                )
-                max_depth_rf = col2.number_input(
-                    "Maximum depth",
-                    value="min",
-                    min_value=0,
-                    key="max_depth_rf",
-                    disabled=not use_rf_max_depth,
-                )
-                params = {
-                    "n_estimators": n_estimators_rf,
-                    "min_samples_split": min_samples_split,
-                    "min_samples_leaf": min_samples_leaf,
-                    "max_depth": max_depth_rf if max_depth_rf > 0 else None,
-                }
-                st.divider()
-            else:
-                params = RANDOM_FOREST_GRID
-            model_types["Random Forest"] = {
-                "use": use_rf,
-                "params": params,
-            }
+            rf_model_type = _random_forest_opts(use_hyperparam_search)
+            model_types.update(rf_model_type)
 
         use_xgb = st.toggle("XGBoost", value=False)
         if use_xgb:
-            if not use_hyperparam_search:
-                if st.checkbox("Set XGBoost options"):
-                    st.write("Options:")
-                    n_estimators_xgb = st.number_input(
-                        "Number of estimators", value=100, key="n_estimators_xgb"
-                    )
-                    learning_rate = st.number_input("Learning rate", value=0.01)
-                    subsample = st.number_input("Subsample size", value=0.5)
-                    col1, col2 = st.columns(
-                        [0.25, 0.75], vertical_alignment="bottom", gap="small"
-                    )
-                    use_xgb_max_depth = col1.checkbox(
-                        "Set max depth",
-                        value=False,
-                        help="If disabled or 0, then nodes are expanded until all leaves are pure.",
-                    )
-                    max_depth_xbg = col2.number_input(
-                        "Maximum depth",
-                        value="min",
-                        min_value=0,
-                        key="max_depth_xgb",
-                        disabled=not use_xgb_max_depth,
-                    )
-                else:
-                    n_estimators_xgb = None
-                    max_depth_xbg = None
-                    learning_rate = None
-                    subsample = None
-                params = {
-                    "kwargs": {
-                        "n_estimators": n_estimators_xgb,
-                        "max_depth": max_depth_xbg,
-                        "learning_rate": learning_rate,
-                        "subsample": subsample,
-                    }
-                }
-                st.divider()
-            else:
-                params = XGB_GRID
-
-            model_types["XGBoost"] = {
-                "use": use_xgb,
-                "params": params,
-            }
+            xgb_model_type = _xgboost_opts(use_hyperparam_search)
+            model_types.update(xgb_model_type)
 
         use_svm = st.toggle("Support Vector Machine", value=False)
         if use_svm:
@@ -703,6 +626,94 @@ def _linear_model_opts(use_hyperparam_search: bool) -> dict:
     else:
         params = LINEAR_MODEL_GRID
     model_types["Linear Model"] = {
+        "use": True,
+        "params": params,
+    }
+    return model_types
+
+
+def _random_forest_opts(use_hyperparam_search: bool) -> dict:
+    model_types = {}
+    if not use_hyperparam_search:
+        st.write("Options:")
+        n_estimators_rf = st.number_input(
+            "Number of estimators", value=100, key="n_estimators_rf"
+        )
+        min_samples_split = st.number_input("Minimum samples split", value=2)
+        min_samples_leaf = st.number_input("Minimum samples leaf", value=1)
+        col1, col2 = st.columns([0.25, 0.75], vertical_alignment="bottom", gap="small")
+        use_rf_max_depth = col1.checkbox(
+            "Set max depth",
+            value=False,
+            help="If disabled or 0, then nodes are expanded until all leaves are pure"
+            " or until all leaves contain less than 'Minimum samples split'.",
+        )
+        max_depth_rf = col2.number_input(
+            "Maximum depth",
+            value="min",
+            min_value=0,
+            key="max_depth_rf",
+            disabled=not use_rf_max_depth,
+        )
+        params = {
+            "n_estimators": n_estimators_rf,
+            "min_samples_split": min_samples_split,
+            "min_samples_leaf": min_samples_leaf,
+            "max_depth": max_depth_rf if max_depth_rf > 0 else None,
+        }
+        st.divider()
+    else:
+        params = RANDOM_FOREST_GRID
+    model_types["Random Forest"] = {
+        "use": True,
+        "params": params,
+    }
+    return model_types
+
+
+def _xgboost_opts(use_hyperparam_search: bool) -> dict:
+    model_types = {}
+    if not use_hyperparam_search:
+        if st.checkbox("Set XGBoost options"):
+            st.write("Options:")
+            n_estimators_xgb = st.number_input(
+                "Number of estimators", value=100, key="n_estimators_xgb"
+            )
+            learning_rate = st.number_input("Learning rate", value=0.01)
+            subsample = st.number_input("Subsample size", value=0.5)
+            col1, col2 = st.columns(
+                [0.25, 0.75], vertical_alignment="bottom", gap="small"
+            )
+            use_xgb_max_depth = col1.checkbox(
+                "Set max depth",
+                value=False,
+                help="If disabled or 0, then nodes are expanded until all leaves are pure.",
+            )
+            max_depth_xbg = col2.number_input(
+                "Maximum depth",
+                value="min",
+                min_value=0,
+                key="max_depth_xgb",
+                disabled=not use_xgb_max_depth,
+            )
+        else:
+            n_estimators_xgb = None
+            max_depth_xbg = None
+            learning_rate = None
+            subsample = None
+        params = {
+            "kwargs": {
+                "n_estimators": n_estimators_xgb,
+                "max_depth": max_depth_xbg,
+                "learning_rate": learning_rate,
+                "subsample": subsample,
+            }
+        }
+        st.divider()
+    else:
+        params = XGB_GRID
+
+    model_types["XGBoost"] = {
         "use": True,
         "params": params,
     }
