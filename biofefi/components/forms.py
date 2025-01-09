@@ -327,20 +327,8 @@ def ml_options_form(use_hyperparam_search: bool):
         model_types = {}
         use_linear = st.toggle("Linear Model", value=False)
         if use_linear:
-
-            if not use_hyperparam_search:
-                st.write("Options:")
-                fit_intercept = st.checkbox("Fit intercept")
-                params = {
-                    "fit_intercept": fit_intercept,
-                }
-                st.divider()
-            else:
-                params = LINEAR_MODEL_GRID
-            model_types["Linear Model"] = {
-                "use": use_linear,
-                "params": params,
-            }
+            lm_model_type = _linear_model_opts(use_hyperparam_search)
+            model_types.update(lm_model_type)
 
         use_rf = st.toggle("Random Forest", value=False)
         if use_rf:
@@ -701,3 +689,21 @@ def tSNE_plot_form(data, random_state, data_analysis_plot_dir, plot_opts):
             fig.savefig(data_analysis_plot_dir / "tsne_plot.png")
             plt.clf()
             st.success("Plots created and saved successfully.")
+
+
+def _linear_model_opts(use_hyperparam_search: bool) -> dict:
+    model_types = {}
+    if not use_hyperparam_search:
+        st.write("Options:")
+        fit_intercept = st.checkbox("Fit intercept")
+        params = {
+            "fit_intercept": fit_intercept,
+        }
+        st.divider()
+    else:
+        params = LINEAR_MODEL_GRID
+    model_types["Linear Model"] = {
+        "use": True,
+        "params": params,
+    }
+    return model_types
