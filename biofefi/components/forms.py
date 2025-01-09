@@ -342,25 +342,8 @@ def ml_options_form(use_hyperparam_search: bool):
 
         use_svm = st.toggle("Support Vector Machine", value=False)
         if use_svm:
-
-            if not use_hyperparam_search:
-                st.write("Options:")
-                kernel = st.selectbox("Kernel", options=SVM_KERNELS)
-                degree = st.number_input("Degree", min_value=0, value=3)
-                c = st.number_input("C", value=1.0, min_value=0.0)
-                params = {
-                    "kernel": kernel.lower(),
-                    "degree": degree,
-                    "C": c,
-                }
-                st.divider()
-            else:
-                params = SVM_GRID
-
-            model_types["SVM"] = {
-                "use": use_svm,
-                "params": params,
-            }
+            svm_model_type = _svm_opts(use_hyperparam_search)
+            model_types.update(svm_model_type)
 
         st.session_state[ConfigStateKeys.ModelTypes] = model_types
         st.subheader("Select outputs to save")
@@ -714,6 +697,29 @@ def _xgboost_opts(use_hyperparam_search: bool) -> dict:
         params = XGB_GRID
 
     model_types["XGBoost"] = {
+        "use": True,
+        "params": params,
+    }
+    return model_types
+
+
+def _svm_opts(use_hyperparam_search: bool) -> dict:
+    model_types = {}
+    if not use_hyperparam_search:
+        st.write("Options:")
+        kernel = st.selectbox("Kernel", options=SVM_KERNELS)
+        degree = st.number_input("Degree", min_value=0, value=3)
+        c = st.number_input("C", value=1.0, min_value=0.0)
+        params = {
+            "kernel": kernel.lower(),
+            "degree": degree,
+            "C": c,
+        }
+        st.divider()
+    else:
+        params = SVM_GRID
+
+    model_types["SVM"] = {
         "use": True,
         "params": params,
     }
