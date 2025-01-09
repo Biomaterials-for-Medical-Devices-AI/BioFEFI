@@ -325,23 +325,19 @@ def ml_options_form(use_hyperparam_search: bool):
             st.success("**✨ Hyper-parameters will be searched automatically**")
 
         model_types = {}
-        use_linear = st.toggle("Linear Model", value=False)
-        if use_linear:
+        if st.toggle("Linear Model", value=False):
             lm_model_type = _linear_model_opts(use_hyperparam_search)
             model_types.update(lm_model_type)
 
-        use_rf = st.toggle("Random Forest", value=False)
-        if use_rf:
+        if st.toggle("Random Forest", value=False):
             rf_model_type = _random_forest_opts(use_hyperparam_search)
             model_types.update(rf_model_type)
 
-        use_xgb = st.toggle("XGBoost", value=False)
-        if use_xgb:
+        if st.toggle("XGBoost", value=False):
             xgb_model_type = _xgboost_opts(use_hyperparam_search)
             model_types.update(xgb_model_type)
 
-        use_svm = st.toggle("Support Vector Machine", value=False)
-        if use_svm:
+        if st.toggle("Support Vector Machine", value=False):
             svm_model_type = _svm_opts(use_hyperparam_search)
             model_types.update(svm_model_type)
 
