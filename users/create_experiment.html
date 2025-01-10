@@ -50,6 +50,14 @@
 </section>
 <section id="configure-data-options">
 <h2>Configure data options<a class="headerlink" href="#configure-data-options" title="Link to this heading">¶</a></h2>
+<section id="automatic-hyper-parameter-search">
+<h3>Automatic hyper-parameter search<a class="headerlink" href="#automatic-hyper-parameter-search" title="Link to this heading">¶</a></h3>
+<p>BioFEFI allows you to either manually set hyper-parameters for your models or perform an automatic hyper-parameter search. This is performed by <a class="reference external" href="https://scikit-learn.org/stable/modules/grid_search.html#exhaustive-grid-search">Grid Search with cross-validation</a>. When performing automatic hyper-parameter search, the data will not be bootstrapped and you will get the best performing model from the search for each model. By default, BioFEFI will perform automatic hyper-parameter search; to manually tune your models, click the toggle to switch to manual mode.</p>
+<p><img alt="Automatic hyper-parameter search" src="../_images/auto-hp-search.png" /></p>
+<p><img alt="Manual hyper-parameter search" src="../_images/manual-hp-search.png" /></p>
+</section>
+<section id="options">
+<h3>Options<a class="headerlink" href="#options" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Select your problem type.</p>
 <p>If your dependent variable is categorical (e.g. cat 🐱 or dog 🐶), choose <strong>“Classification”</strong>.</p>
@@ -69,6 +77,7 @@
 <li><p>Specify the random seed. Data splitting is pseudo-random and this setting helps make an experiment repeatable, while reducing bias in the training and testing sets.</p></li>
 </ul>
 <p><img alt="Configure data" src="../_images/config-data.png" /></p>
+</section>
 </section>
 <section id="configure-experiment-plots">
 <h2>Configure experiment plots<a class="headerlink" href="#configure-experiment-plots" title="Link to this heading">¶</a></h2>
