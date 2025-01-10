@@ -153,14 +153,16 @@ def get_models(
         for model_type, model in model_types.items()
         if model["use"]
     ]
-    for model, model_param in model_list:
+    for model, model_params in model_list:
         if model_class := MODEL_PROBLEM_CHOICES.get(
             (model.lower(), problem_type.lower())
         ):
-            model_param = assert_model_param(model_class, model_param, logger=logger)
             if problem_type.lower() == ProblemTypes.Classification:
-                model_param["class_weight"] = "balanced"
-            models[model] = model_class(**model_param) if use_params else model_class()
+                model_params["class_weight"] = "balanced"
+            models[model] = model_class(**model_params) if use_params else model_class()
+            logger.info(
+                f"Using model {model_class.__name__} with parameters {model_params}"
+            )
 
         else:
             raise ValueError(f"Model type {model} not recognized")
