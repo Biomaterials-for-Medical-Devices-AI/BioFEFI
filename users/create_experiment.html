@@ -63,9 +63,17 @@
 <li><p>Select your data split method</p>
 <p><strong>“Holdout”</strong> will create a train-test split with a portion of the data randomly held out to test the model, which will be trained on the remaining portion of the data.</p>
 <p><strong>“K-fold”</strong> stands for <em>K-fold cross validation</em>. The test data is split from the training data, then the training data is split into <em>k</em>-folds. The folds are used to find the model parameters and the test set is used to evaluate the models.</p>
+<p><strong>Data split methods are not available if using automatic hyper-parameter search.</strong></p>
 </li>
-<li><p>Specify a test split size. This is a number between 0 and 1. The default is 0.20, i.e. 20% of the data will be used is the test data and 80% for training.</p></li>
-<li><p>Specify the number of bootstraps. This will train a model <em>n</em> times, where <em>n</em> is the number of bootstraps. The data will be randomly split <em>n</em> times into new bataches of training and testing sets. Defaults to 10.</p></li>
+<li><p>Specify a test split size. This is a number between 0 and 1. The default is 0.20, i.e. 20% of the data will be used is the test data and 80% for training.</p>
+<p><strong>Test split is replaced by n splits when using K-fold as the Data split method.</strong></p>
+</li>
+<li><p>Specify <em>n</em> splits. This is the number of folds for K-fold cross validation.</p>
+<p><strong>This is not available when using Holdout with manual hyper-parameter search.</strong></p>
+</li>
+<li><p>Specify the number of bootstraps. This will train a model <em>n</em> times, where <em>n</em> is the number of bootstraps. The data will be randomly split <em>n</em> times into new bataches of training and testing sets. Defaults to 10.</p>
+<p><strong>When using automatic hyper-parameter search, bootstrapping is not available.</strong></p>
+</li>
 <li><p>Specify the random seed. Data splitting is pseudo-random and this setting helps make an experiment repeatable, while reducing bias in the training and testing sets.</p></li>
 </ul>
 <p><img alt="Configure data" src="../_images/config-data.png" /></p>
