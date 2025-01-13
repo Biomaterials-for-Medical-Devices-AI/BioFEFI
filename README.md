@@ -2,7 +2,7 @@
 
 ## Overview
 
-This toolkit provides a streamlined workflow for machine learning model training, feature importance analysis, and fuzzy interpretation. It includes pipelines for data ingestion, model training, feature importance evaluation, and fuzzy logic rule generation.
+BioFEFI is a no-code application for training and interpreting machine learning models. You can search hyper-parameters manually or ask BioFEFI to perform hyper-parameter search automatically. Also included is the ability to perform exploratory data analysis before you create any models. BioFEFI also produces publication-ready graphs along with model metrics and, of course, the models themselves!
 
 **Note**: The data used in this pipeline needs to be pre-cleaned and pre-modeled. This includes:
 - Data type formatting
