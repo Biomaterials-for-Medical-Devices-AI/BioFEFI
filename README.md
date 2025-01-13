@@ -1,5 +1,6 @@
 # BioFEFI: Python Toolkit for Machine Learning, Feature Importance, and Fuzzy Interpretation
 
+![Python][python-badge]
 ![Poetry][poetry-badge]
 ![scikit-learn][sklearn-badge]
 ![Matplotlib][plt-badge]
@@ -7,7 +8,6 @@
 ![macOS][macos-badge]
 ![Windows][windows-badge]
 
-![GitHub top language][gh-lang-badge]
 ![GitHub Issues or Pull Requests][issues-badge]
 ![Build docs status][build-docs-badge]
 ![Publish docs status][publish-docs-badge]
@@ -39,7 +39,7 @@ BioFEFI will open in your internet browser when you run it. The main screen will
 [linux-badge]: https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black
 [macos-badge]: https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0
 [windows-badge]: https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white
-[gh-lang-badge]: https://img.shields.io/github/languages/top/Biomaterials-for-Medical-Devices-AI/BioFEFI?style=for-the-badge
+[python-badge]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [issues-badge]: https://img.shields.io/github/issues/Biomaterials-for-Medical-Devices-AI/BioFEFI?style=for-the-badge
 [build-docs-badge]: https://img.shields.io/github/actions/workflow/status/Biomaterials-for-Medical-Devices-AI/BioFEFI/build-dcos.yml?style=for-the-badge&label=Build%20docs
 [publish-docs-badge]: https://img.shields.io/github/actions/workflow/status/Biomaterials-for-Medical-Devices-AI/BioFEFI/publish-docs.yml?style=for-the-badge&label=Publish%20docs
