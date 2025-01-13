@@ -158,6 +158,12 @@ class Learner:
                 res[i][model_name]["y_pred_train"] = y_pred_train
                 y_pred_test = model.predict(X_test)
                 res[i][model_name]["y_pred_test"] = y_pred_test
+                if self._problem_type == ProblemTypes.Classification:
+                    y_pred_probs_train = model.predict_proba(X_train)
+                    y_pred_probs_test = model.predict_proba(X_test)
+                else:
+                    y_pred_probs_train = None
+                    y_pred_probs_test = None
                 if model_name not in metric_res:
                     metric_res[model_name] = []
                 metric_res[model_name].append(
@@ -166,8 +172,10 @@ class Learner:
                         self._metrics,
                         y_train,
                         y_pred_train,
+                        y_pred_probs_train,
                         y_test,
                         y_pred_test,
+                        y_pred_probs_test,
                         self._logger,
                     )
                 )
@@ -195,6 +203,12 @@ class Learner:
                 res[i][model_name]["y_pred_train"] = y_pred_train
                 y_pred_test = model.predict(X_test)
                 res[i][model_name]["y_pred_test"] = y_pred_test
+                if self._problem_type == ProblemTypes.Classification:
+                    y_pred_probs_train = model.predict_proba(X_train)
+                    y_pred_probs_test = model.predict_proba(X_test)
+                else:
+                    y_pred_probs_train = None
+                    y_pred_probs_test = None
                 if model_name not in metric_res:
                     metric_res[model_name] = []
                 metric_res[model_name].append(
@@ -203,8 +217,10 @@ class Learner:
                         self._metrics,
                         y_train,
                         y_pred_train,
+                        y_pred_probs_train,
                         y_test,
                         y_pred_test,
+                        y_pred_probs_test,
                         self._logger,
                     )
                 )
@@ -298,6 +314,12 @@ class GridSearchLearner:
             res[0][model_name]["y_pred_train"] = y_pred_train
             y_pred_test = gs.predict(X_test)
             res[0][model_name]["y_pred_test"] = y_pred_test
+            if self._problem_type == ProblemTypes.Classification:
+                y_pred_probs_train = gs.predict_proba(X_train)
+                y_pred_probs_test = gs.predict_proba(X_test)
+            else:
+                y_pred_probs_train = None
+                y_pred_probs_test = None
             if model_name not in metric_res:
                 metric_res[model_name] = []
             metric_res[model_name].append(
@@ -306,8 +328,10 @@ class GridSearchLearner:
                     metrics,
                     y_train,
                     y_pred_train,
+                    y_pred_probs_train,
                     y_test,
                     y_pred_test,
+                    y_pred_probs_test,
                     self._logger,
                 )
             )
@@ -322,8 +346,10 @@ def _evaluate(
     metrics: dict,
     y_train: np.ndarray,
     y_pred_train: np.ndarray,
+    y_pred_probs_train: np.ndarray,
     y_test: np.ndarray,
     y_pred_test: np.ndarray,
+    y_pred_probs_test: np.ndarray,
     logger: object,
 ) -> dict:
     """
@@ -343,8 +369,19 @@ def _evaluate(
     for metric_name, metric in metrics.items():
         eval_res[metric_name] = {}
         logger.info(f"Evaluating {model_name} on {metric_name}...")
-        metric_train = metric(y_train, y_pred_train)
-        metric_test = metric(y_test, y_pred_test)
+        if y_pred_probs_train is None or y_pred_probs_train.shape[1] < 3:
+            metric_train = metric(y_train, y_pred_train)
+            metric_test = metric(y_test, y_pred_test)
+        else:
+            if metric_name == "accuracy":
+                metric_train = metric(y_train, y_pred_train)
+                metric_test = metric(y_test, y_pred_test)
+            elif metric_name == "roc_auc_score":
+                metric_train = metric(y_train, y_pred_probs_train, multi_class="ovr")
+                metric_test = metric(y_test, y_pred_probs_test, multi_class="ovr")
+            else:
+                metric_train = metric(y_train, y_pred_train, average="micro")
+                metric_test = metric(y_test, y_pred_test, average="micro")
         eval_res[metric_name]["train"] = {
             "value": metric_train,
         }
