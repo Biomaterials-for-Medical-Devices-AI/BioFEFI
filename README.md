@@ -19,7 +19,7 @@ BioFEFI is a no-code application for training and interpreting machine learning 
 
 ## Install and run BioFEFI
 
-For information on how to install BioFEFI, check the [instructions](https://biomaterials-for-medical-devices-ai.github.io/BioFEFI/users/installation.html).
+For information on how to install and run BioFEFI, check the [instructions](https://biomaterials-for-medical-devices-ai.github.io/BioFEFI/users/installation.html).
 
 ## Usage
 
