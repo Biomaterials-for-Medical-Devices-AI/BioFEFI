@@ -12,32 +12,9 @@ This toolkit provides a streamlined workflow for machine learning model training
 
 The data should be in a format where all columns except the last one are input features, and the last column is the target variable.
 
-## Installation
+## Install and run BioFEFI
 
 For information on how to install BioFEFI, check the [instructions](https://biomaterials-for-medical-devices-ai.github.io/BioFEFI/users/installation.html).
-
-## Running the app
-
-Remember to activate the virtual environment before running the app, if you haven't already (see [Installation](#installation)). The app will open in your web browser. Or you can follow follow this link to view your app http://localhost:8501.
-
-### Users
-
-If the installation was successful, you should be able to run the app with the following command:
-
-```bash
-biofefi
-```
-
-### Developers
-
-If the installation was successful, you should be able to run the app. In the `BioFEFI/biofefi` directory run the following command:
-
-```bash
-poetry run biofefi
-```
-
-You will see the following screen:
-![main screen](static/main-screen.png)
 
 ## Usage
 
