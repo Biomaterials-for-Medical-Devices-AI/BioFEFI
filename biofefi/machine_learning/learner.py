@@ -11,7 +11,12 @@ from biofefi.options.choices import (
     MODEL_PROBLEM_CHOICES,
     REGRESSION_METRICS,
 )
-from biofefi.options.enums import DataSplitMethods, Normalisations, ProblemTypes
+from biofefi.options.enums import (
+    DataSplitMethods,
+    Metrics,
+    Normalisations,
+    ProblemTypes,
+)
 from biofefi.services.metrics import get_metrics
 from biofefi.services.ml_models import get_models
 from biofefi.utils.logging_utils import Logger
@@ -360,8 +365,10 @@ def _evaluate(
         - metrics (dict): The metrics to use in evaluation.
         - y_train (np.ndarray): True labels for the training set.
         - y_pred_train (np.ndarray): Predicted labels for the training set.
+        - y_pred_probs_train (np.ndarray): Predicted probabilities for the training set.
         - y_test (np.ndarray): True labels for the test set.
         - y_pred_test (np.ndarray): Predicted labels for the test set.
+        - y_pred_probs_test (np.ndarray): Predicted probabilities for the test set.
         - logger (object): The logger.
     """
     logger.info(f"Evaluating {model_name}...")
@@ -373,10 +380,10 @@ def _evaluate(
             metric_train = metric(y_train, y_pred_train)
             metric_test = metric(y_test, y_pred_test)
         else:
-            if metric_name == "accuracy":
+            if metric_name == Metrics.Accuracy:
                 metric_train = metric(y_train, y_pred_train)
                 metric_test = metric(y_test, y_pred_test)
-            elif metric_name == "roc_auc_score":
+            elif metric_name == Metrics.ROC_AUC:
                 metric_train = metric(y_train, y_pred_probs_train, multi_class="ovr")
                 metric_test = metric(y_test, y_pred_probs_test, multi_class="ovr")
             else:
