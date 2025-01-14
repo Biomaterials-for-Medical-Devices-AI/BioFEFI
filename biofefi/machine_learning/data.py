@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 import pandas as pd
-from sklearn.model_selection import KFold, train_test_split
+from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from biofefi.options.enums import DataSplitMethods, Normalisations
@@ -81,6 +81,8 @@ class DataBuilder:
                     y,
                     test_size=self._data_split["test_size"],
                     random_state=self._random_state + i,
+                    stratify=y,
+                    shuffle=True,
                 )
                 X_train_list.append(X_train)
                 X_test_list.append(X_test)
@@ -91,7 +93,7 @@ class DataBuilder:
             and self._data_split["type"].lower() == DataSplitMethods.KFold
         ):
             folds = self._data_split["n_splits"]
-            kf = KFold(n_splits=folds, shuffle=True, random_state=self._random_state)
+            kf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=self._random_state)
             kf.get_n_splits(X)
 
             for i, (train_index, test_index) in enumerate(kf.split(X)):
