@@ -114,7 +114,7 @@ class DataSplitMethods(StrEnum):
 
 class Metrics(StrEnum):
     Accuracy = "accuracy"
-    f1Score = "f1_score"
+    F1Score = "f1_score"
     Precision = "precision_score"
     Recall = "recall_score"
     ROC_AUC = "roc_auc_score"
