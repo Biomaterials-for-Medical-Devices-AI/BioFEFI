@@ -98,7 +98,7 @@ class DataBuilder:
             )
             kf.get_n_splits(X)
 
-            for i, (train_index, test_index) in enumerate(kf.split(X)):
+            for i, (train_index, test_index) in enumerate(kf.split(X, y)):
 
                 self._logger.info(
                     "Using K-Fold data split "
