@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-from biofefi.options.enums import DataSplitMethods, Normalisations
+from biofefi.options.enums import DataSplitMethods, Normalisations, ProblemTypes
 
 
 class DataBuilder:
@@ -26,6 +27,7 @@ class DataBuilder:
         n_bootstraps: int,
         logger: object = None,
         data_split: dict | None = None,
+        problem_type: str = None,
     ) -> None:
         self._path = data_path
         self._data_split = data_split
@@ -34,6 +36,7 @@ class DataBuilder:
         self._normalization = normalization
         self._numerical_cols = "all"
         self._n_bootstraps = n_bootstraps
+        self._problem_type = problem_type
 
     def _load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
@@ -76,12 +79,16 @@ class DataBuilder:
                     f"with test size {self._data_split['test_size']} "
                     f"for bootstrap {i+1}"
                 )
+                if self._problem_type == ProblemTypes.Regression:
+                    stratify = None
+                elif self._problem_type == ProblemTypes.Classification:
+                    stratify = y
                 X_train, X_test, y_train, y_test = train_test_split(
                     X,
                     y,
                     test_size=self._data_split["test_size"],
                     random_state=self._random_state + i,
-                    stratify=y,
+                    stratify=stratify,
                     shuffle=True,
                 )
                 X_train_list.append(X_train)
@@ -98,7 +105,12 @@ class DataBuilder:
             )
             kf.get_n_splits(X)
 
-            for i, (train_index, test_index) in enumerate(kf.split(X, y)):
+            if self._problem_type == ProblemTypes.Regression:
+                stratify = np.zeros(y.shape[0])
+            elif self._problem_type == ProblemTypes.Classification:
+                stratify = y
+
+            for i, (train_index, test_index) in enumerate(kf.split(X, stratify)):
 
                 self._logger.info(
                     "Using K-Fold data split "
