@@ -93,7 +93,9 @@ class DataBuilder:
             and self._data_split["type"].lower() == DataSplitMethods.KFold
         ):
             folds = self._data_split["n_splits"]
-            kf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=self._random_state)
+            kf = StratifiedKFold(
+                n_splits=folds, shuffle=True, random_state=self._random_state
+            )
             kf.get_n_splits(X)
 
             for i, (train_index, test_index) in enumerate(kf.split(X)):
