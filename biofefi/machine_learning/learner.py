@@ -293,6 +293,7 @@ class GridSearchLearner:
         res = {0: {}}
         metric_res = {}
         trained_models = {model_name: [] for model_name in self._models.keys()}
+        metric_res_stats = {model_name: {} for model_name in self._models.keys()}
         for model_name, model in self._models.items():
             res[0][model_name] = {}
             # Set up grid search
@@ -308,6 +309,7 @@ class GridSearchLearner:
                 scoring=scorers,
                 refit=refit,
                 cv=self._data_split["n_splits"],
+                return_train_score=True,
             )
 
             # Fit the model
@@ -342,7 +344,9 @@ class GridSearchLearner:
             )
             # append the best estimator
             trained_models[model_name].append(gs.best_estimator_)
-        metric_res_stats = _compute_metrics_statistics(metric_res)
+            metric_res_stats[model_name].update(
+                self._compute_metrics_statistics(gs.cv_results_, gs.best_index_)
+            )
         return res, metric_res, metric_res_stats, trained_models
 
     def _compute_metrics_statistics(self, metric_res: dict, best_index: int) -> dict:
