@@ -9,7 +9,10 @@ BioFEFI is installed and run via the command line. You can find the terminal on 
 **On Linux:** Since there are are lots of distributions of Linux, you will have to use a search engine (e.g. Google) or lookup the instructions for your particular distribution.
 
 ## Installation
-**N.B.:** You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI.
+### Pre-requirements
+You will need to install **Python 3.11** or greater to use BioFEFI. Make sure you also install `pip` (The Python package installer). If you don't already have it installed, [get Python.](https://www.python.org/downloads/)
+
+You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI. In the terminal use the following commands for your OS:
 
 On Mac:
 ```shell
