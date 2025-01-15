@@ -56,7 +56,7 @@ def display_metrics_table(metrics_path: Path):
     # Display the table in Streamlit
     st.write("### Metrics Summary")
     st.write(
-        "Metrics are the mean (± standard deviation) of all boostraps (if using the Holdout"
+        "Metrics are the mean (± standard deviation) of all bootstraps (if using the Holdout"
         " data split) or cross-validation folds (if using K-fold data split or"
         " automatic hyper-parameter search)."
     )
