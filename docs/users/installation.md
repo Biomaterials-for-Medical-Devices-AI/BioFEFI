@@ -4,6 +4,8 @@ BioFEFI is installed and run via the command line. You can find the terminal on 
 
 **On Mac:** [How to find the terminal on Mac](https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac)
 
+**On Windows:** [How to find the terminal on Windows](https://learn.microsoft.com/en-us/windows/terminal/faq#how-do-i-run-a-shell-in-windows-terminal-in-administrator-mode)
+
 ## Installation
 **N.B.:** You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI.
 
