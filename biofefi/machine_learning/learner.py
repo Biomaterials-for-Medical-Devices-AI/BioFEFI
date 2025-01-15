@@ -345,6 +345,38 @@ class GridSearchLearner:
         metric_res_stats = _compute_metrics_statistics(metric_res)
         return res, metric_res, metric_res_stats, trained_models
 
+    def _compute_metrics_statistics(self, metric_res: dict, best_index: int) -> dict:
+        """
+        Compute metric statistics for each model.
+
+        Args:
+            - metric_res (dict): Dictionary containing metric values
+            for each bootstrap sample.
+            - best_index (int):
+
+        Returns:
+            - dict: Dictionary containing metric statistics for
+            each model.
+        """
+        metric_names = (
+            REGRESSION_METRICS.keys()
+            if self._problem_type == ProblemTypes.Regression
+            else CLASSIFICATION_METRICS.keys()
+        )
+
+        statistics = {"train": {}, "test": {}}
+        for metric in metric_names:
+            statistics["train"][metric] = {
+                "mean": metric_res[f"mean_train_{metric}"][best_index],
+                "std": metric_res[f"std_train_{metric}"][best_index],
+            }
+            statistics["test"][metric] = {
+                "mean": metric_res[f"mean_test_{metric}"][best_index],
+                "std": metric_res[f"std_test_{metric}"][best_index],
+            }
+
+        return statistics
+
 
 def _evaluate(
     model_name: str,
