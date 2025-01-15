@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; BioFEFI  documentation</title>
+    <title>Installation and running &#8212; BioFEFI  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
@@ -33,9 +33,21 @@
 
           <div class="body" role="main">
             
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
-<p><strong>N.B.:</strong> You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI.</p>
+  <section id="installation-and-running">
+<h1>Installation and running<a class="headerlink" href="#installation-and-running" title="Link to this heading">¶</a></h1>
+<section id="before-you-start">
+<h2>Before you start…<a class="headerlink" href="#before-you-start" title="Link to this heading">¶</a></h2>
+<p>BioFEFI is installed and run via the command line. You can find the terminal on your computer in the following ways:</p>
+<p><strong>On Mac:</strong> <a class="reference external" href="https://support.apple.com/en-gb/guide/terminal/apd5265185d-f365-44cb-8b09-71a064a42125/mac">How to find the terminal on Mac</a></p>
+<p><strong>On Windows:</strong> <a class="reference external" href="https://learn.microsoft.com/en-us/windows/terminal/faq#how-do-i-run-a-shell-in-windows-terminal-in-administrator-mode">How to find the terminal on Windows</a></p>
+<p><strong>On Linux:</strong> Since there are are lots of distributions of Linux, you will have to use a search engine (e.g. Google) or lookup the instructions for your particular distribution.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<section id="pre-requirements">
+<h3>Pre-requirements<a class="headerlink" href="#pre-requirements" title="Link to this heading">¶</a></h3>
+<p>You will need to install <strong>Python 3.11</strong> or greater to use BioFEFI. Make sure you also install <code class="docutils literal notranslate"><span class="pre">pip</span></code> (The Python package installer). If you don’t already have it installed, <a class="reference external" href="https://www.python.org/downloads/">get Python.</a></p>
+<p>You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI. In the terminal use the following commands for your OS:</p>
 <p>On Mac:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>libomp
 </pre></div>
@@ -45,6 +57,8 @@
 </pre></div>
 </div>
 <p>On Windows, this doesn’t seem to be a problem. You should be able to proceed with installation.</p>
+</section>
+</section>
 <hr class="docutils" />
 <section id="mac-linux">
 <h2>Mac/Linux<a class="headerlink" href="#mac-linux" title="Link to this heading">¶</a></h2>
@@ -117,7 +131,9 @@ pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com
 <p class="caption" role="heading"><span class="caption-text">User documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Welcome to the BioFEFI user documentation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation and running</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#before-you-start">Before you start…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mac-linux">Mac/Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-biofefi">Running BioFEFI</a></li>
