@@ -6,21 +6,20 @@ import seaborn as sns
 from sklearn.metrics import RocCurveDisplay
 
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import ProblemTypes, Metrics
+from biofefi.options.enums import Metrics, ProblemTypes
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
 
 
 def plot_auc_roc(
-        y_classes_labels,
-        y_score_probs,
-        set_name: str,
-        model_name: str,
-        directory: str,
-        plot_opts: PlottingOptions | None = None,
-                 ):
-
+    y_classes_labels,
+    y_score_probs,
+    set_name: str,
+    model_name: str,
+    directory: str,
+    plot_opts: PlottingOptions | None = None,
+):
     """
     Plot the ROC curve for a multi-class classification model.
     Args:
@@ -32,7 +31,7 @@ def plot_auc_roc(
         directory: The directory to save the plot.
         Returns:
         None
-        """
+    """
 
     num_classes = y_score_probs.shape[1]
     start_index = 1 if num_classes == 2 else 0
@@ -40,11 +39,11 @@ def plot_auc_roc(
     for i in range(start_index, num_classes):
 
         auroc = RocCurveDisplay.from_predictions(
-        y_classes_labels[:, i],
-        y_score_probs[:, i],
-        name=f"Class {i} vs the rest",
-        color="darkorange",
-        plot_chance_level=True,
+            y_classes_labels[:, i],
+            y_score_probs[:, i],
+            name=f"Class {i} vs the rest",
+            color="darkorange",
+            plot_chance_level=True,
         )
 
         auroc.ax_.set_xlabel(
@@ -59,7 +58,9 @@ def plot_auc_roc(
             family=plot_opts.plot_font_family,
         )
 
-        figure_title = f"{model_name} {set_name} One-vs-Rest ROC curves:\n {i} Class vs Rest"
+        figure_title = (
+            f"{model_name} {set_name} One-vs-Rest ROC curves:\n {i} Class vs Rest"
+        )
         auroc.ax_.set_title(
             figure_title,
             family=plot_opts.plot_font_family,
@@ -77,6 +78,7 @@ def plot_auc_roc(
         auroc.figure_.savefig(f"{directory}/{model_name}-{set_name}-{i}_vs_rest.png")
 
         plt.close()
+
 
 def transform_to_one_hot(input_array):
     """
@@ -112,6 +114,7 @@ def transform_to_one_hot(input_array):
         output_array[i, label_to_index[label]] = 1
 
     return output_array
+
 
 def plot_scatter(
     y,
@@ -272,7 +275,7 @@ def save_actual_pred_plots(
                         plot_opts=plot_opts,
                     )
 
-                elif opt.problem_type == ProblemTypes.Classification:
+                else:
 
                     model = trained_models[model_name][i]
                     y_score_train = model.predict_proba(data.X_train[i])
@@ -284,7 +287,7 @@ def save_actual_pred_plots(
                         set_name="Train",
                         model_name=model_name,
                         directory=directory,
-                        plot_opts=plot_opts
+                        plot_opts=plot_opts,
                     )
 
                     y_score_test = model.predict_proba(data.X_test[i])
@@ -296,8 +299,5 @@ def save_actual_pred_plots(
                         set_name="Test",
                         model_name=model_name,
                         directory=directory,
-                        plot_opts=plot_opts
+                        plot_opts=plot_opts,
                     )
-
-
-
