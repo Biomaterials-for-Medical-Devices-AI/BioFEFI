@@ -3,13 +3,115 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from sklearn.metrics import RocCurveDisplay
 
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import ProblemTypes
+from biofefi.options.enums import ProblemTypes, Metrics
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
 
+
+def plot_auc_roc(
+        y_classes_labels,
+        y_score_probs,
+        set_name: str,
+        model_name: str,
+        directory: str,
+        plot_opts: PlottingOptions | None = None,
+                 ):
+
+    """
+    Plot the ROC curve for a multi-class classification model.
+    Args:
+
+        y_classes_labels: The true labels of the classes.
+        y_score_probs: The predicted probabilities of the classes.
+        set_name: The name of the set (train or test).
+        model_name: The name of the model.
+        directory: The directory to save the plot.
+        Returns:
+        None
+        """
+
+    num_classes = y_score_probs.shape[1]
+    start_index = 1 if num_classes == 2 else 0
+
+    for i in range(start_index, num_classes):
+
+        auroc = RocCurveDisplay.from_predictions(
+        y_classes_labels[:, i],
+        y_score_probs[:, i],
+        name=f"Class {i} vs the rest",
+        color="darkorange",
+        plot_chance_level=True,
+        )
+
+        auroc.ax_.set_xlabel(
+            "False Positive Rate",
+            fontsize=plot_opts.plot_axis_font_size,
+            family=plot_opts.plot_font_family,
+        )
+
+        auroc.ax_.set_ylabel(
+            "True Positive Rate",
+            fontsize=plot_opts.plot_axis_font_size,
+            family=plot_opts.plot_font_family,
+        )
+
+        figure_title = f"{model_name} {set_name} One-vs-Rest ROC curves:\n {i} Class vs Rest"
+        auroc.ax_.set_title(
+            figure_title,
+            family=plot_opts.plot_font_family,
+            wrap=True,
+        )
+
+        auroc.ax_.legend(
+            prop={
+                "family": plot_opts.plot_font_family,
+                "size": plot_opts.plot_axis_tick_size,
+            },
+            loc="lower right",
+        )
+
+        auroc.figure_.savefig(f"{directory}/{model_name}-{set_name}-{i}_vs_rest.png")
+
+        plt.close()
+
+def transform_to_one_hot(input_array):
+    """
+    Transforms a numpy array containing any number of different labels into a one-hot encoded array.
+
+    Parameters:
+    - input_array (numpy.ndarray): An array of shape (instances,) or (instances, 1) containing labels.
+
+    Returns:
+    - numpy.ndarray: A one-hot encoded array of shape (instances, num_classes),
+                     where num_classes is the number of unique labels in input_array.
+    """
+    # If the input is 1D, reshape it to (instances, 1)
+    if input_array.ndim == 1:
+        input_array = input_array[:, np.newaxis]
+
+    # Ensure the input is now a 2D array with shape (instances, 1)
+    if input_array.ndim != 2 or input_array.shape[1] != 1:
+        raise ValueError("Input array must have shape (instances, 1) or be 1D")
+
+    # Flatten the array to extract unique labels
+    labels = np.unique(input_array)
+
+    # Create a dictionary to map each label to an index
+    label_to_index = {label: index for index, label in enumerate(labels)}
+
+    # Initialize the output array with zeros
+    num_classes = len(labels)
+    output_array = np.zeros((input_array.shape[0], num_classes), dtype=int)
+
+    # Populate the output array with one-hot encoding
+    for i, label in enumerate(input_array[:, 0]):
+        output_array[i, label_to_index[label]] = 1
+
+    return output_array
 
 def plot_scatter(
     y,
@@ -91,6 +193,7 @@ def save_actual_pred_plots(
     n_bootstraps: int,
     plot_opts: PlottingOptions | None = None,
     ml_opts: MachineLearningOptions | None = None,
+    trained_models: dict | None = None,
 ) -> None:
     """Save Actual vs Predicted plots for Regression models
     Args:
@@ -104,46 +207,50 @@ def save_actual_pred_plots(
         None
     """
     if opt.problem_type == ProblemTypes.Regression:
+        metric = Metrics.R2
+    elif opt.problem_type == ProblemTypes.Classification:
+        metric = Metrics.ROC_AUC
 
-        model_boots_plot = {}
+    model_boots_plot = {}
 
-        for model_name, stats in ml_metric_results_stats.items():
-            # Extract the mean R² for the test set
-            mean_r2_test = stats["test"]["R2"]["mean"]
+    for model_name, stats in ml_metric_results_stats.items():
+        # Extract the mean R² for the test set
+        mean_r2_test = stats["test"][metric]["mean"]
 
-            # Find the bootstrap index closest to the mean R²
-            dif = float("inf")
-            closest_index = -1
-            for i, bootstrap in enumerate(ml_metric_results[model_name]):
-                r2_test_value = bootstrap["R2"]["test"]["value"]
-                current_dif = abs(r2_test_value - mean_r2_test)
-                if current_dif < dif:
-                    dif = current_dif
-                    closest_index = i
+        # Find the bootstrap index closest to the mean R²
+        dif = float("inf")
+        closest_index = -1
+        for i, bootstrap in enumerate(ml_metric_results[model_name]):
+            r2_test_value = bootstrap[metric]["test"]["value"]
+            current_dif = abs(r2_test_value - mean_r2_test)
+            if current_dif < dif:
+                dif = current_dif
+                closest_index = i
 
-            # Store the closest index
-            model_boots_plot[model_name] = closest_index
+        # Store the closest index
+        model_boots_plot[model_name] = closest_index
 
-        # Create results directory if it doesn't exist
-        directory = ml_opts.ml_plot_dir
-        if not os.path.exists(directory):
-            os.makedirs(directory, exist_ok=True)
-        # Convert train and test sets to numpy arrays for easier handling
-        y_test = [np.array(df) for df in data.y_test]
-        y_train = [np.array(df) for df in data.y_train]
+    # Create results directory if it doesn't exist
+    directory = ml_opts.ml_plot_dir
+    if not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+    # Convert train and test sets to numpy arrays for easier handling
+    y_test = [np.array(df) for df in data.y_test]
+    y_train = [np.array(df) for df in data.y_train]
 
-        # Scatter plot of actual vs predicted values
-        for model_name, model_options in ml_opts.model_types.items():
-            if model_options["use"]:
-                logger.info(f"Saving actual vs prediction plots of {model_name}...")
+    # Scatter plot of actual vs predicted values
+    for model_name, model_options in ml_opts.model_types.items():
+        if model_options["use"]:
+            logger.info(f"Saving actual vs prediction plots of {model_name}...")
 
-                for i in range(n_bootstraps):
-                    if i != model_boots_plot[model_name]:
-                        continue
-                    y_pred_test = ml_results[i][model_name]["y_pred_test"]
-                    y_pred_train = ml_results[i][model_name]["y_pred_train"]
+            for i in range(n_bootstraps):
+                if i != model_boots_plot[model_name]:
+                    continue
+                y_pred_test = ml_results[i][model_name]["y_pred_test"]
+                y_pred_train = ml_results[i][model_name]["y_pred_train"]
 
-                    # Plotting the training and test results
+                # Plotting the training and test results
+                if opt.problem_type == ProblemTypes.Regression:
                     plot_scatter(
                         y_test[i],
                         y_pred_test,
@@ -164,3 +271,33 @@ def save_actual_pred_plots(
                         directory,
                         plot_opts=plot_opts,
                     )
+
+                elif opt.problem_type == ProblemTypes.Classification:
+
+                    model = trained_models[model_name][i]
+                    y_score_train = model.predict_proba(data.X_train[i])
+                    y_train_labels = transform_to_one_hot(y_train[i])
+
+                    plot_auc_roc(
+                        y_classes_labels=y_train_labels,
+                        y_score_probs=y_score_train,
+                        set_name="Train",
+                        model_name=model_name,
+                        directory=directory,
+                        plot_opts=plot_opts
+                    )
+
+                    y_score_test = model.predict_proba(data.X_test[i])
+                    y_test_labels = transform_to_one_hot(y_test[i])
+
+                    plot_auc_roc(
+                        y_classes_labels=y_test_labels,
+                        y_score_probs=y_score_test,
+                        set_name="Test",
+                        model_name=model_name,
+                        directory=directory,
+                        plot_opts=plot_opts
+                    )
+
+
+
