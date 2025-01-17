@@ -133,21 +133,20 @@ class BaseNetwork(nn.Module):
             )
 
     def train_brnn(
-        self, X: np.ndarray, y: np.ndarray, problem_type: ProblemTypes
+        self, X: torch.Tensor, y: torch.Tensor, problem_type: ProblemTypes
     ) -> None:
         """
         Trains the Bayesian Regularized Neural Network.
 
         Args:
-            X (np.ndarray): The input data.
-            y (np.ndarray): The target data.
+            X (torch.Tensor): The input data.
+            y (torch.Tensor): The target data.
             problem_type (ProblemTypes): The problem type.
         """
 
         self.train()
-        dataset = torch.utils.data.TensorDataset(
-            torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
-        )
+
+        dataset = torch.utils.data.TensorDataset(X, y)
         dataloader = torch.utils.data.DataLoader(
             dataset, batch_size=self._brnn_options.batch_size, shuffle=True
         )
