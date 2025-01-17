@@ -1,9 +1,6 @@
-import os
 from pathlib import Path
-import sys
 from typing import Tuple
 
-import numpy as np
 import torch
 import torch.nn as nn
 
@@ -11,8 +8,6 @@ from biofefi.options.enums import OptimiserTypes, ProblemTypes
 from biofefi.options.ml import BrnnOptions
 from biofefi.services.custom_loss import compute_brnn_loss
 from biofefi.services.weights_init import kaiming_init, normal_init, xavier_init
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class BaseNetwork(nn.Module):
@@ -152,7 +147,7 @@ class BaseNetwork(nn.Module):
             dataset, batch_size=self._brnn_options.batch_size, shuffle=True
         )
 
-        for epoch in range(self._brnn_options.epochs):
+        for _ in range(self._brnn_options.epochs):
             epoch_loss = 0.0
 
             for batch_X, batch_y in dataloader:
@@ -167,10 +162,6 @@ class BaseNetwork(nn.Module):
                 loss.backward()
                 self.optimizer.step()
                 epoch_loss += loss.item()
-
-            print(
-                f"Epoch {epoch + 1}/{self._brnn_options.epochs}, Loss: {epoch_loss:.4f}"
-            )
 
         return self
 
@@ -208,8 +199,6 @@ class BaseNetwork(nn.Module):
         all_params = sum(p.numel() for p in self.parameters())
         trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
 
-        print(f"Total Parameters: {all_params}")
-        print(f"Trainable Parameters: {trainable_params}")
         return all_params, trainable_params
 
     def save_model(self, destination: Path):
