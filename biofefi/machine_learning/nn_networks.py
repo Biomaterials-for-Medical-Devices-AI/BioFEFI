@@ -223,3 +223,7 @@ class BaseNetwork(nn.Module):
             )
         except Exception as e:
             raise NotImplementedError(f"Method not implemented: {e}")
+
+    # define purely for help from the IDE
+    def parameters(self, recurse=True):
+        return super().parameters(recurse)

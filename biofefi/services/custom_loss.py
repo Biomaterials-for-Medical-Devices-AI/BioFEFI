@@ -1,10 +1,16 @@
 import torch
 
+from biofefi.machine_learning.nn_models import (
+    BayesianRegularisedNNClassifier,
+    BayesianRegularisedNNRegressor,
+)
 from biofefi.options.ml import BrnnOptions
 
 
 def bayesian_regularization_loss(
-    model, prior_mu: float = None, prior_sigma: float = None
+    model: BayesianRegularisedNNClassifier | BayesianRegularisedNNRegressor,
+    prior_mu: float = None,
+    prior_sigma: float = None,
 ) -> torch.Tensor:
     """
     Compute the Bayesian Regularization loss.
