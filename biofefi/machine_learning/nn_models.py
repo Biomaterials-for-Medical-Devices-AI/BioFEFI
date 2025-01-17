@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 
 from biofefi.machine_learning.nn_networks import BaseNetwork
-from biofefi.options.enums import ModelNames, OptimiserTypes
+from biofefi.options.enums import ModelNames, OptimiserTypes, ProblemTypes
 from biofefi.options.ml import BrnnOptions
 
 
@@ -97,8 +97,8 @@ class BayesianRegularisedNNClassifier(BaseNetwork, BaseEstimator, ClassifierMixi
 
         try:
             self._initialize_network(input_dim, output_dim)
-            self.train()
-            self.train_brnn(X, y)
+            self.train()  # set the underlying model to training mode
+            self.train_brnn(X, y, ProblemTypes.Classification)
         except Exception as e:
             raise ValueError(f"Error occured during fitting of BRNN Classifier: {e}")
 
@@ -234,7 +234,7 @@ class BayesianRegularisedNNRegressor(BaseNetwork, BaseEstimator, RegressorMixin)
         try:
             self._initialize_network(input_dim, output_dim)
             self.train()
-            self.train_brnn(X, y)
+            self.train_brnn(X, y, ProblemTypes.Regression)
         except Exception as e:
             raise ValueError(f"Error occured during fitting of BRNN Regressor: {e}")
 

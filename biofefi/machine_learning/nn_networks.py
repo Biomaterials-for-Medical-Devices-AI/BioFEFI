@@ -132,13 +132,16 @@ class BaseNetwork(nn.Module):
                 f"Optimizer type {optimizer_type} not implemented"
             )
 
-    def train_brnn(self, X: np.ndarray, y: np.ndarray) -> None:
+    def train_brnn(
+        self, X: np.ndarray, y: np.ndarray, problem_type: ProblemTypes
+    ) -> None:
         """
         Trains the Bayesian Regularized Neural Network.
 
         Args:
             X (np.ndarray): The input data.
             y (np.ndarray): The target data.
+            problem_type (ProblemTypes): The problem type.
         """
 
         self.train()
@@ -158,7 +161,9 @@ class BaseNetwork(nn.Module):
                 outputs = self(batch_X)
 
                 # Compute total loss
-                loss = compute_brnn_loss(self, outputs, batch_y, self._brnn_options)
+                loss = compute_brnn_loss(
+                    self, outputs, batch_y, self._brnn_options, problem_type
+                )
                 loss.backward()
                 self.optimizer.step()
                 epoch_loss += loss.item()
