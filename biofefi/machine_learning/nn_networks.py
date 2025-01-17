@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import sys
 from typing import Tuple
 
@@ -211,22 +212,11 @@ class BaseNetwork(nn.Module):
         print(f"Trainable Parameters: {trainable_params}")
         return all_params, trainable_params
 
-    def save_model(self):
+    def save_model(self, destination: Path):
         """
         Saves the model's state dictionary to a file.
-
-        Raises:
-            NotImplementedError: If there is an error while
-            saving the model, it raises a NotImplementedError
-            with the error message.
         """
-        try:
-            torch.save(
-                self.state_dict(),
-                os.path.join(self._opt.checkpoints_dir, f"{self._name}.pth"),
-            )
-        except Exception as e:
-            raise NotImplementedError(f"Method not implemented: {e}")
+        torch.save(self.state_dict(), destination)
 
     # define purely for help from the IDE
     def parameters(self, recurse=True):
