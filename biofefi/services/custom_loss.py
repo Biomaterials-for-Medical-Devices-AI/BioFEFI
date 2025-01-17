@@ -4,6 +4,7 @@ from biofefi.machine_learning.nn_models import (
     BayesianRegularisedNNClassifier,
     BayesianRegularisedNNRegressor,
 )
+from biofefi.options.enums import ProblemTypes
 from biofefi.options.ml import BrnnOptions
 
 
@@ -40,7 +41,11 @@ def bayesian_regularization_loss(
 
 
 def compute_brnn_loss(
-    model, outputs: torch.Tensor, targets: torch.Tensor, brnn_options: BrnnOptions
+    model: BayesianRegularisedNNClassifier | BayesianRegularisedNNRegressor,
+    outputs: torch.Tensor,
+    targets: torch.Tensor,
+    brnn_options: BrnnOptions,
+    problem_type: ProblemTypes,
 ) -> torch.Tensor:
     """
     Compute the total loss based on the problem type
@@ -50,13 +55,15 @@ def compute_brnn_loss(
         model (nn.Module): The neural network model.
         outputs (torch.Tensor): The predicted outputs from the model.
         targets (torch.Tensor): The true target values.
+        brnn_options (BrnnOptions): The options for the neural network.
+        problem_type (ProblemTypes): The problem type.
 
     Returns:
         torch.Tensor: The total computed loss, including both
         predictive and regularization loss.
     """
     # Compute predictive loss
-    predictive_loss = model._make_loss(model.problem_type, outputs, targets)
+    predictive_loss = model._make_loss(problem_type, outputs, targets)
 
     # Compute regularization loss
     reg_loss = bayesian_regularization_loss(
