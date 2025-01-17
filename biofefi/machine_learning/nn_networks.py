@@ -75,7 +75,7 @@ class BaseNetwork(nn.Module):
         # Ensure targets are float for MSE loss
         elif problem_type == ProblemTypes.Regression:
             loss_fn = nn.MSELoss()
-            targets = targets.float()
+            targets = targets.unsqueeze(-1).float()
             predictive_loss = loss_fn(outputs, targets)
 
         else:
