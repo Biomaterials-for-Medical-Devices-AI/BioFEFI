@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from sklearn.metrics import RocCurveDisplay
+from sklearn.preprocessing import OneHotEncoder
+from pathlib import Path
 
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import Metrics, ProblemTypes
@@ -13,22 +15,22 @@ from biofefi.options.plotting import PlottingOptions
 
 
 def plot_auc_roc(
-    y_classes_labels,
-    y_score_probs,
+    y_classes_labels: np.ndarray,
+    y_score_probs: np.ndarray,
     set_name: str,
     model_name: str,
-    directory: str,
+    directory: Path,
     plot_opts: PlottingOptions | None = None,
 ):
     """
     Plot the ROC curve for a multi-class classification model.
     Args:
 
-        y_classes_labels: The true labels of the classes.
-        y_score_probs: The predicted probabilities of the classes.
-        set_name: The name of the set (train or test).
-        model_name: The name of the model.
-        directory: The directory to save the plot.
+        y_classes_labels (numpy.ndarray): The true labels of the classes.
+        y_score_probs (numpy.ndarray): The predicted probabilities of the classes.
+        set_name (string): The name of the set (train or test).
+        model_name (string): The name of the model.
+        directory (Path): The directory path to save the plot.
         Returns:
         None
     """
@@ -64,6 +66,7 @@ def plot_auc_roc(
         auroc.ax_.set_title(
             figure_title,
             family=plot_opts.plot_font_family,
+            fontsize=plot_opts.plot_title_font_size,
             wrap=True,
         )
 
@@ -75,46 +78,9 @@ def plot_auc_roc(
             loc="lower right",
         )
 
-        auroc.figure_.savefig(f"{directory}/{model_name}-{set_name}-{i}_vs_rest.png")
+        auroc.figure_.savefig(directory / f"{model_name}-{set_name}-{i}_vs_rest.png")
 
         plt.close()
-
-
-def transform_to_one_hot(input_array):
-    """
-    Transforms a numpy array containing any number of different labels into a one-hot encoded array.
-
-    Parameters:
-    - input_array (numpy.ndarray): An array of shape (instances,) or (instances, 1) containing labels.
-
-    Returns:
-    - numpy.ndarray: A one-hot encoded array of shape (instances, num_classes),
-                     where num_classes is the number of unique labels in input_array.
-    """
-    # If the input is 1D, reshape it to (instances, 1)
-    if input_array.ndim == 1:
-        input_array = input_array[:, np.newaxis]
-
-    # Ensure the input is now a 2D array with shape (instances, 1)
-    if input_array.ndim != 2 or input_array.shape[1] != 1:
-        raise ValueError("Input array must have shape (instances, 1) or be 1D")
-
-    # Flatten the array to extract unique labels
-    labels = np.unique(input_array)
-
-    # Create a dictionary to map each label to an index
-    label_to_index = {label: index for index, label in enumerate(labels)}
-
-    # Initialize the output array with zeros
-    num_classes = len(labels)
-    output_array = np.zeros((input_array.shape[0], num_classes), dtype=int)
-
-    # Populate the output array with one-hot encoding
-    for i, label in enumerate(input_array[:, 0]):
-        output_array[i, label_to_index[label]] = 1
-
-    return output_array
-
 
 def plot_scatter(
     y,
@@ -234,7 +200,7 @@ def save_actual_pred_plots(
         model_boots_plot[model_name] = closest_index
 
     # Create results directory if it doesn't exist
-    directory = ml_opts.ml_plot_dir
+    directory = Path(ml_opts.ml_plot_dir)
     if not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
     # Convert train and test sets to numpy arrays for easier handling
@@ -279,7 +245,9 @@ def save_actual_pred_plots(
 
                     model = trained_models[model_name][i]
                     y_score_train = model.predict_proba(data.X_train[i])
-                    y_train_labels = transform_to_one_hot(y_train[i])
+                    encoder = OneHotEncoder()
+                    encoder.fit(y_train[i].reshape(-1, 1))
+                    y_train_labels = encoder.transform(y_train[i].reshape(-1, 1)).toarray()
 
                     plot_auc_roc(
                         y_classes_labels=y_train_labels,
@@ -291,7 +259,7 @@ def save_actual_pred_plots(
                     )
 
                     y_score_test = model.predict_proba(data.X_test[i])
-                    y_test_labels = transform_to_one_hot(y_test[i])
+                    y_test_labels = encoder.transform(y_test[i].reshape(-1, 1)).toarray()
 
                     plot_auc_roc(
                         y_classes_labels=y_test_labels,
