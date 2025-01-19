@@ -89,7 +89,7 @@ def plot_scatter(
     set_name: str,
     dependent_variable: str,
     model_name: str,
-    directory: str,
+    directory: Path,
     plot_opts: PlottingOptions | None = None,
 ):
     """_summary_
@@ -148,7 +148,7 @@ def plot_scatter(
     ax.grid(visible=True, axis="both")
 
     # Save the figure
-    fig.savefig(f"{directory}/{model_name}-{set_name}.png")
+    fig.savefig(directory / f"{model_name}-{set_name}.png")
     plt.close()
 
 
