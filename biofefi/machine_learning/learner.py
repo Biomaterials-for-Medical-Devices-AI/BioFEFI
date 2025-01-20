@@ -411,9 +411,22 @@ def _evaluate(
     for metric_name, metric in metrics.items():
         eval_res[metric_name] = {}
         logger.info(f"Evaluating {model_name} on {metric_name}...")
-        if y_pred_probs_train is None or y_pred_probs_train.shape[1] < 3:
+
+        # Regression
+        if y_pred_probs_train is None:
             metric_train = metric(y_train, y_pred_train)
             metric_test = metric(y_test, y_pred_test)
+
+        # Binary classification
+        elif y_pred_probs_train.shape[1] < 3:
+            if metric_name == Metrics.ROC_AUC:
+                metric_train = metric(y_train, y_pred_probs_train[:, 1])
+                metric_test = metric(y_test, y_pred_probs_test[:, 1])
+            else:
+                metric_train = metric(y_train, y_pred_train)
+                metric_test = metric(y_test, y_pred_test)
+
+        # Multiclass classification
         else:
             if metric_name == Metrics.Accuracy:
                 metric_train = metric(y_train, y_pred_train)
