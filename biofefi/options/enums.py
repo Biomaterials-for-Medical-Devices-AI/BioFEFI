@@ -81,8 +81,8 @@ class ProblemTypes(StrEnum):
     Auto = "auto"
     Classification = "classification"
     Regression = "regression"
-    Binary_Classification = "binary_classification"
-    Multi_Classification = "multi_classification"
+    BinaryClassification = "binary_classification"
+    MultiClassification = "multi_classification"
 
 
 class SvmKernels(StrEnum):
