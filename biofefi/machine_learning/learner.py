@@ -182,6 +182,7 @@ class Learner:
                         y_pred_test,
                         y_pred_probs_test,
                         self._logger,
+                        self._problem_type,
                     )
                 )
                 trained_models[model_name].append(model)
@@ -227,6 +228,7 @@ class Learner:
                         y_pred_test,
                         y_pred_probs_test,
                         self._logger,
+                        self._problem_type,
                     )
                 )
                 trained_models[model_name].append(model)
@@ -340,6 +342,7 @@ class GridSearchLearner:
                     y_pred_test,
                     y_pred_probs_test,
                     self._logger,
+                    self._problem_type,
                 )
             )
             # append the best estimator
@@ -391,6 +394,7 @@ def _evaluate(
     y_pred_test: np.ndarray,
     y_pred_probs_test: np.ndarray,
     logger: object,
+    problem_type: ProblemTypes,
 ) -> dict:
     """
     Evaluates the performance of a model using specified metrics.
@@ -408,35 +412,40 @@ def _evaluate(
     """
     logger.info(f"Evaluating {model_name}...")
     eval_res = {}
+
+    if y_pred_probs_test is not None and y_pred_probs_test.shape[1] < 3:
+        problem = ProblemTypes.Binary_Classification
+    elif y_pred_probs_test is not None:
+        problem = ProblemTypes.Multi_Classification
+
     for metric_name, metric in metrics.items():
         eval_res[metric_name] = {}
         logger.info(f"Evaluating {model_name} on {metric_name}...")
 
         # Regression
-        if y_pred_probs_train is None:
-            metric_train = metric(y_train, y_pred_train)
-            metric_test = metric(y_test, y_pred_test)
+        if problem_type == ProblemTypes.Regression:
+            metric_train = calculate_regression_metrics(y_train, y_pred_train, metric)
+            metric_test = calculate_regression_metrics(y_test, y_pred_test, metric)
 
         # Binary classification
-        elif y_pred_probs_train.shape[1] < 3:
-            if metric_name == Metrics.ROC_AUC:
-                metric_train = metric(y_train, y_pred_probs_train[:, 1])
-                metric_test = metric(y_test, y_pred_probs_test[:, 1])
-            else:
-                metric_train = metric(y_train, y_pred_train)
-                metric_test = metric(y_test, y_pred_test)
+        elif problem_type == ProblemTypes.Classification:
+            metric_train = calculate_classification_metrics(
+                y_true=y_train,
+                y_pred=y_pred_train,
+                y_pred_probs=y_pred_probs_train,
+                metric_function=metric,
+                metric_name=metric_name,
+                problem_type=problem,
+            )
+            metric_test = calculate_classification_metrics(
+                y_true=y_test,
+                y_pred=y_pred_test,
+                y_pred_probs=y_pred_probs_test,
+                metric_function=metric,
+                metric_name=metric_name,
+                problem_type=problem,
+            )
 
-        # Multiclass classification
-        else:
-            if metric_name == Metrics.Accuracy:
-                metric_train = metric(y_train, y_pred_train)
-                metric_test = metric(y_test, y_pred_test)
-            elif metric_name == Metrics.ROC_AUC:
-                metric_train = metric(y_train, y_pred_probs_train, multi_class="ovr")
-                metric_test = metric(y_test, y_pred_probs_test, multi_class="ovr")
-            else:
-                metric_train = metric(y_train, y_pred_train, average="micro")
-                metric_test = metric(y_test, y_pred_test, average="micro")
         eval_res[metric_name]["train"] = {
             "value": metric_train,
         }
@@ -444,6 +453,62 @@ def _evaluate(
             "value": metric_test,
         }
     return eval_res
+
+
+def calculate_regression_metrics(y_true: np.array, y_pred: np.array, metric_function):
+    """
+    Calculate regression metrics for a given model.
+
+    Args:
+        - y_true (np.ndarray): True labels.
+        - y_pred (np.ndarray): Predicted labels.
+        - metric: Metric to calculate.
+
+    Returns:
+        - float: Value of the metric.
+    """
+    metric = metric_function(y_true, y_pred)
+
+    return metric
+
+
+def calculate_classification_metrics(
+    y_true: np.array,
+    y_pred: np.array,
+    y_pred_probs: np.array,
+    metric_function,
+    metric_name,
+    problem_type: str,
+):
+    """
+    Calculate classification metrics for a given model.
+
+    Args:
+        - y_true (np.ndarray): True labels.
+        - y_pred (np.ndarray): Predicted labels.
+        - y_pred_probs (np.ndarray): Predicted probabilities.
+        - metric: Metric to calculate.
+        - problem_type (str): Type of classification problem.
+
+    Returns:
+        - float: Value of the metric.
+    """
+
+    if problem_type == ProblemTypes.Binary_Classification:
+        if metric_name == Metrics.ROC_AUC:
+            metric = metric_function(y_true, y_pred_probs[:, 1])
+        else:
+            metric = metric_function(y_true, y_pred)
+
+    elif problem_type == ProblemTypes.Multi_Classification:
+        if metric_name == Metrics.Accuracy:
+            metric = metric_function(y_true, y_pred)
+        elif metric_name == Metrics.ROC_AUC:
+            metric = metric_function(y_true, y_pred_probs, multi_class="ovr")
+        else:
+            metric = metric_function(y_true, y_pred, average="micro")
+
+    return metric
 
 
 def _compute_metrics_statistics(metric_res: dict) -> dict:
