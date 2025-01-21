@@ -424,12 +424,12 @@ def _evaluate(
 
         # Regression
         if problem_type == ProblemTypes.Regression:
-            metric_train = calculate_regression_metrics(y_train, y_pred_train, metric)
-            metric_test = calculate_regression_metrics(y_test, y_pred_test, metric)
+            metric_train = _calculate_regression_metrics(y_train, y_pred_train, metric)
+            metric_test = _calculate_regression_metrics(y_test, y_pred_test, metric)
 
         # Binary classification
         elif problem_type == ProblemTypes.Classification:
-            metric_train = calculate_classification_metrics(
+            metric_train = _calculate_classification_metrics(
                 y_true=y_train,
                 y_pred=y_pred_train,
                 y_pred_probs=y_pred_probs_train,
@@ -437,7 +437,7 @@ def _evaluate(
                 metric_name=metric_name,
                 problem_type=problem,
             )
-            metric_test = calculate_classification_metrics(
+            metric_test = _calculate_classification_metrics(
                 y_true=y_test,
                 y_pred=y_pred_test,
                 y_pred_probs=y_pred_probs_test,
@@ -455,7 +455,7 @@ def _evaluate(
     return eval_res
 
 
-def calculate_regression_metrics(y_true: np.array, y_pred: np.array, metric_function):
+def _calculate_regression_metrics(y_true: np.array, y_pred: np.array, metric_function):
     """
     Calculate regression metrics for a given model.
 
@@ -472,13 +472,13 @@ def calculate_regression_metrics(y_true: np.array, y_pred: np.array, metric_func
     return metric
 
 
-def calculate_classification_metrics(
+def _calculate_classification_metrics(
     y_true: np.array,
     y_pred: np.array,
     y_pred_probs: np.array,
     metric_function,
     metric_name,
-    problem_type: str,
+    problem_type: ProblemTypes,
 ):
     """
     Calculate classification metrics for a given model.
@@ -488,7 +488,7 @@ def calculate_classification_metrics(
         - y_pred (np.ndarray): Predicted labels.
         - y_pred_probs (np.ndarray): Predicted probabilities.
         - metric: Metric to calculate.
-        - problem_type (str): Type of classification problem.
+        - problem_type (ProblemTypes): Type of classification problem.
 
     Returns:
         - float: Value of the metric.
