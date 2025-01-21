@@ -1,11 +1,11 @@
 import os
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from sklearn.metrics import RocCurveDisplay
 from sklearn.preprocessing import OneHotEncoder
-from pathlib import Path
 
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import Metrics, ProblemTypes
@@ -81,6 +81,7 @@ def plot_auc_roc(
         auroc.figure_.savefig(directory / f"{model_name}-{set_name}-{i}_vs_rest.png")
 
         plt.close()
+
 
 def plot_scatter(
     y,
@@ -247,7 +248,9 @@ def save_actual_pred_plots(
                     y_score_train = model.predict_proba(data.X_train[i])
                     encoder = OneHotEncoder()
                     encoder.fit(y_train[i].reshape(-1, 1))
-                    y_train_labels = encoder.transform(y_train[i].reshape(-1, 1)).toarray()
+                    y_train_labels = encoder.transform(
+                        y_train[i].reshape(-1, 1)
+                    ).toarray()
 
                     plot_auc_roc(
                         y_classes_labels=y_train_labels,
@@ -259,7 +262,9 @@ def save_actual_pred_plots(
                     )
 
                     y_score_test = model.predict_proba(data.X_test[i])
-                    y_test_labels = encoder.transform(y_test[i].reshape(-1, 1)).toarray()
+                    y_test_labels = encoder.transform(
+                        y_test[i].reshape(-1, 1)
+                    ).toarray()
 
                     plot_auc_roc(
                         y_classes_labels=y_test_labels,
