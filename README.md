@@ -27,6 +27,15 @@ For information on how to install and run BioFEFI, check the [instructions](http
 
 BioFEFI will open in your internet browser when you run it. The main screen will appear giving a brief introduction to the app. To the left of the screen you will see a list of pages with the different functionalities of the app. Explanations can be found in the [instructions](https://biomaterials-for-medical-devices-ai.github.io/BioFEFI/index.html).
 
+
+## Team
+- [Daniel Lea](https://github.com/dcl10)
+- [Eduardo Aguilar](https://edaguilarb.github.io./)
+- [Grazziela Figueredo](https://scholar.google.com/citations?user=DXNNUcUAAAAJ&hl=en)
+- Karthikeyan Sivakumar
+- Jimiama M Mase
+- Reza Omidvar
+
 [poetry-badge]: https://img.shields.io/badge/Poetry-%233B82F6.svg?style=for-the-badge&logo=poetry&logoColor=0B3D8D
 [sklearn-badge]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
 [plt-badge]: https://img.shields.io/badge/Matplotlib-%23ffffff.svg?style=for-the-badge&logo=Matplotlib&logoColor=black
