@@ -414,9 +414,9 @@ def _evaluate(
     eval_res = {}
 
     if y_pred_probs_test is not None and y_pred_probs_test.shape[1] < 3:
-        problem = ProblemTypes.Binary_Classification
+        problem = ProblemTypes.BinaryClassification
     elif y_pred_probs_test is not None:
-        problem = ProblemTypes.Multi_Classification
+        problem = ProblemTypes.MultiClassification
 
     for metric_name, metric in metrics.items():
         eval_res[metric_name] = {}
@@ -477,7 +477,7 @@ def _calculate_classification_metrics(
     y_pred: np.array,
     y_pred_probs: np.array,
     metric_function,
-    metric_name,
+    metric_name: Metrics,
     problem_type: ProblemTypes,
 ):
     """
@@ -487,20 +487,21 @@ def _calculate_classification_metrics(
         - y_true (np.ndarray): True labels.
         - y_pred (np.ndarray): Predicted labels.
         - y_pred_probs (np.ndarray): Predicted probabilities.
-        - metric: Metric to calculate.
+        - metric_function: Metric to calculate.
+        - metric_name (Metrics): Name of the metric.
         - problem_type (ProblemTypes): Type of classification problem.
 
     Returns:
         - float: Value of the metric.
     """
 
-    if problem_type == ProblemTypes.Binary_Classification:
+    if problem_type == ProblemTypes.BinaryClassification:
         if metric_name == Metrics.ROC_AUC:
             metric = metric_function(y_true, y_pred_probs[:, 1])
         else:
             metric = metric_function(y_true, y_pred)
 
-    elif problem_type == ProblemTypes.Multi_Classification:
+    elif problem_type == ProblemTypes.MultiClassification:
         if metric_name == Metrics.Accuracy:
             metric = metric_function(y_true, y_pred)
         elif metric_name == Metrics.ROC_AUC:
