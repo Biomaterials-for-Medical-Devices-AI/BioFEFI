@@ -46,12 +46,13 @@
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <section id="pre-requirements">
 <h3>Pre-requirements<a class="headerlink" href="#pre-requirements" title="Link to this heading">¶</a></h3>
-<p>You will need to install <strong>Python 3.11</strong> or greater to use BioFEFI. Make sure you also install <code class="docutils literal notranslate"><span class="pre">pip</span></code> (The Python package installer). If you don’t already have it installed, <a class="reference external" href="https://www.python.org/downloads/">get Python.</a></p>
+<p>You will need to install <strong>Python 3.11</strong> or <strong>3.12</strong> to use BioFEFI. Make sure you also install <code class="docutils literal notranslate"><span class="pre">pip</span></code> (The Python package installer). If you don’t already have it installed, <a class="reference external" href="https://www.python.org/downloads/">get Python.</a></p>
 <p>You may need to make sure you have OpenMP installed on your machine before you can install BioFEFI. In the terminal use the following commands for your OS:</p>
 <p>On Mac:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>libomp
 </pre></div>
 </div>
+<p>You may need to try <code class="docutils literal notranslate"><span class="pre">brew3</span></code> if <code class="docutils literal notranslate"><span class="pre">brew</span></code> does not work. Make sure you <a class="reference external" href="https://brew.sh/">install Homebrew</a> on your Mac to use the <code class="docutils literal notranslate"><span class="pre">brew</span></code>/<code class="docutils literal notranslate"><span class="pre">brew3</span></code> command.</p>
 <p>On Linux (Ubuntu)</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>libomp-dev
 </pre></div>
@@ -70,11 +71,12 @@ pip<span class="w"> </span>install<span class="w"> </span>biofefi
 <span class="c1"># -- OR --</span>
 
 <span class="c1"># Create a virtual environment with conda</span>
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env_name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env_name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w">  </span><span class="c1"># or 3.12</span>
 conda<span class="w"> </span>activate<span class="w"> </span>&lt;env_name&gt;
 pip<span class="w"> </span>install<span class="w"> </span>biofefi
 </pre></div>
 </div>
+<p>You may need to try <code class="docutils literal notranslate"><span class="pre">python3</span></code> and <code class="docutils literal notranslate"><span class="pre">pip3</span></code> if <code class="docutils literal notranslate"><span class="pre">python</span></code> and <code class="docutils literal notranslate"><span class="pre">pip</span></code> do not work.</p>
 </section>
 <section id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Link to this heading">¶</a></h2>
@@ -86,7 +88,7 @@ pip<span class="w"> </span>install<span class="w"> </span>biofefi
 <span class="c1"># -- OR --</span>
 
 <span class="c1"># Create a virtual environment with conda</span>
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env_name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env_name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w"> </span><span class="c1"># or 3.12</span>
 conda<span class="w"> </span>activate<span class="w"> </span>&lt;env_name&gt;
 pip<span class="w"> </span>install<span class="w"> </span>biofefi
 </pre></div>
@@ -99,7 +101,7 @@ pip<span class="w"> </span>install<span class="w"> </span>biofefi
 </pre></div>
 </div>
 <p>A browser window will open to the main page of the app.</p>
-<!-- insert image here --></section>
+</section>
 </section>
 
 
