@@ -462,7 +462,7 @@ def _calculate_regression_metrics(y_true: np.array, y_pred: np.array, metric_fun
     Args:
         - y_true (np.ndarray): True labels.
         - y_pred (np.ndarray): Predicted labels.
-        - metric: Metric to calculate.
+        - metric_function: Metric to calculate.
 
     Returns:
         - float: Value of the metric.
