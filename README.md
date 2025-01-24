@@ -19,13 +19,13 @@
 
 BioFEFI is an open-source, extensible tool for reproducible Machine Learning Modelling and results interpretation. It was originally designed for QSAR/QSPR modelling in biomaterials discovery, but can be applied to any tabular data classification or regression tasks. Version 1.0.0 contains tools for data visualisation and basic pre-processing, it has a collection of machine learning models and interpretation approaches, including fuzzy fusion. The theoretical work underpinning the development of the tool can be found in:
 
-Rengasamy, Jimiama M. Mase, Aayush Kumar, Benjamin Rothwell, Mercedes Torres Torres, Morgan R. Alexander, David A. Winkler, Grazziela P. Figueredo,
+D. Rengasamy, Jimiama M. Mase, Aayush Kumar, Benjamin Rothwell, Mercedes Torres Torres, Morgan R. Alexander, David A. Winkler, Grazziela P. Figueredo,
 Feature importance in machine learning models: A fuzzy information fusion approach,
 Neurocomputing, Volume 511,2022, Pages 163-174,ISSN 0925-2312, https://doi.org/10.1016/j.neucom.2022.09.053 [LINK](https://www.sciencedirect.com/science/article/pii/S0925231222011584)
 
-Rengasamy, D.; Rothwell, B.C.; Figueredo, G.P. Towards a More Reliable Interpretation of Machine Learning Outputs for Safety-Critical Systems Using Feature Importance Fusion. Appl. Sci. 2021, 11, 11854. https://doi.org/10.3390/app112411854 [Link](https://www.mdpi.com/2076-3417/11/24/11854)
+D. Rengasamy, B. C. Rothwell; G. P. Figueredo, Towards a More Reliable Interpretation of Machine Learning Outputs for Safety-Critical Systems Using Feature Importance Fusion. Appl. Sci. 2021, 11, 11854. https://doi.org/10.3390/app112411854 [Link](https://www.mdpi.com/2076-3417/11/24/11854)
 
-To cite our tool, please use the following DOI:
+To cite BioFEFI, please use the following DOI:
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14721954.svg)](https://doi.org/10.5281/zenodo.14721954)
 
@@ -82,4 +82,4 @@ BioFEFI will open in your internet browser when you run it. The main screen will
 
 ## Contact
 
-For bugs, questions, suggestions and collaborations, please contact [us](mailto:g.figueredo@gmail.com)
+For bugs, questions, suggestions and collaborations, please [contact us](mailto:g.figueredo@gmail.com)
