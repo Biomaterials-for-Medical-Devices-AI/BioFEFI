@@ -107,9 +107,6 @@ The path will be to a <cite>json</cite> file containing the plot options.</p>
 </dd></dl>
 
 </section>
-<section id="biofefi-services-custom-loss-module">
-<h2>biofefi.services.custom_loss module<a class="headerlink" href="#biofefi-services-custom-loss-module" title="Link to this heading">¶</a></h2>
-</section>
 <section id="module-biofefi.services.experiments">
 <span id="biofefi-services-experiments-module"></span><h2>biofefi.services.experiments module<a class="headerlink" href="#module-biofefi.services.experiments" title="Link to this heading">¶</a></h2>
 <dl class="py function">
@@ -240,11 +237,144 @@ saved as a <cite>json</cite> file.</p>
 </dd></dl>
 
 </section>
-<section id="biofefi-services-metrics-module">
-<h2>biofefi.services.metrics module<a class="headerlink" href="#biofefi-services-metrics-module" title="Link to this heading">¶</a></h2>
+<section id="module-biofefi.services.metrics">
+<span id="biofefi-services-metrics-module"></span><h2>biofefi.services.metrics module<a class="headerlink" href="#module-biofefi.services.metrics" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.metrics.get_metrics">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.metrics.</span></span><span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.enums.ProblemTypes" title="biofefi.options.enums.ProblemTypes"><span class="pre">ProblemTypes</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#biofefi.services.metrics.get_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>Get the metrics functions for a given problem type.</p>
+<p>For classification:
+- Accuracy
+- F1
+- Precision
+- Recall
+- ROC AUC</p>
+<p>For Regression
+- R2
+- MAE
+- RMSE</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problem_type</strong> (<a class="reference internal" href="biofefi.options.html#biofefi.options.enums.ProblemTypes" title="biofefi.options.enums.ProblemTypes"><em>ProblemTypes</em></a>) – Where the problem is classification or regression.</p></li>
+<li><p><strong>logger</strong> (<em>object</em><em>, </em><em>optional</em>) – The logger. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – When you give an incorrect problem type.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <cite>dict</cite> of score names and functions.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="biofefi-services-ml-models-module">
-<h2>biofefi.services.ml_models module<a class="headerlink" href="#biofefi-services-ml-models-module" title="Link to this heading">¶</a></h2>
+<section id="module-biofefi.services.ml_models">
+<span id="biofefi-services-ml-models-module"></span><h2>biofefi.services.ml_models module<a class="headerlink" href="#module-biofefi.services.ml_models" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.get_models">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">get_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#biofefi.services.ml_models.get_models" title="Link to this definition">¶</a></dt>
+<dd><p>Constructs and initializes machine learning models
+based on the given configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_types</strong> (<em>dict</em>) – Dictionary containing model types</p></li>
+<li><p><strong>parameters.</strong> (<em>and their</em>)</p></li>
+<li><p><strong>problem_type</strong> (<em>str</em>) – Type of problem (
+classification or regression).</p></li>
+<li><p><strong>logger</strong> (<em>object</em>) – Logger object to log messages.</p></li>
+<li><p><strong>use_params</strong> (<em>bool</em><em>, </em><em>optional</em>) – Add the parameters to models or leave them blank. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If a model type is not recognized or unsupported</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary of initialized models where th
+keys are model names and the values are instances
+of the corresponding models.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.load_models">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">load_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#biofefi.services.ml_models.load_models" title="Link to this definition">¶</a></dt>
+<dd><p>Load pre-trained machine learning models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Path</em>) – The path to the directory where the models are saved.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The pre-trained models.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, list]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.load_models_to_explain">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">load_models_to_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#biofefi.services.ml_models.load_models_to_explain" title="Link to this definition">¶</a></dt>
+<dd><p>Load pre-trained machine learning models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em>) – The path to the directory where the models are saved.</p></li>
+<li><p><strong>model_names</strong> (<em>str</em>) – The name of the models to explain.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The pre-trained models.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, list]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.models_exist">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">models_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#biofefi.services.ml_models.models_exist" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.save_model">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.services.ml_models.save_model" title="Link to this definition">¶</a></dt>
+<dd><p>Save a machine learning model to the given file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>_type_</em>) – The model to save. Must be picklable.</p></li>
+<li><p><strong>path</strong> (<em>Path</em>) – The file path to save the model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.save_models_metrics">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">save_models_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.services.ml_models.save_models_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>Save the statistical metrics of the models to the given file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metrics</strong> (<em>dict</em>) – The metrics to save.</p></li>
+<li><p><strong>path</strong> (<em>Path</em>) – The file path to save the metrics.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-biofefi.services.plotting">
 <span id="biofefi-services-plotting-module"></span><h2>biofefi.services.plotting module<a class="headerlink" href="#module-biofefi.services.plotting" title="Link to this heading">¶</a></h2>

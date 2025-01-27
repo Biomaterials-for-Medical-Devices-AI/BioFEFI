@@ -12,14 +12,6 @@ biofefi.services.configuration module
    :undoc-members:
    :show-inheritance:
 
-biofefi.services.custom\_loss module
-------------------------------------
-
-.. automodule:: biofefi.services.custom_loss
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 biofefi.services.experiments module
 -----------------------------------
 
