@@ -122,7 +122,9 @@ def get_models(
             (model.lower(), problem_type.lower())
         ):
             if problem_type.lower() == ProblemTypes.Classification:
-                model_params["class_weight"] = ["balanced"] if use_grid_search else "balanced"
+                model_params["class_weight"] = (
+                    ["balanced"] if use_grid_search else "balanced"
+                )
             models[model] = model_class(**model_params) if use_params else model_class()
             logger.info(
                 f"Using model {model_class.__name__} with parameters {model_params}"
