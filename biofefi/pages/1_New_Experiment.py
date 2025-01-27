@@ -148,7 +148,7 @@ st.write(
 )
 
 st.write(
-    """"
+    """
     **Please notice that last column of the uploaded file should be the dependent variable.**
     """
 )
