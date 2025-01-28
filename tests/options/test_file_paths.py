@@ -26,3 +26,16 @@ def test_uploaded_file_path():
     # Assert
     assert isinstance(actual_output, Path)
     assert actual_output == expected_output
+
+
+def test_log_dir():
+    # Arrange
+    experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
+    expected_output = experiment_path / "logs"
+
+    # Act
+    actual_output = fp.log_dir(experiment_path)
+
+    # Assert
+    assert isinstance(actual_output, Path)
+    assert actual_output == expected_output
