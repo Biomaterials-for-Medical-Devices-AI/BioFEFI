@@ -104,3 +104,16 @@ def test_fi_result_dir():
     # Assert
     assert isinstance(actual_output, Path)
     assert actual_output == expected_output
+
+
+def test_fi_options_dir():
+    # Arrange
+    experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
+    expected_output = experiment_path / "options" / "fi"
+
+    # Act
+    actual_output = fp.fi_options_dir(experiment_path)
+
+    # Assert
+    assert isinstance(actual_output, Path)
+    assert actual_output == expected_output
