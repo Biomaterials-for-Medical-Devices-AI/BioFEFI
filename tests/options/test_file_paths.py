@@ -117,3 +117,16 @@ def test_fi_options_dir():
     # Assert
     assert isinstance(actual_output, Path)
     assert actual_output == expected_output
+
+
+def test_fuzzy_plot_dir():
+    # Arrange
+    experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
+    expected_output = experiment_path / "plots" / "fuzzy"
+
+    # Act
+    actual_output = fp.fuzzy_plot_dir(experiment_path)
+
+    # Assert
+    assert isinstance(actual_output, Path)
+    assert actual_output == expected_output
