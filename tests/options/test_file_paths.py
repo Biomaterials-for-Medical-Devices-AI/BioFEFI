@@ -39,3 +39,16 @@ def test_log_dir():
     # Assert
     assert isinstance(actual_output, Path)
     assert actual_output == expected_output
+
+
+def test_ml_plot_dir():
+    # Arrange
+    experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
+    expected_output = experiment_path / "plots" / "ml"
+
+    # Act
+    actual_output = fp.ml_plot_dir(experiment_path)
+
+    # Assert
+    assert isinstance(actual_output, Path)
+    assert actual_output == expected_output
