@@ -156,3 +156,16 @@ def test_data_analysis_plots_dir():
     # Assert
     assert isinstance(actual_output, Path)
     assert actual_output == expected_output
+
+
+def test_plot_options_path():
+    # Arrange
+    experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
+    expected_output = experiment_path / "plot_options.json"
+
+    # Act
+    actual_output = fp.plot_options_path(experiment_path)
+
+    # Assert
+    assert isinstance(actual_output, Path)
+    assert actual_output == expected_output
