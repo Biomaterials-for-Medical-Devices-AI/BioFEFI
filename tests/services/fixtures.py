@@ -18,6 +18,7 @@ from biofefi.options.file_paths import (
 from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
+from biofefi.utils.utils import delete_directory
 
 
 @pytest.fixture
@@ -230,3 +231,19 @@ def fuzzy_opts_file_path() -> Generator[Path, None, None]:
     # Cleanup
     if options_file.exists():
         options_file.unlink()
+
+
+@pytest.fixture
+def experiment_dir():
+    # Arrange
+    base_dir = Path.cwd() / "BioFEFIExperiments"
+    base_dir.mkdir()
+    experiment_dirs = ["experiment1", "experiment2"]
+    for exp in experiment_dirs:
+        directory = base_dir / exp
+        directory.mkdir()
+    yield base_dir, experiment_dirs
+
+    # Cleanup
+    if base_dir.exists():
+        delete_directory(base_dir)

@@ -1,24 +1,9 @@
 from pathlib import Path
-import pytest
 
 from biofefi.services.experiments import get_experiments
-from biofefi.utils.utils import delete_directory
 
-
-@pytest.fixture
-def experiment_dir():
-    # Arrange
-    base_dir = Path.cwd() / "BioFEFIExperiments"
-    base_dir.mkdir()
-    experiment_dirs = ["experiment1", "experiment2"]
-    for exp in experiment_dirs:
-        directory = base_dir / exp
-        directory.mkdir()
-    yield base_dir, experiment_dirs
-
-    # Cleanup
-    if base_dir.exists():
-        delete_directory(base_dir)
+# import all the fixtures for services
+from .fixtures import *  # noqa: F403, F401
 
 
 def test_get_experiments_with_base_dir(experiment_dir: tuple[Path, list[str]]):
