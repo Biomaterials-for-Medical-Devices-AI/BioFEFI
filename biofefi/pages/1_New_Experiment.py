@@ -1,4 +1,4 @@
-'''In BioFEFI, an experiment is defined as a collection of pre-processing, machine learning models trained 
+"""In BioFEFI, an experiment is defined as a collection of pre-processing, machine learning models trained 
 on a particular dataset and/or explanation of the machine learning results. Each experiment can be
 subject to a different subset of possible analytics configurations and parameters. 
 For example, for a dataset D, one can create an Experiment1 that includes no normalisation, uses linear 
@@ -10,7 +10,7 @@ how the whole data analytics pipeline was run. This allows for inspection, compa
 This also allows for a historic record of the data analytics pipeline to be kept, which can be useful for
 publication and sharing of results.
 For that, we implemented the functions below, that allow for selection and inspection of previous 
-experiments. One can also and to proceed to explain results of the selected experiment.'''
+experiments. One can also and to proceed to explain results of the selected experiment."""
 
 import os
 from pathlib import Path
