@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from biofefi.options.execution import ExecutionOptions
+from biofefi.options.file_paths import execution_options_path, plot_options_path
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import create_experiment, get_experiments
 
@@ -29,20 +30,22 @@ def test_get_experiments_without_base_dir():
 
 
 def test_create_experiment(
-    experiment_dir, execution_opts: ExecutionOptions, plotting_opts: PlottingOptions
+    experiment_dir: tuple[Path, list[str]],
+    execution_opts: ExecutionOptions,
+    plotting_opts: PlottingOptions,
 ):
     # Arrange
     base_dir, experiments = experiment_dir
     save_dir = base_dir / experiments[0]  # use the first experiment directory
 
-    # don't use the functions `execution_options_path` and `plot_options_path`
-    # this would create coupling with those tests
-    execution_options_file = save_dir / "execution_options.json"
-    plotting_options_file = save_dir / "plot_options.json"
+    execution_options_file = execution_options_path(save_dir)
+    plotting_options_file = plot_options_path(save_dir)
 
     # Act
     create_experiment(save_dir, plotting_opts, execution_opts)
 
     # Assert
     assert execution_options_file.exists()
+    assert execution_options_file.is_file()
     assert plotting_options_file.exists()
+    assert plotting_options_file.is_file()
