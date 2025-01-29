@@ -140,7 +140,7 @@ def fi_options_form():
 
     st.write("### Local Feature Importance Methods")
     st.write(
-        "Select local methods to interpret individual predictions. "
+        "Select local methods to interpret individual predictions."
         "These methods focus on explaining predictions at a finer granularity."
     )
 
@@ -347,13 +347,13 @@ def ml_options_form(use_hyperparam_search: bool):
             "Save models",
             key=ConfigStateKeys.SaveModels,
             value=True,
-            help="Save the models that are trained to disk?",
+            help="This option will save the trained models to disk.",
         )
         st.toggle(
             "Save plots",
             key=PlotOptionKeys.SavePlots,
             value=True,
-            help="Save the plots to disk?",
+            help="This option will save the result plots to disk",
         )
 
 
@@ -422,7 +422,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
     """
 
     if st.toggle(
-        "Select All Descriptors",
+        "Select all data columns",
         value=False,
         key=ConfigStateKeys.SelectAllDescriptorsCorrelation,
     ):
@@ -441,7 +441,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
 
     if len(corr_descriptors) < 1:
         st.warning(
-            "Please select at least one descriptor to create the correlation heatmap."
+            "Please select at least one data column to create the correlation heatmap."
         )
 
     if st.checkbox(
@@ -507,7 +507,7 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
     """
 
     if st.toggle(
-        "Select All Descriptors",
+        "Select all data columns",
         value=False,
         key=ConfigStateKeys.SelectAllDescriptorsPairPlot,
     ):
@@ -526,7 +526,7 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
 
     if len(descriptors) < 1:
         st.warning(
-            "Please select at least one descriptor to create the correlation plot."
+            "Please select at least one data column to create the correlation plot."
         )
 
     if st.checkbox("Create Pairplot", key=ConfigStateKeys.PairPlot):

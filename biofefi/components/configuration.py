@@ -1,3 +1,8 @@
+'''This file contains the user configurations. These are the input options for 
+the BioFEFI tool, including machine learning options, plot options, and feature
+importance options. These options are obtained from the user interface designed 
+in Streamlit.'''
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -345,7 +350,7 @@ def execution_options_box_manual():
     )
     st.write(
         """
-        If you select **"Standardization"**, your data will be normalised by subtracting the
+        If you select **"Standardization"**, your data will be normalized by subtracting the
         mean and dividing by the standard deviation for each feature. The resulting transformation has a
         mean of 0 and values are between -1 and 1.
 
@@ -356,7 +361,7 @@ def execution_options_box_manual():
         """
     )
     st.selectbox(
-        "Normalisation",
+        "Normalization",
         NORMALISATIONS,
         key=ConfigStateKeys.Normalization,
     )
@@ -413,7 +418,7 @@ def execution_options_box_auto():
     )
     st.write(
         """
-        If you select **"Standardization"**, your data will be normalised by subtracting the
+        If you select **"Standardization"**, your data will be normalized by subtracting the
         mean and dividing by the standard deviation for each feature. The resulting transformation has a
         mean of 0 and values are between -1 and 1.
 
@@ -424,7 +429,7 @@ def execution_options_box_auto():
         """
     )
     st.selectbox(
-        "Normalisation",
+        "Normalization",
         NORMALISATIONS,
         key=ConfigStateKeys.Normalization,
     )
