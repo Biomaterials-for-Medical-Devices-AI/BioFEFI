@@ -102,7 +102,7 @@ def plotting_opts() -> PlottingOptions:
 
 
 @pytest.fixture
-def plotting_opts_file_path() -> Generator[PlottingOptions, None, None]:
+def plotting_opts_file_path() -> Generator[Path, None, None]:
     """Produce the test `Path` to some plotting options.
 
     Delete the file if it has been created by a test.
