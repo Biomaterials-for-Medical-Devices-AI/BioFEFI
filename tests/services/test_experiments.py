@@ -1,9 +1,17 @@
 from pathlib import Path
 
 from biofefi.options.execution import ExecutionOptions
-from biofefi.options.file_paths import execution_options_path, plot_options_path
+from biofefi.options.file_paths import (
+    execution_options_path,
+    fi_result_dir,
+    plot_options_path,
+)
 from biofefi.options.plotting import PlottingOptions
-from biofefi.services.experiments import create_experiment, get_experiments
+from biofefi.services.experiments import (
+    create_experiment,
+    find_previous_fi_results,
+    get_experiments,
+)
 
 # import all the fixtures for services
 from .fixtures import *  # noqa: F403, F401
@@ -49,3 +57,33 @@ def test_create_experiment(
     assert execution_options_file.is_file()
     assert plotting_options_file.exists()
     assert plotting_options_file.is_file()
+
+
+def test_find_previous_fi_results_when_empty(
+    experiment_dir: tuple[Path, list[str]],
+):
+    # Arrange
+    base_dir, experiments = experiment_dir
+    exp_dir = base_dir / experiments[0]  # use the first experiment directory
+
+    # Act
+    results_found = find_previous_fi_results(exp_dir)
+
+    # Assert
+    assert not results_found
+
+
+def test_find_previous_fi_results(
+    experiment_dir: tuple[Path, list[str]],
+):
+    # Arrange
+    base_dir, experiments = experiment_dir
+    exp_dir = base_dir / experiments[0]  # use the first experiment directory
+    results_dir = fi_result_dir(exp_dir)
+    results_dir.mkdir(parents=True)  # make th intermediate directories
+
+    # Act
+    results_found = find_previous_fi_results(exp_dir)
+
+    # Assert
+    assert results_found
