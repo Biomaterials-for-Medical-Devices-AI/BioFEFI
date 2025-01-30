@@ -94,7 +94,7 @@ def find_previous_fi_results(experiment_path: Path) -> bool:
     return any([d.exists() for d in directories])
 
 
-def delete_previous_FI_results(experiment_path: Path):
+def delete_previous_fi_results(experiment_path: Path):
     """Delete previous feature importance results.
 
     Args:

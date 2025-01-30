@@ -10,7 +10,7 @@ from biofefi.options.file_paths import (
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import (
     create_experiment,
-    delete_previous_FI_results,
+    delete_previous_fi_results,
     find_previous_fi_results,
     get_experiments,
 )
@@ -92,7 +92,7 @@ def test_delete_previous_FI_results(previous_fi_results: Path):
         contents_pre_delete.extend(dpath / fname for fname in filenames)
 
     # Act
-    delete_previous_FI_results(previous_fi_results)
+    delete_previous_fi_results(previous_fi_results)
 
     contents_post_delete = []
     for dirpath, dirnames, filenames in os.walk(previous_fi_results, topdown=True):
