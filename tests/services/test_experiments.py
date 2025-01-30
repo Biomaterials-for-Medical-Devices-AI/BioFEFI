@@ -2,11 +2,7 @@ import os
 from pathlib import Path
 
 from biofefi.options.execution import ExecutionOptions
-from biofefi.options.file_paths import (
-    execution_options_path,
-    fi_result_dir,
-    plot_options_path,
-)
+from biofefi.options.file_paths import execution_options_path, plot_options_path
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import (
     create_experiment,
