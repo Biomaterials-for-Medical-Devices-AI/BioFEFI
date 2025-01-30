@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from biofefi.options.execution import ExecutionOptions
@@ -9,6 +10,7 @@ from biofefi.options.file_paths import (
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.experiments import (
     create_experiment,
+    delete_previous_FI_results,
     find_previous_fi_results,
     get_experiments,
 )
@@ -73,11 +75,30 @@ def test_find_previous_fi_results_when_empty(
     assert not results_found
 
 
-def test_find_previous_fi_results(
-    previous_fi_results: Path,
-):
+def test_find_previous_fi_results(previous_fi_results: Path):
     # Act
     results_found = find_previous_fi_results(previous_fi_results)
 
     # Assert
     assert results_found
+
+
+def test_delete_previous_FI_results(previous_fi_results: Path):
+    # Arrange
+    contents_pre_delete = []
+    for dirpath, dirnames, filenames in os.walk(previous_fi_results, topdown=True):
+        dpath = Path(dirpath)
+        contents_pre_delete.extend(dpath / dname for dname in dirnames)
+        contents_pre_delete.extend(dpath / fname for fname in filenames)
+
+    # Act
+    delete_previous_FI_results(previous_fi_results)
+
+    contents_post_delete = []
+    for dirpath, dirnames, filenames in os.walk(previous_fi_results, topdown=True):
+        dpath = Path(dirpath)
+        contents_post_delete.extend(dpath / dname for dname in dirnames)
+        contents_post_delete.extend(dpath / fname for fname in filenames)
+
+    # Assert
+    assert len(contents_post_delete) < len(contents_pre_delete)
