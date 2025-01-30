@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from biofefi.options.choices import SVM_KERNELS
 from biofefi.options.enums import (
@@ -544,10 +546,9 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
 
 
 @st.experimental_fragment
-def tSNE_plot_form(data, random_state, data_analysis_plot_dir, plot_opts, scaler=None):
-
-    from sklearn.manifold import TSNE
-    from sklearn.preprocessing import MinMaxScaler, StandardScaler
+def tSNE_plot_form(
+    data, random_state, data_analysis_plot_dir, plot_opts, scaler: Normalisations = None
+):
 
     X = data.drop(columns=[data.columns[-1]])
     y = data[data.columns[-1]]
