@@ -11,6 +11,7 @@ from biofefi.options.choices import SVM_KERNELS
 from biofefi.options.enums import (
     ConfigStateKeys,
     ExecutionStateKeys,
+    Normalisations,
     PlotOptionKeys,
     ProblemTypes,
 )
@@ -543,19 +544,32 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
 
 
 @st.experimental_fragment
-def tSNE_plot_form(data, random_state, data_analysis_plot_dir, plot_opts):
+def tSNE_plot_form(data, random_state, data_analysis_plot_dir, plot_opts, scaler=None):
 
     from sklearn.manifold import TSNE
-    from sklearn.preprocessing import StandardScaler
+    from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
     X = data.drop(columns=[data.columns[-1]])
     y = data[data.columns[-1]]
 
-    X = StandardScaler().fit_transform(X)
+    if st.toggle("Normalise Features", key=ConfigStateKeys.NormaliseFeaturesTSNE):
+        if scaler == Normalisations.MinMax:
+            X = MinMaxScaler().fit_transform(X)
+        elif scaler == Normalisations.Standardization:
+            X = StandardScaler().fit_transform(X)
+
+    perplexity = st.slider(
+        "Perplexity",
+        min_value=5,
+        max_value=50,
+        value=30,
+        help="The perplexity parameter controls the balance between local and global aspects of the data.",
+        key=ConfigStateKeys.Perplexity,
+    )
 
     if st.checkbox("Create t-SNE Plot", key=ConfigStateKeys.tSNEPlot):
 
-        tsne = TSNE(n_components=2, random_state=random_state)
+        tsne = TSNE(n_components=2, random_state=random_state, perplexity=perplexity)
         X_embedded = tsne.fit_transform(X)
 
         df = pd.DataFrame(X_embedded, columns=["x", "y"])
@@ -587,7 +601,7 @@ def tSNE_plot_form(data, random_state, data_analysis_plot_dir, plot_opts):
         )
         st.pyplot(fig)
 
-        if st.button("Create and Save Plot", key=ConfigStateKeys.SaveTSNEPlot):
+        if st.button("Save Plot", key=ConfigStateKeys.SaveTSNEPlot):
 
             fig.savefig(data_analysis_plot_dir / "tsne_plot.png")
             plt.clf()
