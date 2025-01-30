@@ -257,7 +257,7 @@ def experiment_dir():
 
 @pytest.fixture
 def previous_fi_results(
-    experiment_dir: tuple[Path, list[str]]
+    experiment_dir: tuple[Path, list[str]],
 ) -> Generator[Path, None, None]:
     # Arrange
     base_dir, experiments = experiment_dir
