@@ -64,6 +64,8 @@ class ConfigStateKeys(StrEnum):
     DescriptorPairPlot = "descriptor_pair_plot"
     SavePairPlot = "save_pair_plot"
     tSNEPlot = "tsne_plot"
+    NormaliseFeaturesTSNE = "normalise_features_tsne"
+    Perplexity = "perplexity"
     SaveTSNEPlot = "save_tsne_plot"
 
 
