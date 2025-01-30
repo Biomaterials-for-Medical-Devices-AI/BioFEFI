@@ -74,16 +74,10 @@ def test_find_previous_fi_results_when_empty(
 
 
 def test_find_previous_fi_results(
-    experiment_dir: tuple[Path, list[str]],
+    previous_fi_results: Path,
 ):
-    # Arrange
-    base_dir, experiments = experiment_dir
-    exp_dir = base_dir / experiments[0]  # use the first experiment directory
-    results_dir = fi_result_dir(exp_dir)
-    results_dir.mkdir(parents=True)  # make th intermediate directories
-
     # Act
-    results_found = find_previous_fi_results(exp_dir)
+    results_found = find_previous_fi_results(previous_fi_results)
 
     # Assert
     assert results_found
