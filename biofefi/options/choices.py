@@ -23,6 +23,7 @@ from biofefi.options.enums import (
     Normalisations,
     ProblemTypes,
     SvmKernels,
+    TransformationsY,
 )
 
 SVM_KERNELS = [
@@ -40,6 +41,14 @@ NORMALISATIONS = [
     Normalisations.MinMax.capitalize(),
     Normalisations.NoNormalisation.capitalize(),
 ]
+TRANSFORMATIONSY = [
+    TransformationsY.Log.capitalize(),
+    TransformationsY.Sqrt.capitalize(),
+    TransformationsY.MinMaxNormailisation.capitalize(),
+    TransformationsY.StandardisationNormalisation.capitalize(),
+    TransformationsY.NoTransformation.capitalize(),
+]
+
 PLOT_FONT_FAMILIES = ["serif", "sans-serif", "cursive", "fantasy", "monospace"]
 DATA_SPLITS = [
     DataSplitMethods.Holdout.capitalize(),
