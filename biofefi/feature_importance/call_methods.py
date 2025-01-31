@@ -35,7 +35,7 @@ def load_model(model_name, folder):
 
 
 def load_data(opt: argparse.Namespace):
-    raise NotImplementedError("Funtion load_data is not implemented")
+    raise NotImplementedError("Function load_data is not implemented")
 
 
 def save_importance_results(
