@@ -1,7 +1,7 @@
-'''This file contains the user configurations. These are the input options for 
+"""This file contains the user configurations. These are the input options for 
 the BioFEFI tool, including machine learning options, plot options, and feature
 importance options. These options are obtained from the user interface designed 
-in Streamlit.'''
+in Streamlit."""
 
 import matplotlib.pyplot as plt
 import numpy as np

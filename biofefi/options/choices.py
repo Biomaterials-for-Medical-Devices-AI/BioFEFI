@@ -54,7 +54,10 @@ MODEL_PROBLEM_CHOICES = {
     (ModelNames.XGBoost, ProblemTypes.Regression): XGBRegressor,
     (ModelNames.SVM, ProblemTypes.Classification): SVC,
     (ModelNames.SVM, ProblemTypes.Regression): SVR,
-    (ModelNames.BRNNClassifier,ProblemTypes.Classification,): BayesianRegularisedNNClassifier,
+    (
+        ModelNames.BRNNClassifier,
+        ProblemTypes.Classification,
+    ): BayesianRegularisedNNClassifier,
     (ModelNames.BRNNRegressor, ProblemTypes.Regression): BayesianRegularisedNNRegressor,
 }
 CLASSIFICATION_METRICS = {
