@@ -25,11 +25,10 @@ st.set_page_config(
 
 sidebar_logo()
 
-st.header("Data Visualisation")
+st.header("Data Preprocessing")
 st.write(
     """
-    Here you can visualise your data. This is useful for understanding the distribution of your data,
-    as well as the correlation between different features.
+    Here you can make changes to your data before running machine learning models. This includes feature selection and scalling of variables.
     """
 )
 
