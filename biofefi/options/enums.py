@@ -67,6 +67,10 @@ class ConfigStateKeys(StrEnum):
     SelectNormTsne = "select_norm_tsne"
     Perplexity = "perplexity"
     SaveTSNEPlot = "save_tsne_plot"
+    # Data Preprocessing options
+    FeatureSelection = "feature_selection"
+    DependentNormalisation = "dependent_normalisation"
+    IndependentNormalisation = "independent_normalisation"
 
 
 class ExecutionStateKeys(StrEnum):
@@ -99,6 +103,14 @@ class Normalisations(StrEnum):
     Standardization = "standardization"
     MinMax = "minmax"
     NoNormalisation = "none"  # field name can't be None
+
+
+class TransformationsY(StrEnum):
+    Log = "log"
+    Sqrt = "Square-root"
+    MinMaxNormailisation = "minmax"
+    StandardisationNormalisation = "standardisation"
+    NoTransformation = "none"
 
 
 class ModelNames(StrEnum):
