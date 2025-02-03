@@ -70,6 +70,7 @@ class ConfigStateKeys(StrEnum):
     # Data Preprocessing options
     DependentNormalisation = "dependent_normalisation"
     IndependentNormalisation = "independent_normalisation"
+    ProceedTransformation = "proceed_transformation"
     VarianceThreshold = "variance_threshold"
     ThresholdVariance = "threshold_variance"
     CorrelationThreshold = "correlation_threshold"
