@@ -119,9 +119,13 @@ def transform_dependent_variable(transformation_y_method: str, y):
     y = y.to_numpy().reshape(-1, 1)
 
     if transformation_y_method == TransformationsY.Log:
+        if y.min() <= 0:
+            y = y - y.min() + 1
         y = np.log(y)
 
     elif transformation_y_method == TransformationsY.Sqrt:
+        if y.min() < 0:
+            y = y - y.min()
         y = np.sqrt(y)
 
     elif transformation_y_method == TransformationsY.MinMaxNormalisation:
@@ -250,7 +254,13 @@ if experiment_name:
             st.warning(
                 "The dependent variable contains negative values. Log and square root transformations require positive values."
             )
-            st.stop()
+            if st.checkbox(
+                "Proceed with transformation. This option will add a constant to the dependent variable to make it positive.",
+                key=ConfigStateKeys.ProceedTransformation,
+            ):
+                pass
+            else:
+                st.stop()
 
     st.write("#### Feature Selection")
 
