@@ -44,7 +44,7 @@ NORMALISATIONS = [
 TRANSFORMATIONSY = [
     TransformationsY.Log.capitalize(),
     TransformationsY.Sqrt.capitalize(),
-    TransformationsY.MinMaxNormailisation.capitalize(),
+    TransformationsY.MinMaxNormalisation.capitalize(),
     TransformationsY.StandardisationNormalisation.capitalize(),
     TransformationsY.NoTransformation.capitalize(),
 ]
