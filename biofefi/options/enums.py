@@ -68,9 +68,14 @@ class ConfigStateKeys(StrEnum):
     Perplexity = "perplexity"
     SaveTSNEPlot = "save_tsne_plot"
     # Data Preprocessing options
-    FeatureSelection = "feature_selection"
     DependentNormalisation = "dependent_normalisation"
     IndependentNormalisation = "independent_normalisation"
+    VarianceThreshold = "variance_threshold"
+    ThresholdVariance = "threshold_variance"
+    CorrelationThreshold = "correlation_threshold"
+    ThresholdCorrelation = "threshold_correlation"
+    LassoFeatureSelection = "lasso_feature_selection"
+    RegularisationTerm = "regularisation_term"
 
 
 class ExecutionStateKeys(StrEnum):
@@ -107,8 +112,8 @@ class Normalisations(StrEnum):
 
 class TransformationsY(StrEnum):
     Log = "log"
-    Sqrt = "Square-root"
-    MinMaxNormailisation = "minmax"
+    Sqrt = "square-root"
+    MinMaxNormalisation = "minmax"
     StandardisationNormalisation = "standardisation"
     NoTransformation = "none"
 
