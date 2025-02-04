@@ -18,6 +18,7 @@ def raw_data_path(file_name: str, experiment_path: Path) -> Path:
     """Create the full path to the directory to save raw data.
 
     Args:
+        file_name (str): The name of the file.
         experiment_path (Path): The path of the experiment.
 
     Returns:
