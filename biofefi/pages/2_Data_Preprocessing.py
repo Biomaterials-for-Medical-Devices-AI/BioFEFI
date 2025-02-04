@@ -1,30 +1,20 @@
-from pathlib import Path
-
-import numpy as np
 import pandas as pd
 import streamlit as st
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.linear_model import Lasso
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from biofefi.components.experiments import experiment_selector
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.choices import NORMALISATIONS, TRANSFORMATIONS_Y
-from biofefi.options.enums import ConfigStateKeys, Normalisations, TransformationsY
+from biofefi.options.enums import ConfigStateKeys, TransformationsY
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
-    data_preprocessing_options_path,
     execution_options_path,
     plot_options_path,
     raw_data_path,
 )
 from biofefi.options.preprocessing import PreprocessingOptions
-from biofefi.services.configuration import (
-    load_execution_options,
-    load_plot_options,
-    save_options,
-)
+from biofefi.services.configuration import load_execution_options, load_plot_options
 from biofefi.services.experiments import get_experiments
+from biofefi.services.preprocessing import run_preprocessing
 
 
 def build_config() -> PreprocessingOptions:
@@ -44,6 +34,9 @@ def build_config() -> PreprocessingOptions:
                 ConfigStateKeys.LassoFeatureSelection
             ],
         },
+        variance_threshold=st.session_state[ConfigStateKeys.ThresholdVariance],
+        correlation_threshold=st.session_state[ConfigStateKeys.ThresholdCorrelation],
+        lasso_regularisation_term=st.session_state[ConfigStateKeys.RegularisationTerm],
         independent_variable_normalisation=st.session_state[
             ConfigStateKeys.IndependentNormalisation
         ].lower(),
@@ -52,146 +45,6 @@ def build_config() -> PreprocessingOptions:
         ].lower(),
     )
     return preprocessing_options
-
-
-def run_feature_selection(feature_selection_methods: dict, data: pd.DataFrame) -> None:
-    """
-    Run feature selection on the data based on the selected methods.
-
-    Args:
-        feature_selection_methods (dict): A dictionary of the feature selection methods to use.
-        data (pd.DataFrame): The data to perform feature selection on.
-
-    Returns:
-        pd.DataFrame: The processed data.
-
-    """
-
-    X = data.iloc[:, :-1]
-    y = data.iloc[:, -1]
-
-    if feature_selection_methods[ConfigStateKeys.VarianceThreshold]:
-        varianceselector = VarianceThreshold(
-            threshold=st.session_state[ConfigStateKeys.ThresholdVariance]
-        )
-        X = varianceselector.fit_transform(X)
-        variance_columns = varianceselector.get_feature_names_out()
-        X = pd.DataFrame(X, columns=variance_columns)
-
-    if feature_selection_methods[ConfigStateKeys.CorrelationThreshold]:
-        corr_matrix = X.corr().abs()
-        upper_triangle = corr_matrix.where(
-            np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
-        )
-        to_drop = [
-            column
-            for column in upper_triangle.columns
-            if any(
-                upper_triangle[column]
-                > st.session_state[ConfigStateKeys.ThresholdCorrelation]
-            )
-        ]
-        X = X.drop(columns=to_drop)
-
-    if feature_selection_methods[ConfigStateKeys.LassoFeatureSelection]:
-        lasso = Lasso(alpha=st.session_state[ConfigStateKeys.RegularisationTerm])
-        lasso.fit(X, y)
-        selected_features = X.columns[lasso.coef_ != 0]
-        X = X[selected_features]
-
-    processed_data = pd.concat([X, y], axis=1)
-
-    return processed_data
-
-
-def normalise_independent_variables(normalisation_method: str, X):
-    """
-    Normalise the independent variables based on the selected method.
-
-    Args:
-        normalisation_method (str): The normalisation method to use.
-        X (pd.DataFrame): The independent variables to normalise.
-
-    Returns:
-        pd.DataFrame: The normalised independent variables.
-    """
-
-    if normalisation_method == Normalisations.NoNormalisation:
-        return X
-
-    elif normalisation_method == Normalisations.Standardization:
-        scaler = StandardScaler()
-
-    elif normalisation_method == Normalisations.MinMax:
-        scaler = MinMaxScaler()
-
-    column_names = X.columns
-    processed_X = scaler.fit_transform(X)
-
-    processed_X = pd.DataFrame(processed_X, columns=column_names)
-
-    return processed_X
-
-
-def transform_dependent_variable(transformation_y_method: str, y):
-    """
-    Transform the dependent variable based on the selected method.
-
-    Args:
-        transformation_y_method (str): The transformation method to use.
-        y (pd.Series): The dependent variable to transform.
-
-    Returns:
-        pd.Series: The transformed dependent variable.
-    """
-
-    if transformation_y_method == TransformationsY.NoTransformation:
-        return y
-
-    column_name = y.name
-    y = y.to_numpy().reshape(-1, 1)
-
-    if transformation_y_method == TransformationsY.Log:
-        if y.min() <= 0:
-            y = y - y.min() + 1
-        y = np.log(y)
-
-    elif transformation_y_method == TransformationsY.Sqrt:
-        if y.min() < 0:
-            y = y - y.min()
-        y = np.sqrt(y)
-
-    elif transformation_y_method == TransformationsY.MinMaxNormalisation:
-        scaler = MinMaxScaler()
-        y = scaler.fit_transform(y)
-
-    elif transformation_y_method == TransformationsY.StandardisationNormalisation:
-        scaler = StandardScaler()
-        y = scaler.fit_transform(y)
-
-    y = pd.DataFrame(y, columns=[column_name])
-
-    return y
-
-
-def run_preprocessing(
-    data: pd.DataFrame, experiment_path: Path, config: PreprocessingOptions
-) -> None:
-
-    X = data.iloc[:, :-1]
-    y = data.iloc[:, -1]
-
-    save_options(data_preprocessing_options_path(experiment_path), config)
-    X = normalise_independent_variables(config.independent_variable_normalisation, X)
-    y = transform_dependent_variable(config.dependent_variable_transformation, y)
-
-    normalised_data = pd.concat([X, y], axis=1)
-
-    processed_data = run_feature_selection(
-        config.feature_selection_methods, normalised_data
-    )
-
-    return processed_data
 
 
 st.set_page_config(
@@ -302,43 +155,52 @@ if experiment_name:
 
     st.write("#### Check the Feature Selection Algorithms to Use")
 
+    variance_disabled = True
     if st.checkbox(
         "Variance threshold",
         key=ConfigStateKeys.VarianceThreshold,
         help="Delete features with variance below a certain threshold",
     ):
-        threshold = st.number_input(
-            "Set threshold",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.8,
-            key=ConfigStateKeys.ThresholdVariance,
-        )
+        variance_disabled = False
+    threshold = st.number_input(
+        "Set threshold",
+        min_value=0.0,
+        max_value=1.0,
+        value=0.1,
+        key=ConfigStateKeys.ThresholdVariance,
+        disabled=variance_disabled,
+    )
 
+    correlation_disabled = True
     if st.checkbox(
         "Correlation threshold",
         key=ConfigStateKeys.CorrelationThreshold,
         help="Delete features with correlation above a certain threshold",
     ):
-        threshold = st.number_input(
-            "Set threshold",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.8,
-            key=ConfigStateKeys.ThresholdCorrelation,
-        )
+        correlation_disabled = False
+    threshold = st.number_input(
+        "Set threshold",
+        min_value=0.0,
+        max_value=1.0,
+        value=0.8,
+        key=ConfigStateKeys.ThresholdCorrelation,
+        disabled=correlation_disabled,
+    )
 
+    lasso_disabled = True
     if st.checkbox(
         "Lasso Feature Selection",
         key=ConfigStateKeys.LassoFeatureSelection,
         help="Select features using Lasso regression",
     ):
-        regularisation_term = st.number_input(
-            "Set regularisation term",
-            min_value=0.0,
-            value=0.05,
-            key=ConfigStateKeys.RegularisationTerm,
-        )
+        lasso_disabled = False
+    regularisation_term = st.number_input(
+        "Set regularisation term",
+        min_value=0.0,
+        value=0.05,
+        key=ConfigStateKeys.RegularisationTerm,
+        disabled=lasso_disabled,
+    )
 
     if st.button("Run Data Preprocessing", type="primary"):
 
