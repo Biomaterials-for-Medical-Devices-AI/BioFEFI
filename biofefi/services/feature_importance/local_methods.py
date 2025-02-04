@@ -1,9 +1,10 @@
-from typing import Any
 import warnings
+from typing import Any
+
 import pandas as pd
 import shap
-from sklearn.base import is_classifier
 from lime.lime_tabular import LimeTabularExplainer
+from sklearn.base import is_classifier
 
 from biofefi.options.enums import ProblemTypes
 from biofefi.utils.logging_utils import Logger

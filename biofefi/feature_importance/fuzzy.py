@@ -1,20 +1,19 @@
 import pandas as pd
 
+from biofefi.options.enums import ProblemTypes
+from biofefi.options.execution import ExecutionOptions
+from biofefi.options.fi import FeatureImportanceOptions
+from biofefi.options.fuzzy import FuzzyOptions
+from biofefi.options.plotting import PlottingOptions
 from biofefi.services.feature_importance.local_methods import (
-    calculate_local_shap_values,
     calculate_lime_values,
+    calculate_local_shap_values,
 )
 from biofefi.services.feature_importance.results import (
     save_fuzzy_sets_plots,
     save_importance_results,
     save_target_clusters_plots,
 )
-
-from biofefi.options.enums import ProblemTypes
-from biofefi.options.execution import ExecutionOptions
-from biofefi.options.fi import FeatureImportanceOptions
-from biofefi.options.fuzzy import FuzzyOptions
-from biofefi.options.plotting import PlottingOptions
 from biofefi.utils.logging_utils import Logger
 
 
