@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 from biofefi.feature_importance.call_methods import save_importance_results
-from biofefi.feature_importance.ensemble_methods import (
+from biofefi.services.feature_importance.ensemble_methods import (
     calculate_ensemble_majorityvote,
     calculate_ensemble_mean,
 )
