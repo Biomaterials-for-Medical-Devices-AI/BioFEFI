@@ -44,17 +44,28 @@ def build_config() -> PreprocessingOptions:
                 ConfigStateKeys.LassoFeatureSelection
             ],
         },
-        dependent_variable_normalisation=st.session_state[
-            ConfigStateKeys.DependentNormalisation
-        ].lower(),
-        independent_variable_transformation=st.session_state[
+        independent_variable_normalisation=st.session_state[
             ConfigStateKeys.IndependentNormalisation
+        ].lower(),
+        dependent_variable_transformation=st.session_state[
+            ConfigStateKeys.DependentNormalisation
         ].lower(),
     )
     return preprocessing_options
 
 
 def run_feature_selection(feature_selection_methods: dict, data: pd.DataFrame) -> None:
+    """
+    Run feature selection on the data based on the selected methods.
+
+    Args:
+        feature_selection_methods (dict): A dictionary of the feature selection methods to use.
+        data (pd.DataFrame): The data to perform feature selection on.
+
+    Returns:
+        pd.DataFrame: The processed data.
+
+    """
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -88,10 +99,22 @@ def run_feature_selection(feature_selection_methods: dict, data: pd.DataFrame) -
         selected_features = X.columns[lasso.coef_ != 0]
         X = X[selected_features]
 
-    data = pd.concat([X, y], axis=1)
+    processed_data = pd.concat([X, y], axis=1)
+
+    return processed_data
 
 
 def normalise_independent_variables(normalisation_method: str, X):
+    """
+    Normalise the independent variables based on the selected method.
+
+    Args:
+        normalisation_method (str): The normalisation method to use.
+        X (pd.DataFrame): The independent variables to normalise.
+
+    Returns:
+        pd.DataFrame: The normalised independent variables.
+    """
 
     if normalisation_method == Normalisations.NoNormalisation:
         return X
@@ -103,14 +126,24 @@ def normalise_independent_variables(normalisation_method: str, X):
         scaler = MinMaxScaler()
 
     column_names = X.columns
-    X = scaler.fit_transform(X)
+    processed_X = scaler.fit_transform(X)
 
-    X = pd.DataFrame(X, columns=column_names)
+    processed_X = pd.DataFrame(processed_X, columns=column_names)
 
-    return X
+    return processed_X
 
 
 def transform_dependent_variable(transformation_y_method: str, y):
+    """
+    Transform the dependent variable based on the selected method.
+
+    Args:
+        transformation_y_method (str): The transformation method to use.
+        y (pd.Series): The dependent variable to transform.
+
+    Returns:
+        pd.Series: The transformed dependent variable.
+    """
 
     if transformation_y_method == TransformationsY.NoTransformation:
         return y
@@ -141,21 +174,24 @@ def transform_dependent_variable(transformation_y_method: str, y):
     return y
 
 
-def run_preprocessing(data: pd.DataFrame, experiment_path: Path) -> None:
+def run_preprocessing(
+    data: pd.DataFrame, experiment_path: Path, config: PreprocessingOptions
+) -> None:
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
 
-    config = build_config()
     save_options(data_preprocessing_options_path(experiment_path), config)
     X = normalise_independent_variables(config.independent_variable_normalisation, X)
     y = transform_dependent_variable(config.dependent_variable_transformation, y)
 
-    data = pd.concat([X, y], axis=1)
+    normalised_data = pd.concat([X, y], axis=1)
 
-    run_feature_selection(config.feature_selection_methods, data)
+    processed_data = run_feature_selection(
+        config.feature_selection_methods, normalised_data
+    )
 
-    return data
+    return processed_data
 
 
 st.set_page_config(
@@ -308,18 +344,22 @@ if experiment_name:
 
         data.to_csv(path_to_raw_data, index=False)
 
-        data = run_preprocessing(
-            data, biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName]
+        config = build_config()
+
+        processed_data = run_preprocessing(
+            data,
+            biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName],
+            config,
         )
 
-        data.to_csv(exec_opt.data_path, index=False)
+        processed_data.to_csv(exec_opt.data_path, index=False)
 
         st.success("Data Preprocessing Complete")
 
         st.write("### Processed Data")
 
-        st.write(data)
+        st.write(processed_data)
 
         st.write("### Processed Data Description")
 
-        st.write(data.describe())
+        st.write(processed_data.describe())
