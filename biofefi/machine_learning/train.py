@@ -1,6 +1,6 @@
 import os
 
-from biofefi.machine_learning.call_methods import save_actual_pred_plots
+from biofefi.services.machine_learning.results import save_actual_pred_plots
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.machine_learning.learner import GridSearchLearner, Learner
 from biofefi.options.execution import ExecutionOptions
