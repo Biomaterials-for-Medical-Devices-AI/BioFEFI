@@ -1,6 +1,6 @@
 import pandas as pd
 
-from biofefi.feature_importance.call_methods import (
+from biofefi.services.feature_importance.results import (
     save_fuzzy_sets_plots,
     save_importance_results,
     save_target_clusters_plots,
