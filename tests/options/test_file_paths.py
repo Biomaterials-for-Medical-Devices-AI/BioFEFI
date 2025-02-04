@@ -28,6 +28,7 @@ def test_uploaded_file_path():
     assert isinstance(actual_output, Path)
     assert actual_output == expected_output
 
+
 def test_raw_data_path():
     # Arrange
     experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
