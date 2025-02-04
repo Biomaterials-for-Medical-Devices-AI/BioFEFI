@@ -1,14 +1,15 @@
 import pandas as pd
 
+from biofefi.services.feature_importance.local_methods import (
+    calculate_local_shap_values,
+    calculate_lime_values,
+)
 from biofefi.services.feature_importance.results import (
     save_fuzzy_sets_plots,
     save_importance_results,
     save_target_clusters_plots,
 )
-from biofefi.services.feature_importance.feature_importance_methods import (
-    calculate_lime_values,
-    calculate_shap_values,
-)
+
 from biofefi.options.enums import ProblemTypes
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
@@ -521,7 +522,7 @@ class Fuzzy:
 
                         if feature_importance_type == "SHAP":
                             # Run SHAP
-                            shap_df, shap_values = calculate_shap_values(
+                            shap_df, shap_values = calculate_local_shap_values(
                                 model=model[0],
                                 X=X,
                                 shap_type=value["type"],
