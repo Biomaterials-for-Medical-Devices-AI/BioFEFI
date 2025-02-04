@@ -192,7 +192,6 @@ class DataBuilder:
 
     def ingest(self):
         X, y = self._load_data()
-        # X_norm = self._normalise_data(X) # normalisation is done in data preprocessing
         data = self._generate_data_splits(X, y)
 
         return TabularData(
