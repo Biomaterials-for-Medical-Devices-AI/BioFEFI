@@ -7,7 +7,7 @@ from biofefi.services.feature_importance.ensemble_methods import (
     calculate_ensemble_majorityvote,
     calculate_ensemble_mean,
 )
-from biofefi.feature_importance.feature_importance_methods import (
+from biofefi.services.feature_importance.feature_importance_methods import (
     calculate_lime_values,
     calculate_permutation_importance,
 )

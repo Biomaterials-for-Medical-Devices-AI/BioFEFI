@@ -5,7 +5,7 @@ from biofefi.services.feature_importance.results import (
     save_importance_results,
     save_target_clusters_plots,
 )
-from biofefi.feature_importance.feature_importance_methods import (
+from biofefi.services.feature_importance.feature_importance_methods import (
     calculate_lime_values,
     calculate_shap_values,
 )
