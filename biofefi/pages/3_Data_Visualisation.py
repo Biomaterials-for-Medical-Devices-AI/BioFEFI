@@ -80,6 +80,8 @@ if experiment_name:
     st.write("### Data Visualisation")
 
     if path_to_raw_data.exists():
+        data_tsne = pd.read_csv(path_to_raw_data)
+
         if st.toggle(
             "Visualise raw data",
             help="Turn this on if you'd like to analyse your raw data (before pre-processing).",
@@ -106,7 +108,7 @@ if experiment_name:
     st.write("#### t-SNE Plot")
 
     tSNE_plot_form(
-        data,
+        data_tsne,
         exec_opt.random_state,
         data_analysis_plot_dir,
         plot_opt,
