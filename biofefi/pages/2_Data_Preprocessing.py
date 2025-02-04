@@ -148,8 +148,8 @@ def run_preprocessing(data: pd.DataFrame, experiment_path: Path) -> None:
 
     config = build_config()
     save_options(data_preprocessing_options_path(experiment_path), config)
-    X = normalise_independent_variables(config.dependent_variable_normalisation, X)
-    y = transform_dependent_variable(config.independent_variable_transformation, y)
+    X = normalise_independent_variables(config.independent_variable_normalisation, X)
+    y = transform_dependent_variable(config.dependent_variable_transformation, y)
 
     data = pd.concat([X, y], axis=1)
 
@@ -231,7 +231,7 @@ if experiment_name:
     st.selectbox(
         "Normalisation",
         NORMALISATIONS,
-        key=ConfigStateKeys.DependentNormalisation,
+        key=ConfigStateKeys.IndependentNormalisation,
         index=len(NORMALISATIONS) - 1,  # default to no normalisation
     )
 
@@ -240,7 +240,7 @@ if experiment_name:
     transformationy = st.selectbox(
         "Transformations",
         TRANSFORMATIONS_Y,
-        key=ConfigStateKeys.IndependentNormalisation,
+        key=ConfigStateKeys.DependentNormalisation,
         index=len(TRANSFORMATIONS_Y) - 1,  # default to no transformation
     )
 
