@@ -9,7 +9,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from biofefi.components.experiments import experiment_selector
 from biofefi.components.images.logos import sidebar_logo
-from biofefi.options.choices import NORMALISATIONS, TRANSFORMATIONSY
+from biofefi.options.choices import NORMALISATIONS, TRANSFORMATIONS_Y
 from biofefi.options.enums import ConfigStateKeys, Normalisations, TransformationsY
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
@@ -239,9 +239,9 @@ if experiment_name:
 
     transformationy = st.selectbox(
         "Transformations",
-        TRANSFORMATIONSY,
+        TRANSFORMATIONS_Y,
         key=ConfigStateKeys.IndependentNormalisation,
-        index=len(TRANSFORMATIONSY) - 1,  # default to no transformation
+        index=len(TRANSFORMATIONS_Y) - 1,  # default to no transformation
     )
 
     if (
