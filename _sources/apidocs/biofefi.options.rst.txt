@@ -68,6 +68,14 @@ biofefi.options.plotting module
    :undoc-members:
    :show-inheritance:
 
+biofefi.options.preprocessing module
+------------------------------------
+
+.. automodule:: biofefi.options.preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 biofefi.options.search\_grids module
 ------------------------------------
 

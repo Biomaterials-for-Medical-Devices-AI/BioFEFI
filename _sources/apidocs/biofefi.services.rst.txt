@@ -60,6 +60,14 @@ biofefi.services.plotting module
    :undoc-members:
    :show-inheritance:
 
+biofefi.services.preprocessing module
+-------------------------------------
+
+.. automodule:: biofefi.services.preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 biofefi.services.weights\_init module
 -------------------------------------
 

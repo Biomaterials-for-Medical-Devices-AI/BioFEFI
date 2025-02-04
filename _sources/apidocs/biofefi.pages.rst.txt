@@ -12,34 +12,42 @@ biofefi.pages.1\_New\_Experiment module
    :undoc-members:
    :show-inheritance:
 
-biofefi.pages.2\_Data\_Visualisation module
+biofefi.pages.2\_Data\_Preprocessing module
 -------------------------------------------
 
-.. automodule:: biofefi.pages.2_Data_Visualisation
+.. automodule:: biofefi.pages.2_Data_Preprocessing
    :members:
    :undoc-members:
    :show-inheritance:
 
-biofefi.pages.3\_Train\_Models module
+biofefi.pages.3\_Data\_Visualisation module
+-------------------------------------------
+
+.. automodule:: biofefi.pages.3_Data_Visualisation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biofefi.pages.4\_Train\_Models module
 -------------------------------------
 
-.. automodule:: biofefi.pages.3_Train_Models
+.. automodule:: biofefi.pages.4_Train_Models
    :members:
    :undoc-members:
    :show-inheritance:
 
-biofefi.pages.4\_Feature\_Importance module
+biofefi.pages.5\_Feature\_Importance module
 -------------------------------------------
 
-.. automodule:: biofefi.pages.4_Feature_Importance
+.. automodule:: biofefi.pages.5_Feature_Importance
    :members:
    :undoc-members:
    :show-inheritance:
 
-biofefi.pages.5\_View\_Experiments module
+biofefi.pages.6\_View\_Experiments module
 -----------------------------------------
 
-.. automodule:: biofefi.pages.5_View_Experiments
+.. automodule:: biofefi.pages.6_View_Experiments
    :members:
    :undoc-members:
    :show-inheritance:
