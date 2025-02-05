@@ -6,9 +6,9 @@ from sklearn.metrics import make_scorer
 from sklearn.model_selection import GridSearchCV
 
 from biofefi.machine_learning.data import TabularData
-from biofefi.options.choices import (
+from biofefi.options.choices import MODEL_PROBLEM_CHOICES
+from biofefi.options.choices_new.metrics import (
     CLASSIFICATION_METRICS,
-    MODEL_PROBLEM_CHOICES,
     REGRESSION_METRICS,
 )
 from biofefi.options.enums import (
