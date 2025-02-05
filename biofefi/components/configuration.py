@@ -4,16 +4,8 @@ import pandas as pd
 import seaborn as sns
 import streamlit as st
 
-from biofefi.options.choices.ui import (
-    DATA_SPLITS,
-    PLOT_FONT_FAMILIES,
-    PROBLEM_TYPES,
-)
-from biofefi.options.enums import (
-    DataSplitMethods,
-    ExecutionStateKeys,
-    PlotOptionKeys,
-)
+from biofefi.options.choices.ui import DATA_SPLITS, PLOT_FONT_FAMILIES, PROBLEM_TYPES
+from biofefi.options.enums import DataSplitMethods, ExecutionStateKeys, PlotOptionKeys
 
 
 @st.experimental_fragment
