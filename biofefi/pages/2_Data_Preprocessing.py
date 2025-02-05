@@ -7,6 +7,7 @@ from biofefi.options.choices.ui import NORMALISATIONS, TRANSFORMATIONS_Y
 from biofefi.options.enums import (
     ConfigStateKeys,
     DataPreprocessingStateKeys,
+    ExecutionStateKeys,
     TransformationsY,
 )
 from biofefi.options.file_paths import (
@@ -76,21 +77,17 @@ experiment_name = experiment_selector(choices)
 biofefi_base_dir = biofefi_experiments_base_dir()
 
 if experiment_name:
-    st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
+    st.session_state[ExecutionStateKeys.ExperimentName] = experiment_name
 
-    path_to_exec_opts = execution_options_path(
-        biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName]
-    )
+    path_to_exec_opts = execution_options_path(biofefi_base_dir / experiment_name)
 
     exec_opt = load_execution_options(path_to_exec_opts)
 
-    path_to_plot_opts = plot_options_path(
-        biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName]
-    )
+    path_to_plot_opts = plot_options_path(biofefi_base_dir / experiment_name)
 
     path_to_raw_data = raw_data_path(
         exec_opt.data_path.split("/")[-1],
-        biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName],
+        biofefi_base_dir / experiment_name,
     )
 
     if path_to_raw_data.exists():
@@ -220,7 +217,7 @@ if experiment_name:
 
         processed_data = run_preprocessing(
             data,
-            biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName],
+            biofefi_base_dir / experiment_name,
             config,
         )
 

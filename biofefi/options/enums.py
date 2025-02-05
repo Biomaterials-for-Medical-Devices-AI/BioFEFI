@@ -39,14 +39,18 @@ class ConfigStateKeys(StrEnum):
     ClusterNames = "cluster_names"
     NumberOfTopRules = "num_top_rules"
     # Base options
+    MLLogBox = "ml_log_box"
+    FILogBox = "fi_log_box"
+    FuzzyLogBox = "fuzzy_log_box"
+
+
+class ExecutionStateKeys(StrEnum):
+    """Enum for state keys related to the execution of experiments."""
+
     ExperimentName = "experiment_name"
     DependentVariableName = "dependent_variable_name"
     UploadedFileName = "uploaded_file_name"
     RandomSeed = "random_seed"
-    MLLogBox = "ml_log_box"
-    FILogBox = "fi_log_box"
-    FuzzyLogBox = "fuzzy_log_box"
-    UploadedModels = "uploaded_models"
     UseHyperParamSearch = "use_hyperparam_search"
 
 

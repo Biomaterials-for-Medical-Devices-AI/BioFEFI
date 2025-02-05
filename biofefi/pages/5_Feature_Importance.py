@@ -11,7 +11,11 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import plot_box
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import ConfigStateKeys, ViewExperimentKeys
+from biofefi.options.enums import (
+    ConfigStateKeys,
+    ExecutionStateKeys,
+    ViewExperimentKeys,
+)
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.file_paths import (
@@ -59,17 +63,14 @@ def build_configuration() -> (
         and the list of models to explain.
     """
     biofefi_base_dir = biofefi_experiments_base_dir()
+    experiment_name = st.session_state[ExecutionStateKeys.ExperimentName]
 
     # Load plotting options
-    path_to_plot_opts = plot_options_path(
-        biofefi_base_dir / st.session_state[ViewExperimentKeys.ExperimentName]
-    )
+    path_to_plot_opts = plot_options_path(biofefi_base_dir / experiment_name)
     plotting_options = load_plot_options(path_to_plot_opts)
 
     # Load executuon options
-    path_to_exec_opts = execution_options_path(
-        biofefi_base_dir / st.session_state[ConfigStateKeys.ExperimentName]
-    )
+    path_to_exec_opts = execution_options_path(biofefi_base_dir / experiment_name)
     exec_opt = load_execution_options(path_to_exec_opts)
 
     # Set up fuzzy options
@@ -137,7 +138,7 @@ def build_configuration() -> (
         fi_opt,
         exec_opt,
         plotting_options,
-        st.session_state[ConfigStateKeys.ExperimentName],
+        experiment_name,
         st.session_state[ConfigStateKeys.ExplainModels],
     )
 
@@ -260,7 +261,7 @@ if experiment_name:
 
     if st.session_state[ConfigStateKeys.RerunFI]:
 
-        st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
+        st.session_state[ExecutionStateKeys.ExperimentName] = experiment_name
 
         model_choices = os.listdir(ml_model_dir(base_dir / experiment_name))
         model_choices = [x for x in model_choices if x.endswith(".pkl")]

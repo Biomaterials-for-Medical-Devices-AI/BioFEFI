@@ -9,7 +9,12 @@ from biofefi.options.choices.ui import (
     PLOT_FONT_FAMILIES,
     PROBLEM_TYPES,
 )
-from biofefi.options.enums import ConfigStateKeys, DataSplitMethods, PlotOptionKeys
+from biofefi.options.enums import (
+    ConfigStateKeys,
+    DataSplitMethods,
+    ExecutionStateKeys,
+    PlotOptionKeys,
+)
 
 
 @st.experimental_fragment
@@ -132,7 +137,7 @@ def execution_options_box_manual():
         key=ConfigStateKeys.NumberOfBootstraps,
     )
     st.number_input(
-        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
+        "Random seed", value=1221, min_value=0, key=ExecutionStateKeys.RandomSeed
     )
 
 
@@ -172,5 +177,5 @@ def execution_options_box_auto():
         "test_size": test_split,
     }
     st.number_input(
-        "Random seed", value=1221, min_value=0, key=ConfigStateKeys.RandomSeed
+        "Random seed", value=1221, min_value=0, key=ExecutionStateKeys.RandomSeed
     )

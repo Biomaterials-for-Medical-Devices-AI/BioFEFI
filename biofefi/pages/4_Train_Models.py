@@ -11,7 +11,7 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import display_metrics_table, plot_box
 from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import ConfigStateKeys, PlotOptionKeys
+from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys, PlotOptionKeys
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
@@ -48,37 +48,28 @@ def build_configuration() -> (
         experiment name
     """
 
+    experiment_name = st.session_state[ExecutionStateKeys.ExperimentName]
+
     path_to_plot_opts = plot_options_path(
-        biofefi_experiments_base_dir()
-        / st.session_state[ConfigStateKeys.ExperimentName]
+        biofefi_experiments_base_dir() / experiment_name
     )
     plot_opt = load_plot_options(path_to_plot_opts)
 
     path_to_exec_opts = execution_options_path(
-        biofefi_experiments_base_dir()
-        / st.session_state[ConfigStateKeys.ExperimentName]
+        biofefi_experiments_base_dir() / experiment_name
     )
     exec_opt = load_execution_options(path_to_exec_opts)
     ml_opt = MachineLearningOptions(
         save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
         model_types=st.session_state[ConfigStateKeys.ModelTypes],
-        ml_plot_dir=str(
-            ml_plot_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
-        ),
+        ml_plot_dir=str(ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)),
         ml_log_dir=str(
-            log_dir(
-                biofefi_experiments_base_dir()
-                / st.session_state[ConfigStateKeys.ExperimentName]
-            )
-            / "ml"
+            log_dir(biofefi_experiments_base_dir() / experiment_name) / "ml"
         ),
         save_models=st.session_state[ConfigStateKeys.SaveModels],
     )
 
-    return ml_opt, exec_opt, plot_opt, st.session_state[ConfigStateKeys.ExperimentName]
+    return ml_opt, exec_opt, plot_opt, experiment_name
 
 
 def pipeline(
@@ -161,7 +152,7 @@ st.write(
 choices = get_experiments()
 experiment_name = experiment_selector(choices)
 if experiment_name:
-    st.session_state[ConfigStateKeys.ExperimentName] = experiment_name
+    st.session_state[ExecutionStateKeys.ExperimentName] = experiment_name
     biofefi_base_dir = biofefi_experiments_base_dir()
     path_to_exec_opts = execution_options_path(biofefi_base_dir / experiment_name)
     exec_opt = load_execution_options(path_to_exec_opts)

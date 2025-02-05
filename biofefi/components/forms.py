@@ -10,6 +10,7 @@ from biofefi.options.choices.ui import SVM_KERNELS
 from biofefi.options.enums import (
     ConfigStateKeys,
     DataAnalysisStateKeys,
+    ExecutionStateKeys,
     Normalisations,
     PlotOptionKeys,
     ProblemTypes,
@@ -251,7 +252,7 @@ def ml_options_form(use_hyperparam_search: bool):
     if models_exist(
         ml_model_dir(
             biofefi_experiments_base_dir()
-            / st.session_state[ConfigStateKeys.ExperimentName]
+            / st.session_state[ExecutionStateKeys.ExperimentName]
         )
     ):
         st.warning("You have trained models in this experiment.")
