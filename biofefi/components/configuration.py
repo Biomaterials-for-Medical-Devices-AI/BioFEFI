@@ -106,7 +106,7 @@ def execution_options_box_manual():
     st.selectbox(
         "Problem type",
         PROBLEM_TYPES,
-        key=ConfigStateKeys.ProblemType,
+        key=ExecutionStateKeys.ProblemType,
     )
     data_split = st.selectbox("Data split method", DATA_SPLITS)
     if data_split.lower() == DataSplitMethods.Holdout:
@@ -116,7 +116,7 @@ def execution_options_box_manual():
             max_value=1.0,
             value=0.2,
         )
-        st.session_state[ConfigStateKeys.DataSplit] = {
+        st.session_state[ExecutionStateKeys.DataSplit] = {
             "type": DataSplitMethods.Holdout,
             "test_size": split_size,
         }
@@ -126,7 +126,7 @@ def execution_options_box_manual():
             min_value=0,
             value=5,
         )
-        st.session_state[ConfigStateKeys.DataSplit] = {
+        st.session_state[ExecutionStateKeys.DataSplit] = {
             "type": DataSplitMethods.KFold,
             "n_splits": split_size,
         }
@@ -157,7 +157,7 @@ def execution_options_box_auto():
     st.selectbox(
         "Problem type",
         PROBLEM_TYPES,
-        key=ConfigStateKeys.ProblemType,
+        key=ExecutionStateKeys.ProblemType,
     )
     test_split = st.number_input(
         "Test split",
@@ -171,7 +171,7 @@ def execution_options_box_auto():
         value=5,
     )
     # Set data split to none for grid search but specify the test size
-    st.session_state[ConfigStateKeys.DataSplit] = {
+    st.session_state[ExecutionStateKeys.DataSplit] = {
         "type": DataSplitMethods.NoSplit,
         "n_splits": split_size,
         "test_size": test_split,

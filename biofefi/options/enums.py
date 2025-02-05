@@ -5,8 +5,6 @@ class ConfigStateKeys(StrEnum):
     """Enum containing the state key names for UI configuration inputs."""
 
     # Machine Learning options
-    ProblemType = "problem_type"
-    DataSplit = "data_split"
     NumberOfBootstraps = "num_bootstraps"
     UseLinear = "use_linear"
     UseRandomForest = "use_rf"
@@ -52,6 +50,8 @@ class ExecutionStateKeys(StrEnum):
     UploadedFileName = "uploaded_file_name"
     RandomSeed = "random_seed"
     UseHyperParamSearch = "use_hyperparam_search"
+    ProblemType = "problem_type"
+    DataSplit = "data_split"
 
 
 class DataAnalysisStateKeys(StrEnum):

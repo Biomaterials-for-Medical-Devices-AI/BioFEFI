@@ -73,9 +73,9 @@ def _entrypoint(save_dir: Path):
     )
     exec_opts = ExecutionOptions(
         data_path=str(path_to_data),  # Path objects aren't JSON serialisable
-        data_split=st.session_state[ConfigStateKeys.DataSplit],
+        data_split=st.session_state[ExecutionStateKeys.DataSplit],
         problem_type=st.session_state.get(
-            ConfigStateKeys.ProblemType, ProblemTypes.Auto
+            ExecutionStateKeys.ProblemType, ProblemTypes.Auto
         ).lower(),
         normalization=st.session_state.get(
             ConfigStateKeys.Normalization, Normalisations.NoNormalisation
