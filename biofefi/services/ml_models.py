@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from pickle import UnpicklingError, dump, load
 
-from biofefi.options.choices_new.ml_models import CLASSIFIERS, REGRESSORS
+from biofefi.options.choices.ml_models import CLASSIFIERS, REGRESSORS
 from biofefi.options.enums import ProblemTypes
 from biofefi.utils.utils import create_directory
 

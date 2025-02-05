@@ -1,4 +1,4 @@
-from biofefi.options.choices_new.metrics import (
+from biofefi.options.choices.metrics import (
     CLASSIFICATION_METRICS,
     REGRESSION_METRICS,
 )
