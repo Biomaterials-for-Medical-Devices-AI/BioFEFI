@@ -11,7 +11,12 @@ from biofefi.components.logs import log_box
 from biofefi.components.plots import display_metrics_table, plot_box
 from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
-from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys, PlotOptionKeys
+from biofefi.options.enums import (
+    ConfigStateKeys,
+    ExecutionStateKeys,
+    MachineLearningStateKeys,
+    PlotOptionKeys,
+)
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
@@ -61,12 +66,12 @@ def build_configuration() -> (
     exec_opt = load_execution_options(path_to_exec_opts)
     ml_opt = MachineLearningOptions(
         save_actual_pred_plots=st.session_state[PlotOptionKeys.SavePlots],
-        model_types=st.session_state[ConfigStateKeys.ModelTypes],
+        model_types=st.session_state[MachineLearningStateKeys.ModelTypes],
         ml_plot_dir=str(ml_plot_dir(biofefi_experiments_base_dir() / experiment_name)),
         ml_log_dir=str(
             log_dir(biofefi_experiments_base_dir() / experiment_name) / "ml"
         ),
-        save_models=st.session_state[ConfigStateKeys.SaveModels],
+        save_models=st.session_state[MachineLearningStateKeys.SaveModels],
     )
 
     return ml_opt, exec_opt, plot_opt, experiment_name
@@ -160,7 +165,7 @@ if experiment_name:
     ml_options_form(exec_opt.use_hyperparam_search)
 
     if st.button("Run Training", type="primary") and (
-        st.session_state[ConfigStateKeys.RerunML]
+        st.session_state[MachineLearningStateKeys.RerunML]
     ):
 
         if os.path.exists(ml_model_dir(biofefi_base_dir / experiment_name)):
@@ -190,7 +195,7 @@ if experiment_name:
         if ml_plots.exists():
             plot_box(ml_plots, "Machine learning plots")
 
-    elif not st.session_state[ConfigStateKeys.RerunML]:
+    elif not st.session_state[MachineLearningStateKeys.RerunML]:
         st.success(
             "You have chosen not to rerun the machine learning experiments. "
             "You can proceed to feature importance analysis."

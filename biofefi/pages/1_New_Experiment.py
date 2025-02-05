@@ -78,7 +78,7 @@ def _entrypoint(save_dir: Path):
             ExecutionStateKeys.ProblemType, ProblemTypes.Auto
         ).lower(),
         normalization=st.session_state.get(
-            ConfigStateKeys.Normalization, Normalisations.NoNormalisation
+            ExecutionStateKeys.Normalisation, Normalisations.NoNormalisation
         ).lower(),
         random_state=st.session_state[ExecutionStateKeys.RandomSeed],
         dependent_variable=st.session_state[ExecutionStateKeys.DependentVariableName],

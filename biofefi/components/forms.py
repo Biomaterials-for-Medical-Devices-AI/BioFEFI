@@ -12,6 +12,7 @@ from biofefi.options.enums import (
     DataAnalysisStateKeys,
     ExecutionStateKeys,
     FuzzyStateKeys,
+    MachineLearningStateKeys,
     Normalisations,
     PlotOptionKeys,
     ProblemTypes,
@@ -260,12 +261,12 @@ def ml_options_form(use_hyperparam_search: bool):
         st.checkbox(
             "Would you like to rerun the experiments? This will overwrite the existing models.",
             value=True,
-            key=ConfigStateKeys.RerunML,
+            key=MachineLearningStateKeys.RerunML,
         )
     else:
-        st.session_state[ConfigStateKeys.RerunML] = True
+        st.session_state[MachineLearningStateKeys.RerunML] = True
 
-    if st.session_state[ConfigStateKeys.RerunML]:
+    if st.session_state[MachineLearningStateKeys.RerunML]:
         if use_hyperparam_search:
             st.success("**✨ Hyper-parameters will be searched automatically**")
 
@@ -286,11 +287,11 @@ def ml_options_form(use_hyperparam_search: bool):
             svm_model_type = _svm_opts(use_hyperparam_search)
             model_types.update(svm_model_type)
 
-        st.session_state[ConfigStateKeys.ModelTypes] = model_types
+        st.session_state[MachineLearningStateKeys.ModelTypes] = model_types
         st.subheader("Select outputs to save")
         st.toggle(
             "Save models",
-            key=ConfigStateKeys.SaveModels,
+            key=MachineLearningStateKeys.SaveModels,
             value=True,
             help="Save the models that are trained to disk?",
         )

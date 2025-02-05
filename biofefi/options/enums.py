@@ -4,15 +4,6 @@ from enum import StrEnum
 class ConfigStateKeys(StrEnum):
     """Enum containing the state key names for UI configuration inputs."""
 
-    # Machine Learning options
-    UseLinear = "use_linear"
-    UseRandomForest = "use_rf"
-    UseXGBoost = "use_xgb"
-    Normalization = "normalization"
-    ModelTypes = "model_types"
-    SaveModels = "save_models"
-    # rerun ML
-    RerunML = "rerun_ml"
     # Feature Importance options
     IsFeatureImportance = "is_feature_importance"
     NumberOfImportantFeatures = "num_important_features"
@@ -30,6 +21,14 @@ class ConfigStateKeys(StrEnum):
     MLLogBox = "ml_log_box"
     FILogBox = "fi_log_box"
     FuzzyLogBox = "fuzzy_log_box"
+
+
+class MachineLearningStateKeys(StrEnum):
+    """Enum for the state keys related to machine learning."""
+
+    ModelTypes = "model_types"
+    SaveModels = "save_models"
+    RerunML = "rerun_ml"
 
 
 class FuzzyStateKeys(StrEnum):
@@ -55,6 +54,7 @@ class ExecutionStateKeys(StrEnum):
     ProblemType = "problem_type"
     DataSplit = "data_split"
     NumberOfBootstraps = "num_bootstraps"
+    Normalisation = "normalisation"
 
 
 class DataAnalysisStateKeys(StrEnum):
