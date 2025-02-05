@@ -25,7 +25,7 @@ def run(
             model_types=ml_opts.model_types,
             problem_type=exec_opts.problem_type,
             data_split=exec_opts.data_split,
-            normalization=exec_opts.normalization,
+            normalisation=exec_opts.normalisation,
             logger=logger,
         )
     else:
@@ -33,7 +33,7 @@ def run(
             model_types=ml_opts.model_types,
             problem_type=exec_opts.problem_type,
             data_split=exec_opts.data_split,
-            normalization=exec_opts.normalization,
+            normalisation=exec_opts.normalisation,
             n_bootstraps=exec_opts.n_bootstraps,
             logger=logger,
         )

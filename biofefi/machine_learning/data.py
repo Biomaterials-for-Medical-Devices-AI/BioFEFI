@@ -14,16 +14,16 @@ class DataBuilder:
     Data builder class
     """
 
-    _normalization_dict = {
+    _normalisation_dict = {
         Normalisations.MinMax: MinMaxScaler,
-        Normalisations.Standardization: StandardScaler,
+        Normalisations.Standardisation: StandardScaler,
     }
 
     def __init__(
         self,
         data_path: str,
         random_state: int,
-        normalization: str,
+        normalisation: str,
         n_bootstraps: int,
         logger: object = None,
         data_split: dict | None = None,
@@ -33,7 +33,7 @@ class DataBuilder:
         self._data_split = data_split
         self._random_state = random_state
         self._logger = logger
-        self._normalization = normalization
+        self._normalisation = normalisation
         self._numerical_cols = "all"
         self._n_bootstraps = n_bootstraps
         self._problem_type = problem_type
@@ -168,16 +168,16 @@ class DataBuilder:
         X : pd.DataFrame
             Dataframe of normalised data
         """
-        if self._normalization.lower() == Normalisations.NoNormalisation:
+        if self._normalisation.lower() == Normalisations.NoNormalisation:
             return data
 
-        self._logger.info(f"Normalising data using {self._normalization}...")
+        self._logger.info(f"Normalising data using {self._normalisation}...")
 
-        scaler = self._normalization_dict.get(self._normalization.lower())
+        scaler = self._normalisation_dict.get(self._normalisation.lower())
         if not scaler:
             raise ValueError(
-                f"Normalization {self._normalization} is not available. "
-                f"Choices are {self._normalization_dict.keys()}"
+                f"Normalisation {self._normalisation} is not available. "
+                f"Choices are {self._normalisation_dict.keys()}"
             )
         scaler = scaler()  # create the scaler object
 

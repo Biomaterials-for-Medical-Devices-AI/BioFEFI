@@ -13,7 +13,7 @@ class ConfigStateKeys(StrEnum):
     UseLinear = "use_linear"
     UseRandomForest = "use_rf"
     UseXGBoost = "use_xgb"
-    Normalization = "normalization"
+    Normalisation = "normalisation"
     ModelTypes = "model_types"
     SaveModels = "save_models"
     # rerun ML
@@ -106,7 +106,7 @@ class SvmKernels(StrEnum):
 
 
 class Normalisations(StrEnum):
-    Standardization = "standardization"
+    Standardisation = "standardisation"
     MinMax = "minmax"
     NoNormalisation = "none"  # field name can't be None
 
@@ -149,6 +149,7 @@ class PlotOptionKeys(StrEnum):
     AxisFontSize = "plot_axis_font_size"
     AxisTickSize = "plot_axis_tick_size"
     ColourScheme = "plot_colour_scheme"
+    ColourMap = "plot_colour_map"
     RotateXAxisLabels = "angle_rotate_xaxis_labels"
     RotateYAxisLabels = "angle_rotate_yaxis_labels"
     SavePlots = "save_plots"

@@ -115,7 +115,7 @@ if experiment_name:
         exec_opt.random_state,
         data_analysis_plot_dir,
         plot_opt,
-        exec_opt.normalization,
+        exec_opt.normalisation,
     )
 
     plot_box(data_analysis_plot_dir, "Data Visualisation Plots")

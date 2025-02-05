@@ -29,7 +29,7 @@ class Learner:
         - problem_type (ProblemTypes): Type of problem (
         classification or regression).
         - data_split (dict): Dictionary containing data split type and parameters
-        - normalization (Normalisations): Type of normalization to apply to the data
+        - normalisation (Normalisations): Type of normalisation to apply to the data
         - n_bootstraps (int): Number of bootstrap samples to generate
         - logger (Logger): Logger object to log messages
     """
@@ -39,7 +39,7 @@ class Learner:
         model_types: dict,
         problem_type: ProblemTypes,
         data_split: dict,
-        normalization: Normalisations,
+        normalisation: Normalisations,
         n_bootstraps: int,
         logger: Logger | None = None,
     ) -> None:
@@ -47,7 +47,7 @@ class Learner:
         self._model_types = model_types
         self._problem_type = problem_type
         self._data_split = data_split
-        self._normalization = normalization
+        self._normalisation = normalisation
         self._n_bootstraps = n_bootstraps
         self._metrics = get_metrics(self._problem_type, logger=self._logger)
 
@@ -238,14 +238,14 @@ class GridSearchLearner:
         model_types: dict,
         problem_type: ProblemTypes,
         data_split: dict,
-        normalization: Normalisations,
+        normalisation: Normalisations,
         logger: Logger | None = None,
     ) -> None:
         self._logger = logger
         self._model_types: dict[str, Any] = model_types
         self._problem_type = problem_type
         self._data_split = data_split
-        self._normalization = normalization
+        self._normalisation = normalisation
         self._metrics = get_metrics(self._problem_type, logger=self._logger)
         self._models: dict = {}
 

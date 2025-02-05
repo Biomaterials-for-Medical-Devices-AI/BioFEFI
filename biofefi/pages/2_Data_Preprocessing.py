@@ -104,7 +104,7 @@ if experiment_name:
 
     st.write(
         """
-        If you select **"Standardization"**, your data will be normalised by subtracting the
+        If you select **"Standardisation"**, your data will be normalised by subtracting the
         mean and dividing by the standard deviation for each feature. The resulting transformation has a
         mean of 0 and values are between -1 and 1.
 
@@ -153,7 +153,7 @@ if experiment_name:
 
     st.write("#### Feature Selection")
 
-    st.write("#### Check the Feature Selection Algorithms to Use")
+    st.write("#### Select the Feature Selection Algorithms to Use")
 
     variance_disabled = True
     if st.checkbox(

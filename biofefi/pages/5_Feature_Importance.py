@@ -170,7 +170,7 @@ def pipeline(
     data = DataBuilder(
         data_path=exec_opts.data_path,
         random_state=exec_opts.random_state,
-        normalization=exec_opts.normalization,
+        normalisation=exec_opts.normalisation,
         n_bootstraps=exec_opts.n_bootstraps,
         logger=fi_logger,
         data_split=exec_opts.data_split,

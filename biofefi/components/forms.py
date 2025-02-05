@@ -479,7 +479,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
         )
 
         # Generate a custom diverging colormap
-        cmap = sns.diverging_palette(230, 20, as_cmap=True)
+        cmap = plot_opts.plot_colour_map
 
         # Draw the heatmap with the mask and correct aspect ratio
         _ = sns.heatmap(
@@ -556,13 +556,13 @@ def tSNE_plot_form(
     if scaler == Normalisations.NoNormalisation:
         scaler = st.selectbox(
             "Select Normalisation for Comparison (this will not affect the normalisation for ML models)",
-            options=[Normalisations.Standardization, Normalisations.MinMax],
+            options=[Normalisations.Standardisation, Normalisations.MinMax],
             key=ConfigStateKeys.SelectNormTsne,
         )
 
     if scaler == Normalisations.MinMax:
         X_scaled = MinMaxScaler().fit_transform(X)
-    elif scaler == Normalisations.Standardization:
+    elif scaler == Normalisations.Standardisation:
         X_scaled = StandardScaler().fit_transform(X)
 
     perplexity = st.slider(
@@ -594,14 +594,16 @@ def tSNE_plot_form(
 
         plt.style.use(plot_opts.plot_colour_scheme)
         fig, axes = plt.subplots(1, 2, figsize=(16, 8))
-
-        # Plot 1: Normalized Data
+        # TODO: these two plots below can be plotted using a single function and the dataset
+        # as an argument. The code appears to be the same for both plots.
+        # And this function should go into services/plottings.py
+        # Plot 1: Normalised Data
         sns.scatterplot(
             data=df_normalised,
             x="x",
             y="y",
             hue="target",
-            palette="viridis",
+            palette=plot_opts.plot_colour_map,
             ax=axes[0],
         )
         axes[0].set_title(
@@ -622,7 +624,7 @@ def tSNE_plot_form(
 
         # Plot 2: Original Data
         sns.scatterplot(
-            data=df, x="x", y="y", hue="target", palette="viridis", ax=axes[1]
+            data=df, x="x", y="y", hue="target", palette=plot_opts.plot_colour_map, ax=axes[1]
         )
         axes[1].set_title(
             "t-SNE Plot (Original Features)",

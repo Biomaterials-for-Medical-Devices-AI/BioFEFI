@@ -19,7 +19,7 @@ PROBLEM_TYPES = [
     ProblemTypes.Regression.capitalize(),
 ]
 NORMALISATIONS = [
-    Normalisations.Standardization.capitalize(),
+    Normalisations.Standardisation.capitalize(),
     Normalisations.MinMax.capitalize(),
     Normalisations.NoNormalisation.capitalize(),
 ]
@@ -30,8 +30,11 @@ TRANSFORMATIONS_Y = [
     TransformationsY.StandardisationNormalisation.capitalize(),
     TransformationsY.NoTransformation.capitalize(),
 ]
-
-PLOT_FONT_FAMILIES = ["serif", "sans-serif", "cursive", "fantasy", "monospace"]
+PLOT_FONT_FAMILIES = ["serif", 
+                      "sans-serif", 
+                      "cursive", 
+                      "fantasy", 
+                      "monospace"]
 DATA_SPLITS = [
     DataSplitMethods.Holdout.capitalize(),
     DataSplitMethods.KFold.capitalize(),

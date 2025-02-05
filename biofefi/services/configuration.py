@@ -21,7 +21,8 @@ T = TypeVar(
 
 def load_execution_options(path: Path) -> ExecutionOptions:
     """Load experiment execution options from the given path.
-    The path will be to a `json` file containing the options.
+    The path will be to a `json` file containing the options
+    defined by the user.
 
     Args:
         path (Path): The path the `json` file containing the options.
