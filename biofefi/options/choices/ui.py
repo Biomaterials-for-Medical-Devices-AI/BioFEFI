@@ -1,3 +1,5 @@
+"""This module contains choices that will appear in the UI."""
+
 from biofefi.options.enums import (
     DataSplitMethods,
     Normalisations,
