@@ -1,6 +1,15 @@
 biofefi.services package
 ========================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   biofefi.services.feature_importance
+   biofefi.services.machine_learning
+
 Submodules
 ----------
 
@@ -16,14 +25,6 @@ biofefi.services.experiments module
 -----------------------------------
 
 .. automodule:: biofefi.services.experiments
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-biofefi.services.fi module
---------------------------
-
-.. automodule:: biofefi.services.fi
    :members:
    :undoc-members:
    :show-inheritance:
