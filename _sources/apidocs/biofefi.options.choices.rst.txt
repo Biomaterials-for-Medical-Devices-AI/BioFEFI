@@ -1,0 +1,37 @@
+biofefi.options.choices package
+===============================
+
+Submodules
+----------
+
+biofefi.options.choices.metrics module
+--------------------------------------
+
+.. automodule:: biofefi.options.choices.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biofefi.options.choices.ml\_models module
+-----------------------------------------
+
+.. automodule:: biofefi.options.choices.ml_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biofefi.options.choices.ui module
+---------------------------------
+
+.. automodule:: biofefi.options.choices.ui
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: biofefi.options.choices
+   :members:
+   :undoc-members:
+   :show-inheritance:

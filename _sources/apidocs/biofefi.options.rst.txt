@@ -1,16 +1,16 @@
 biofefi.options package
 =======================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   biofefi.options.choices
+
 Submodules
 ----------
-
-biofefi.options.choices module
-------------------------------
-
-.. automodule:: biofefi.options.choices
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 biofefi.options.enums module
 ----------------------------
