@@ -12,7 +12,6 @@ from biofefi.components.plots import display_metrics_table, plot_box
 from biofefi.machine_learning import train
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
-    ConfigStateKeys,
     ExecutionStateKeys,
     MachineLearningStateKeys,
     PlotOptionKeys,
@@ -182,10 +181,12 @@ if experiment_name:
             # wait for the process to finish or be cancelled
             process.join()
         try:
-            st.session_state[ConfigStateKeys.MLLogBox] = get_logs(
+            st.session_state[MachineLearningStateKeys.MLLogBox] = get_logs(
                 log_dir(biofefi_base_dir / experiment_name) / "ml"
             )
-            log_box(box_title="Machine Learning Logs", key=ConfigStateKeys.MLLogBox)
+            log_box(
+                box_title="Machine Learning Logs", key=MachineLearningStateKeys.MLLogBox
+            )
         except NotADirectoryError:
             pass
         metrics = ml_metrics_path(biofefi_base_dir / experiment_name)

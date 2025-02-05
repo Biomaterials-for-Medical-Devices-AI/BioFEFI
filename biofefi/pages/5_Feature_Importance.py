@@ -12,7 +12,6 @@ from biofefi.components.plots import plot_box
 from biofefi.feature_importance import feature_importance, fuzzy_interpretation
 from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
-    ConfigStateKeys,
     ExecutionStateKeys,
     FeatureImportanceStateKeys,
     FuzzyStateKeys,
@@ -309,17 +308,17 @@ if experiment_name:
                     # wait for the process to finish or be cancelled
                     process.join()
                 try:
-                    st.session_state[ConfigStateKeys.FILogBox] = get_logs(
+                    st.session_state[FeatureImportanceStateKeys.FILogBox] = get_logs(
                         log_dir(base_dir / experiment_name) / "fi"
                     )
-                    st.session_state[ConfigStateKeys.FuzzyLogBox] = get_logs(
+                    st.session_state[FuzzyStateKeys.FuzzyLogBox] = get_logs(
                         log_dir(base_dir / experiment_name) / "fuzzy"
                     )
                     log_box(
                         box_title="Feature Importance Logs",
-                        key=ConfigStateKeys.FILogBox,
+                        key=FeatureImportanceStateKeys.FILogBox,
                     )
-                    log_box(box_title="Fuzzy FI Logs", key=ConfigStateKeys.FuzzyLogBox)
+                    log_box(box_title="Fuzzy FI Logs", key=FuzzyStateKeys.FuzzyLogBox)
                 except NotADirectoryError:
                     pass
                 fi_plots = fi_plot_dir(base_dir / experiment_name)

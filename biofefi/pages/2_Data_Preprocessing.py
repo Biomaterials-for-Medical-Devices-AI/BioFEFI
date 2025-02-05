@@ -5,7 +5,6 @@ from biofefi.components.experiments import experiment_selector
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.choices.ui import NORMALISATIONS, TRANSFORMATIONS_Y
 from biofefi.options.enums import (
-    ConfigStateKeys,
     DataPreprocessingStateKeys,
     ExecutionStateKeys,
     TransformationsY,

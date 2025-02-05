@@ -1,21 +1,13 @@
 from enum import StrEnum
 
 
-class ConfigStateKeys(StrEnum):
-    """Enum containing the state key names for UI configuration inputs."""
-
-    # Base options
-    MLLogBox = "ml_log_box"
-    FILogBox = "fi_log_box"
-    FuzzyLogBox = "fuzzy_log_box"
-
-
 class MachineLearningStateKeys(StrEnum):
     """Enum for the state keys related to machine learning."""
 
     ModelTypes = "model_types"
     SaveModels = "save_models"
     RerunML = "rerun_ml"
+    MLLogBox = "ml_log_box"
 
 
 class FeatureImportanceStateKeys(StrEnum):
@@ -32,6 +24,7 @@ class FeatureImportanceStateKeys(StrEnum):
     GlobalFeatureImportanceMethods = "global_feature_importance_methods"
     ExplainModels = "explain_models"
     ExplainAllModels = "explain_all_models"
+    FILogBox = "fi_log_box"
 
 
 class FuzzyStateKeys(StrEnum):
@@ -44,6 +37,7 @@ class FuzzyStateKeys(StrEnum):
     ClusterNames = "cluster_names"
     NumberOfTopRules = "num_top_rules"
     RerunFI = "rerun_fi"
+    FuzzyLogBox = "fuzzy_log_box"
 
 
 class ExecutionStateKeys(StrEnum):

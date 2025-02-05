@@ -10,7 +10,6 @@ from biofefi.components.configuration import (
 )
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.options.enums import (
-    ConfigStateKeys,
     ExecutionStateKeys,
     Normalisations,
     PlotOptionKeys,

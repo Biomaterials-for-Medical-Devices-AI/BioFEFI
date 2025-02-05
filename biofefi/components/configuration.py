@@ -10,7 +10,6 @@ from biofefi.options.choices.ui import (
     PROBLEM_TYPES,
 )
 from biofefi.options.enums import (
-    ConfigStateKeys,
     DataSplitMethods,
     ExecutionStateKeys,
     PlotOptionKeys,

@@ -10,7 +10,7 @@ from biofefi.components.forms import (
 )
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.plots import plot_box
-from biofefi.options.enums import ConfigStateKeys, ExecutionStateKeys
+from biofefi.options.enums import ExecutionStateKeys
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     data_analysis_plots_dir,

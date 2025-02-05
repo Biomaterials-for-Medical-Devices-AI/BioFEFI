@@ -8,7 +8,6 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from biofefi.options.choices.ui import SVM_KERNELS
 from biofefi.options.enums import (
-    ConfigStateKeys,
     DataAnalysisStateKeys,
     ExecutionStateKeys,
     FeatureImportanceStateKeys,
