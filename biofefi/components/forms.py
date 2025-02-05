@@ -11,6 +11,7 @@ from biofefi.options.enums import (
     ConfigStateKeys,
     DataAnalysisStateKeys,
     ExecutionStateKeys,
+    FuzzyStateKeys,
     Normalisations,
     PlotOptionKeys,
     ProblemTypes,
@@ -178,7 +179,7 @@ def fi_options_form():
     fuzzy_feature_importance = st.checkbox(
         "Enable Fuzzy Feature Importance",
         help="Toggle fuzzy feature importance to analyze feature interactions.",
-        key=ConfigStateKeys.FuzzyFeatureSelection,
+        key=FuzzyStateKeys.FuzzyFeatureSelection,
         disabled=fuzzy_is_disabled,
     )
 
@@ -189,13 +190,13 @@ def fi_options_form():
             min_value=1,
             value=5,
             help="Set the number of features for fuzzy analysis.",
-            key=ConfigStateKeys.NumberOfFuzzyFeatures,
+            key=FuzzyStateKeys.NumberOfFuzzyFeatures,
         )
 
         st.checkbox(
             "Granular features",
             help="Divide features into granular categories for in-depth analysis.",
-            key=ConfigStateKeys.GranularFeatures,
+            key=FuzzyStateKeys.GranularFeatures,
         )
 
         st.number_input(
@@ -203,13 +204,13 @@ def fi_options_form():
             min_value=2,
             value=5,
             help="Set the number of clusters to categorise the target variable for fuzzy interpretation.",
-            key=ConfigStateKeys.NumberOfClusters,
+            key=FuzzyStateKeys.NumberOfClusters,
         )
 
         st.text_input(
             "Names of clusters (comma-separated)",
             help="Specify names for each cluster (e.g., Low, Medium, High).",
-            key=ConfigStateKeys.ClusterNames,
+            key=FuzzyStateKeys.ClusterNames,
             value=", ".join(["very low", "low", "medium", "high", "very high"]),
         )
 
@@ -218,7 +219,7 @@ def fi_options_form():
             min_value=1,
             value=10,
             help="Set the number of most frequent fuzzy rules for synergy analysis.",
-            key=ConfigStateKeys.NumberOfTopRules,
+            key=FuzzyStateKeys.NumberOfTopRules,
         )
 
     st.subheader("Select outputs to save")

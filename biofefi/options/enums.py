@@ -28,17 +28,21 @@ class ConfigStateKeys(StrEnum):
     GlobalFeatureImportanceMethods = "global_feature_importance_methods"
     ExplainModels = "explain_models"
     ExplainAllModels = "explain_all_models"
-    # Fuzzy options
+    # Base options
+    MLLogBox = "ml_log_box"
+    FILogBox = "fi_log_box"
+    FuzzyLogBox = "fuzzy_log_box"
+
+
+class FuzzyStateKeys(StrEnum):
+    """Enum for the state keys related to fuzzy importance."""
+
     FuzzyFeatureSelection = "fuzzy_feature_selection"
     NumberOfFuzzyFeatures = "num_fuzzy_features"
     GranularFeatures = "granular_features"
     NumberOfClusters = "num_clusters"
     ClusterNames = "cluster_names"
     NumberOfTopRules = "num_top_rules"
-    # Base options
-    MLLogBox = "ml_log_box"
-    FILogBox = "fi_log_box"
-    FuzzyLogBox = "fuzzy_log_box"
 
 
 class ExecutionStateKeys(StrEnum):

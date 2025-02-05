@@ -14,6 +14,7 @@ from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
     ConfigStateKeys,
     ExecutionStateKeys,
+    FuzzyStateKeys,
     ViewExperimentKeys,
 )
 from biofefi.options.execution import ExecutionOptions
@@ -75,20 +76,20 @@ def build_configuration() -> (
 
     # Set up fuzzy options
     fuzzy_opt = None
-    if st.session_state.get(ConfigStateKeys.FuzzyFeatureSelection, False):
+    if st.session_state.get(FuzzyStateKeys.FuzzyFeatureSelection, False):
         fuzzy_opt = FuzzyOptions(
             fuzzy_feature_selection=st.session_state[
-                ConfigStateKeys.FuzzyFeatureSelection
+                FuzzyStateKeys.FuzzyFeatureSelection
             ],
             number_fuzzy_features=st.session_state[
-                ConfigStateKeys.NumberOfFuzzyFeatures
+                FuzzyStateKeys.NumberOfFuzzyFeatures
             ],
-            granular_features=st.session_state[ConfigStateKeys.GranularFeatures],
-            number_clusters=st.session_state[ConfigStateKeys.NumberOfClusters],
-            cluster_names=st.session_state.get(ConfigStateKeys.ClusterNames, "").split(
+            granular_features=st.session_state[FuzzyStateKeys.GranularFeatures],
+            number_clusters=st.session_state[FuzzyStateKeys.NumberOfClusters],
+            cluster_names=st.session_state.get(FuzzyStateKeys.ClusterNames, "").split(
                 ", "
             ),
-            number_rules=st.session_state[ConfigStateKeys.NumberOfTopRules],
+            number_rules=st.session_state[FuzzyStateKeys.NumberOfTopRules],
             save_fuzzy_set_plots=plotting_options.save_plots,
             fuzzy_log_dir=str(
                 log_dir(
