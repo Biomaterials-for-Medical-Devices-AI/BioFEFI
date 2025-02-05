@@ -13,8 +13,6 @@ class ConfigStateKeys(StrEnum):
     SaveModels = "save_models"
     # rerun ML
     RerunML = "rerun_ml"
-    # rerun FI
-    RerunFI = "rerun_fi"
     # Feature Importance options
     IsFeatureImportance = "is_feature_importance"
     NumberOfImportantFeatures = "num_important_features"
@@ -43,6 +41,7 @@ class FuzzyStateKeys(StrEnum):
     NumberOfClusters = "num_clusters"
     ClusterNames = "cluster_names"
     NumberOfTopRules = "num_top_rules"
+    RerunFI = "rerun_fi"
 
 
 class ExecutionStateKeys(StrEnum):

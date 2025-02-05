@@ -255,12 +255,12 @@ if experiment_name:
         st.checkbox(
             "Would you like to rerun feature importance? This will overwrite the existing results.",
             value=True,
-            key=ConfigStateKeys.RerunFI,
+            key=FuzzyStateKeys.RerunFI,
         )
     else:
-        st.session_state[ConfigStateKeys.RerunFI] = True
+        st.session_state[FuzzyStateKeys.RerunFI] = True
 
-    if st.session_state[ConfigStateKeys.RerunFI]:
+    if st.session_state[FuzzyStateKeys.RerunFI]:
 
         st.session_state[ExecutionStateKeys.ExperimentName] = experiment_name
 
