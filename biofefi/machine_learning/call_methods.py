@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from sklearn.metrics import RocCurveDisplay
+from sklearn.metrics import ConfusionMatrixDisplay, RocCurveDisplay
 from sklearn.preprocessing import OneHotEncoder
 
 from biofefi.machine_learning.data import DataBuilder
@@ -12,6 +12,65 @@ from biofefi.options.enums import Metrics, ProblemTypes
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
+
+
+def plot_confusion_matrix(
+    estimator,
+    X,
+    y,
+    set_name: str,
+    model_name: str,
+    directory: Path,
+    plot_opts: PlottingOptions | None = None,
+):
+    """
+    Plot the confusion matrix for a multi-class or binary classification model.
+
+    Args:
+        estimator: The trained model.
+        X: The features.
+        y: The true labels.
+        set_name: The name of the set (train or test).
+        model_name: The name of the model.
+        directory: The directory path to save the plot.
+        plot_opts: Options for styling the plot. Defaults to None.
+
+    Returns:
+        None
+    """
+
+    plt.style.use(plot_opts.plot_colour_scheme)
+
+    disp = ConfusionMatrixDisplay.from_estimator(
+        estimator=estimator,
+        X=X,
+        y=y,
+        normalize=None,
+        colorbar=False,
+        cmap="Grays",
+    )
+
+    disp.ax_.set_xlabel(
+        "Predicted label",
+        fontsize=plot_opts.plot_axis_font_size,
+        fontfamily=plot_opts.plot_font_family,
+    )
+    disp.ax_.set_ylabel(
+        "True label",
+        fontsize=plot_opts.plot_axis_font_size,
+        fontfamily=plot_opts.plot_font_family,
+    )
+
+    disp.ax_.set_title(
+        "Confusion Matrix {} - {}".format(model_name, set_name),
+        fontsize=plot_opts.plot_title_font_size,
+        fontfamily=plot_opts.plot_font_family,
+    )
+
+    disp.figure_.savefig(directory / f"{model_name}-{set_name}-confusion_matrix.png")
+
+    plt.close()
+    plt.clf()
 
 
 def plot_auc_roc(
@@ -39,6 +98,8 @@ def plot_auc_roc(
     start_index = 1 if num_classes == 2 else 0
 
     for i in range(start_index, num_classes):
+
+        plt.style.use(plot_opts.plot_colour_scheme)
 
         auroc = RocCurveDisplay.from_predictions(
             y_classes_labels[:, i],
@@ -81,6 +142,7 @@ def plot_auc_roc(
         auroc.figure_.savefig(directory / f"{model_name}-{set_name}-{i}_vs_rest.png")
 
         plt.close()
+        plt.clf()
 
 
 def plot_scatter(
@@ -261,6 +323,16 @@ def save_actual_pred_plots(
                         plot_opts=plot_opts,
                     )
 
+                    plot_confusion_matrix(
+                        estimator=model,
+                        X=data.X_train[i],
+                        y=y_train[i],
+                        set_name="Train",
+                        model_name=model_name,
+                        directory=directory,
+                        plot_opts=plot_opts,
+                    )
+
                     y_score_test = model.predict_proba(data.X_test[i])
                     y_test_labels = encoder.transform(
                         y_test[i].reshape(-1, 1)
@@ -269,6 +341,16 @@ def save_actual_pred_plots(
                     plot_auc_roc(
                         y_classes_labels=y_test_labels,
                         y_score_probs=y_score_test,
+                        set_name="Test",
+                        model_name=model_name,
+                        directory=directory,
+                        plot_opts=plot_opts,
+                    )
+
+                    plot_confusion_matrix(
+                        estimator=model,
+                        X=data.X_test[i],
+                        y=y_test[i],
                         set_name="Test",
                         model_name=model_name,
                         directory=directory,
