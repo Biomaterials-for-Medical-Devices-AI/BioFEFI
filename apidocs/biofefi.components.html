@@ -72,16 +72,6 @@ for their models.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="biofefi.components.configuration.fi_options_box">
-<span class="sig-prename descclassname"><span class="pre">biofefi.components.configuration.</span></span><span class="sig-name descname"><span class="pre">fi_options_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.configuration.fi_options_box" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biofefi.components.configuration.ml_options_box">
-<span class="sig-prename descclassname"><span class="pre">biofefi.components.configuration.</span></span><span class="sig-name descname"><span class="pre">ml_options_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.configuration.ml_options_box" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="biofefi.components.configuration.plot_options_box">
 <span class="sig-prename descclassname"><span class="pre">biofefi.components.configuration.</span></span><span class="sig-name descname"><span class="pre">plot_options_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.configuration.plot_options_box" title="Link to this definition">¶</a></dt>
 <dd><p>Expander containing the options for making plots</p>
@@ -153,13 +143,6 @@ to allow the user to select multiple models to explain using the FI pipeline.</p
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="biofefi.components.forms.data_upload_form">
-<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">data_upload_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.data_upload_form" title="Link to this definition">¶</a></dt>
-<dd><p>The main form for BioFEFI where the user supplies the data
-and says where they want their experiment to be saved.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="biofefi.components.forms.fi_options_form">
 <span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">fi_options_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.fi_options_form" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -197,7 +180,7 @@ and says where they want their experiment to be saved.</p>
 <span id="biofefi-components-logs-module"></span><h2>biofefi.components.logs module<a class="headerlink" href="#module-biofefi.components.logs" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="biofefi.components.logs.log_box">
-<span class="sig-prename descclassname"><span class="pre">biofefi.components.logs.</span></span><span class="sig-name descname"><span class="pre">log_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">box_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigStateKeys.MLLogBox</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ConfigStateKeys.FILogBox</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ConfigStateKeys.FuzzyLogBox</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.logs.log_box" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.logs.</span></span><span class="sig-name descname"><span class="pre">log_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">box_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="pre">MachineLearningStateKeys.MLLogBox</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FeatureImportanceStateKeys.FILogBox</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FuzzyStateKeys.FuzzyLogBox</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.logs.log_box" title="Link to this definition">¶</a></dt>
 <dd><p>Display a text area which shows that logs of the current pipeline run.</p>
 </dd></dl>
 
