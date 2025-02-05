@@ -11,6 +11,7 @@ from biofefi.options.enums import (
     ConfigStateKeys,
     DataAnalysisStateKeys,
     ExecutionStateKeys,
+    FeatureImportanceStateKeys,
     FuzzyStateKeys,
     MachineLearningStateKeys,
     Normalisations,
@@ -53,7 +54,9 @@ def fi_options_form():
     )
     global_methods["SHAP"] = {"type": "global", "value": use_shap}
 
-    st.session_state[ConfigStateKeys.GlobalFeatureImportanceMethods] = global_methods
+    st.session_state[FeatureImportanceStateKeys.GlobalFeatureImportanceMethods] = (
+        global_methods
+    )
 
     st.write("### Ensemble Feature Importance Methods")
     st.write(
@@ -82,7 +85,7 @@ def fi_options_form():
     )
     ensemble_methods["Majority Vote"] = use_majority
 
-    st.session_state[ConfigStateKeys.EnsembleMethods] = ensemble_methods
+    st.session_state[FeatureImportanceStateKeys.EnsembleMethods] = ensemble_methods
 
     st.write("### Local Feature Importance Methods")
     st.write(
@@ -105,7 +108,9 @@ def fi_options_form():
         "value": use_local_shap,
     }
 
-    st.session_state[ConfigStateKeys.LocalImportanceFeatures] = local_importance_methods
+    st.session_state[FeatureImportanceStateKeys.LocalImportanceFeatures] = (
+        local_importance_methods
+    )
 
     st.write("### Additional Configuration Options")
 
@@ -115,7 +120,7 @@ def fi_options_form():
         min_value=1,
         value=10,
         help="Select how many top features to visualise based on their importance score.",
-        key=ConfigStateKeys.NumberOfImportantFeatures,
+        key=FeatureImportanceStateKeys.NumberOfImportantFeatures,
     )
 
     # Scoring function for permutation importance
@@ -139,7 +144,7 @@ def fi_options_form():
         "Scoring function for permutation importance",
         scoring_options,
         help="Choose a scoring function to evaluate the model during permutation importance.",
-        key=ConfigStateKeys.ScoringFunction,
+        key=FeatureImportanceStateKeys.ScoringFunction,
     )
 
     # Number of repetitions for permutation importance
@@ -148,7 +153,7 @@ def fi_options_form():
         min_value=1,
         value=5,
         help="Specify the number of times to shuffle each feature for importance estimation.",
-        key=ConfigStateKeys.NumberOfRepetitions,
+        key=FeatureImportanceStateKeys.NumberOfRepetitions,
     )
 
     # Percentage of data to consider for SHAP
@@ -158,7 +163,7 @@ def fi_options_form():
         100,
         100,
         help="Set the percentage of data used to calculate SHAP values.",
-        key=ConfigStateKeys.ShapDataPercentage,
+        key=FeatureImportanceStateKeys.ShapDataPercentage,
     )
 
     # Fuzzy Options
@@ -229,14 +234,14 @@ def fi_options_form():
     st.toggle(
         "Save feature importance options",
         help="Save the selected configuration of feature importance methods.",
-        key=ConfigStateKeys.SaveFeatureImportanceOptions,
+        key=FeatureImportanceStateKeys.SaveFeatureImportanceOptions,
         value=True,
     )
 
     st.toggle(
         "Save feature importance results",
         help="Store the results from feature importance computations.",
-        key=ConfigStateKeys.SaveFeatureImportanceResults,
+        key=FeatureImportanceStateKeys.SaveFeatureImportanceResults,
         value=True,
     )
 

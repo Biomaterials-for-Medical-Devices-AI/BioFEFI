@@ -14,6 +14,7 @@ from biofefi.machine_learning.data import DataBuilder
 from biofefi.options.enums import (
     ConfigStateKeys,
     ExecutionStateKeys,
+    FeatureImportanceStateKeys,
     FuzzyStateKeys,
     ViewExperimentKeys,
 )
@@ -103,15 +104,17 @@ def build_configuration() -> (
     # Set up feature importance options
     fi_opt = FeatureImportanceOptions(
         num_features_to_plot=st.session_state[
-            ConfigStateKeys.NumberOfImportantFeatures
+            FeatureImportanceStateKeys.NumberOfImportantFeatures
         ],
         permutation_importance_scoring=st.session_state[
-            ConfigStateKeys.ScoringFunction
+            FeatureImportanceStateKeys.ScoringFunction
         ],
         permutation_importance_repeat=st.session_state[
-            ConfigStateKeys.NumberOfRepetitions
+            FeatureImportanceStateKeys.NumberOfRepetitions
         ],
-        shap_reduce_data=st.session_state[ConfigStateKeys.ShapDataPercentage],
+        shap_reduce_data=st.session_state[
+            FeatureImportanceStateKeys.ShapDataPercentage
+        ],
         save_feature_importance_plots=plotting_options.save_plots,
         fi_log_dir=str(
             log_dir(
@@ -120,17 +123,19 @@ def build_configuration() -> (
             / "fi"
         ),
         save_feature_importance_options=st.session_state[
-            ConfigStateKeys.SaveFeatureImportanceOptions
+            FeatureImportanceStateKeys.SaveFeatureImportanceOptions
         ],
         save_feature_importance_results=st.session_state[
-            ConfigStateKeys.SaveFeatureImportanceResults
+            FeatureImportanceStateKeys.SaveFeatureImportanceResults
         ],
         local_importance_methods=st.session_state[
-            ConfigStateKeys.LocalImportanceFeatures
+            FeatureImportanceStateKeys.LocalImportanceFeatures
         ],
-        feature_importance_ensemble=st.session_state[ConfigStateKeys.EnsembleMethods],
+        feature_importance_ensemble=st.session_state[
+            FeatureImportanceStateKeys.EnsembleMethods
+        ],
         global_importance_methods=st.session_state[
-            ConfigStateKeys.GlobalFeatureImportanceMethods
+            FeatureImportanceStateKeys.GlobalFeatureImportanceMethods
         ],
     )
 
@@ -140,7 +145,7 @@ def build_configuration() -> (
         exec_opt,
         plotting_options,
         experiment_name,
-        st.session_state[ConfigStateKeys.ExplainModels],
+        st.session_state[FeatureImportanceStateKeys.ExplainModels],
     )
 
 
@@ -268,15 +273,17 @@ if experiment_name:
         model_choices = [x for x in model_choices if x.endswith(".pkl")]
 
         explain_all_models = st.toggle(
-            "Explain all models", key=ConfigStateKeys.ExplainAllModels
+            "Explain all models", key=FeatureImportanceStateKeys.ExplainAllModels
         )
 
         if explain_all_models:
-            st.session_state[ConfigStateKeys.ExplainModels] = model_choices
+            st.session_state[FeatureImportanceStateKeys.ExplainModels] = model_choices
         else:
             model_selector(model_choices)
 
-        if model_choices := st.session_state.get(ConfigStateKeys.ExplainModels):
+        if model_choices := st.session_state.get(
+            FeatureImportanceStateKeys.ExplainModels
+        ):
             fi_options_form()
 
             if st.button("Run Feature Importance", type="primary"):

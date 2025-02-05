@@ -5,6 +5,7 @@ import streamlit as st
 from biofefi.options.enums import (
     ConfigStateKeys,
     ExecutionStateKeys,
+    FeatureImportanceStateKeys,
     ViewExperimentKeys,
 )
 
@@ -44,7 +45,7 @@ def model_selector(options: list) -> Path:
         options=options,
         default=None,
         placeholder="Models to explain",
-        key=ConfigStateKeys.ExplainModels,
+        key=FeatureImportanceStateKeys.ExplainModels,
     )
 
 

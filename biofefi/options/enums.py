@@ -4,19 +4,6 @@ from enum import StrEnum
 class ConfigStateKeys(StrEnum):
     """Enum containing the state key names for UI configuration inputs."""
 
-    # Feature Importance options
-    IsFeatureImportance = "is_feature_importance"
-    NumberOfImportantFeatures = "num_important_features"
-    ScoringFunction = "scoring_function"
-    NumberOfRepetitions = "num_repetitions"
-    ShapDataPercentage = "shap_data_percentage"
-    SaveFeatureImportanceOptions = "save_feature_importance_options"
-    SaveFeatureImportanceResults = "save_feature_importance_results"
-    LocalImportanceFeatures = "local_importance_methods"
-    EnsembleMethods = "ensemble_methods"
-    GlobalFeatureImportanceMethods = "global_feature_importance_methods"
-    ExplainModels = "explain_models"
-    ExplainAllModels = "explain_all_models"
     # Base options
     MLLogBox = "ml_log_box"
     FILogBox = "fi_log_box"
@@ -29,6 +16,22 @@ class MachineLearningStateKeys(StrEnum):
     ModelTypes = "model_types"
     SaveModels = "save_models"
     RerunML = "rerun_ml"
+
+
+class FeatureImportanceStateKeys(StrEnum):
+    """Enum for the state keys related to feature importance."""
+
+    NumberOfImportantFeatures = "num_important_features"
+    ScoringFunction = "scoring_function"
+    NumberOfRepetitions = "num_repetitions"
+    ShapDataPercentage = "shap_data_percentage"
+    SaveFeatureImportanceOptions = "save_feature_importance_options"
+    SaveFeatureImportanceResults = "save_feature_importance_results"
+    LocalImportanceFeatures = "local_importance_methods"
+    EnsembleMethods = "ensemble_methods"
+    GlobalFeatureImportanceMethods = "global_feature_importance_methods"
+    ExplainModels = "explain_models"
+    ExplainAllModels = "explain_all_models"
 
 
 class FuzzyStateKeys(StrEnum):
