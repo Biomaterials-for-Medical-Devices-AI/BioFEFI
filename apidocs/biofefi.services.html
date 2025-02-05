@@ -402,6 +402,28 @@ of the corresponding models.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.plotting.plot_confusion_matrix">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.plotting.PlottingOptions" title="biofefi.options.plotting.PlottingOptions"><span class="pre">PlottingOptions</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.services.plotting.plot_confusion_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the confusion matrix for a multi-class or binary classification model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> – The trained model.</p></li>
+<li><p><strong>X</strong> – The features.</p></li>
+<li><p><strong>y</strong> – The true labels.</p></li>
+<li><p><strong>set_name</strong> – The name of the set (train or test).</p></li>
+<li><p><strong>model_name</strong> – The name of the model.</p></li>
+<li><p><strong>directory</strong> – The directory path to save the plot.</p></li>
+<li><p><strong>plot_opts</strong> – Options for styling the plot. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="biofefi.services.plotting.plot_global_shap_importance">
 <span class="sig-prename descclassname"><span class="pre">biofefi.services.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_global_shap_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shap_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.plotting.PlottingOptions" title="biofefi.options.plotting.PlottingOptions"><span class="pre">PlottingOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_features_to_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="headerlink" href="#biofefi.services.plotting.plot_global_shap_importance" title="Link to this definition">¶</a></dt>
 <dd><p>Produce a bar chart of global SHAP values.</p>
