@@ -4,9 +4,7 @@ from enum import StrEnum
 class ConfigStateKeys(StrEnum):
     """Enum containing the state key names for UI configuration inputs."""
 
-    IsFeatureEngineering = "is_feature_engineering"
     # Machine Learning options
-    IsMachineLearning = "is_machine_learning"
     ProblemType = "problem_type"
     DataSplit = "data_split"
     NumberOfBootstraps = "num_bootstraps"
@@ -67,7 +65,11 @@ class ConfigStateKeys(StrEnum):
     SelectNormTsne = "select_norm_tsne"
     Perplexity = "perplexity"
     SaveTSNEPlot = "save_tsne_plot"
-    # Data Preprocessing options
+
+
+class DataPreprocessingStateKeys(StrEnum):
+    """Enum for app state keys relating to the Data Preprocessing page."""
+
     DependentNormalisation = "dependent_normalisation"
     IndependentNormalisation = "independent_normalisation"
     ProceedTransformation = "proceed_transformation"
@@ -77,10 +79,6 @@ class ConfigStateKeys(StrEnum):
     ThresholdCorrelation = "threshold_correlation"
     LassoFeatureSelection = "lasso_feature_selection"
     RegularisationTerm = "regularisation_term"
-
-
-class ExecutionStateKeys(StrEnum):
-    RunPipeline = "run_pipeline"
 
 
 class OptimiserTypes(StrEnum):
