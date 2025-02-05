@@ -9,6 +9,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from biofefi.options.choices.ui import SVM_KERNELS
 from biofefi.options.enums import (
     ConfigStateKeys,
+    DataAnalysisStateKeys,
     Normalisations,
     PlotOptionKeys,
     ProblemTypes,
@@ -305,18 +306,18 @@ def target_variable_dist_form(data, dep_var_name, data_analysis_plot_dir, plot_o
     Form to create the target variable distribution plot.
     """
 
-    show_kde = st.toggle("Show KDE", value=True, key=ConfigStateKeys.ShowKDE)
+    show_kde = st.toggle("Show KDE", value=True, key=DataAnalysisStateKeys.ShowKDE)
     n_bins = st.slider(
         "Number of Bins",
         min_value=5,
         max_value=50,
         value=10,
-        key=ConfigStateKeys.NBins,
+        key=DataAnalysisStateKeys.NBins,
     )
 
     if st.checkbox(
         "Create Target Variable Distribution Plot",
-        key=ConfigStateKeys.TargetVarDistribution,
+        key=DataAnalysisStateKeys.TargetVarDistribution,
     ):
         plt.style.use(plot_opts.plot_colour_scheme)
         plt.figure(figsize=(10, 6))
@@ -350,7 +351,7 @@ def target_variable_dist_form(data, dep_var_name, data_analysis_plot_dir, plot_o
 
         st.pyplot(displot)
 
-        if st.button("Save Plot", key=ConfigStateKeys.SaveTargetVarDistribution):
+        if st.button("Save Plot", key=DataAnalysisStateKeys.SaveTargetVarDistribution):
 
             displot.savefig(data_analysis_plot_dir / f"{dep_var_name}_distribution.png")
             plt.clf()
@@ -366,7 +367,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
     if st.toggle(
         "Select All Descriptors",
         value=False,
-        key=ConfigStateKeys.SelectAllDescriptorsCorrelation,
+        key=DataAnalysisStateKeys.SelectAllDescriptorsCorrelation,
     ):
         default_corr = list(data.columns[:-1])
     else:
@@ -376,7 +377,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
         "Select columns to include in the correlation heatmap",
         data.columns[:-1],
         default=default_corr,
-        key=ConfigStateKeys.DescriptorCorrelation,
+        key=DataAnalysisStateKeys.DescriptorCorrelation,
     )
 
     corr_data = data[corr_descriptors + [data.columns[-1]]]
@@ -387,7 +388,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
         )
 
     if st.checkbox(
-        "Create Correlation Heatmap Plot", key=ConfigStateKeys.CorrelationHeatmap
+        "Create Correlation Heatmap Plot", key=DataAnalysisStateKeys.CorrelationHeatmap
     ):
 
         corr = corr_data.corr()
@@ -435,7 +436,7 @@ def correlation_heatmap_form(data, data_analysis_plot_dir, plot_opts):
 
         st.pyplot(fig)
 
-        if st.button("Save Plot", key=ConfigStateKeys.SaveHeatmap):
+        if st.button("Save Plot", key=DataAnalysisStateKeys.SaveHeatmap):
 
             fig.savefig(data_analysis_plot_dir / "correlation_heatmap.png")
             plt.clf()
@@ -451,7 +452,7 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
     if st.toggle(
         "Select All Descriptors",
         value=False,
-        key=ConfigStateKeys.SelectAllDescriptorsPairPlot,
+        key=DataAnalysisStateKeys.SelectAllDescriptorsPairPlot,
     ):
         default_corr = list(data.columns[:-1])
     else:
@@ -461,7 +462,7 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
         "Select columns to include in the pairplot",
         data.columns[:-1],
         default=default_corr,
-        key=ConfigStateKeys.DescriptorPairPlot,
+        key=DataAnalysisStateKeys.DescriptorPairPlot,
     )
 
     pairplot_data = data[descriptors + [data.columns[-1]]]
@@ -471,14 +472,14 @@ def pairplot_form(data, data_analysis_plot_dir, plot_opts):
             "Please select at least one descriptor to create the correlation plot."
         )
 
-    if st.checkbox("Create Pairplot", key=ConfigStateKeys.PairPlot):
+    if st.checkbox("Create Pairplot", key=DataAnalysisStateKeys.PairPlot):
 
         plt.style.use(plot_opts.plot_colour_scheme)
         plt.figure(figsize=(10, 6))
         pairplot = sns.pairplot(pairplot_data, corner=True)
         st.pyplot(plt)
 
-        if st.button("Save Plot", key=ConfigStateKeys.SavePairPlot):
+        if st.button("Save Plot", key=DataAnalysisStateKeys.SavePairPlot):
             pairplot.savefig(data_analysis_plot_dir / "pairplot.png")
             plt.clf()
             st.success("Plot created and saved successfully.")
@@ -496,7 +497,7 @@ def tSNE_plot_form(
         scaler = st.selectbox(
             "Select Normalisation for Comparison (this will not affect the normalisation for ML models)",
             options=[Normalisations.Standardization, Normalisations.MinMax],
-            key=ConfigStateKeys.SelectNormTsne,
+            key=DataAnalysisStateKeys.SelectNormTsne,
         )
 
     if scaler == Normalisations.MinMax:
@@ -510,10 +511,10 @@ def tSNE_plot_form(
         max_value=50,
         value=30,
         help="The perplexity parameter controls the balance between local and global aspects of the data.",
-        key=ConfigStateKeys.Perplexity,
+        key=DataAnalysisStateKeys.Perplexity,
     )
 
-    if st.checkbox("Create t-SNE Plot", key=ConfigStateKeys.tSNEPlot):
+    if st.checkbox("Create t-SNE Plot", key=DataAnalysisStateKeys.TSNEPlot):
 
         tsne_normalised = TSNE(
             n_components=2, random_state=random_state, perplexity=perplexity
@@ -590,7 +591,7 @@ def tSNE_plot_form(
 
         st.pyplot(fig)
 
-        if st.button("Save Plot", key=ConfigStateKeys.SaveTSNEPlot):
+        if st.button("Save Plot", key=DataAnalysisStateKeys.SaveTSNEPlot):
 
             fig.savefig(data_analysis_plot_dir / "tsne_plot.png")
             plt.clf()

@@ -48,7 +48,11 @@ class ConfigStateKeys(StrEnum):
     FuzzyLogBox = "fuzzy_log_box"
     UploadedModels = "uploaded_models"
     UseHyperParamSearch = "use_hyperparam_search"
-    # Data Analysis options
+
+
+class DataAnalysisStateKeys(StrEnum):
+    """Enum for app state keys relating to the Data Visualisation page."""
+
     TargetVarDistribution = "target_var_distribution"
     ShowKDE = "show_kde"
     NBins = "n_bins"
@@ -61,7 +65,7 @@ class ConfigStateKeys(StrEnum):
     SelectAllDescriptorsPairPlot = "select_all_descriptors_pair_plot"
     DescriptorPairPlot = "descriptor_pair_plot"
     SavePairPlot = "save_pair_plot"
-    tSNEPlot = "tsne_plot"
+    TSNEPlot = "tsne_plot"
     SelectNormTsne = "select_norm_tsne"
     Perplexity = "perplexity"
     SaveTSNEPlot = "save_tsne_plot"
