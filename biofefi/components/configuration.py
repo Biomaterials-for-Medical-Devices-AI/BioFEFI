@@ -134,7 +134,7 @@ def execution_options_box_manual():
         "Number of bootstraps",
         min_value=1,
         value=10,
-        key=ConfigStateKeys.NumberOfBootstraps,
+        key=ExecutionStateKeys.NumberOfBootstraps,
     )
     st.number_input(
         "Random seed", value=1221, min_value=0, key=ExecutionStateKeys.RandomSeed

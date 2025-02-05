@@ -5,7 +5,6 @@ class ConfigStateKeys(StrEnum):
     """Enum containing the state key names for UI configuration inputs."""
 
     # Machine Learning options
-    NumberOfBootstraps = "num_bootstraps"
     UseLinear = "use_linear"
     UseRandomForest = "use_rf"
     UseXGBoost = "use_xgb"
@@ -52,6 +51,7 @@ class ExecutionStateKeys(StrEnum):
     UseHyperParamSearch = "use_hyperparam_search"
     ProblemType = "problem_type"
     DataSplit = "data_split"
+    NumberOfBootstraps = "num_bootstraps"
 
 
 class DataAnalysisStateKeys(StrEnum):
