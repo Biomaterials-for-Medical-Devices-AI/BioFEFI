@@ -24,11 +24,11 @@ In BioFEFI, you must create an experiment before you can train models and perfor
 
 - Select your data split method
 
+    **Data split methods are not available if using automatic hyper-parameter search.**
+
     **"Holdout"** will create a train-test split with a portion of the data randomly held out to test the model, which will be trained on the remaining portion of the data.
 
     **"K-fold"** stands for *K-fold cross validation*. The test data is split from the training data, then the training data is split into *k*-folds. The folds are used to find the model parameters and the test set is used to evaluate the models.
-
-    **Data split methods are not available if using automatic hyper-parameter search.**
 
 - Specify a test split size. This is a number between 0 and 1. The default is 0.20, i.e. 20% of the data will be used is the test data and 80% for training.
 
