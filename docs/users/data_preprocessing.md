@@ -1,6 +1,8 @@
 # Preprocessing your data
 BioFEFI allows you preprocess your data before training any models. This includes normalising your data, removing low variance features or highly correlated features.
 
+![New experiment page](../_static/data-preprocessing-page.png)
+
 ## Normalisation
 - Normalisation Method for Independent Variables
 
