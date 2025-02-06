@@ -22,14 +22,6 @@ In BioFEFI, you must create an experiment before you can train models and perfor
 
     If your dependent variable is continuous (e.g. stock prices 📈), choose **"Regression"**.
 
-- Select how you wish to normalise your data.
-
-    If you select **"Standardization"**, your data will be normalised by subtracting the mean and dividing by the standard deviation for each feature. The resulting transformation has a mean of 0 and values are between -1 and 1.
-
-    If you select **"Minmax"**, your data will be scaled based on the minimum and maximum value of each feature. The resulting transformation will have values between 0 and 1.
-
-    If you select **"None"**, the data will not be normalised.
-
 - Select your data split method
 
     **"Holdout"** will create a train-test split with a portion of the data randomly held out to test the model, which will be trained on the remaining portion of the data.
