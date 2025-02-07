@@ -87,7 +87,6 @@ def save_actual_pred_plots(
                         "Test",
                         opt.dependent_variable,
                         model_name,
-                        directory,
                         plot_opts=plot_opts,
                     )
                     test_plot.savefig(directory / f"{model_name}-{i}-Test.png")
@@ -98,7 +97,6 @@ def save_actual_pred_plots(
                         "Train",
                         opt.dependent_variable,
                         model_name,
-                        directory,
                         plot_opts=plot_opts,
                     )
                     train_plot.savefig(directory / f"{model_name}-{i}-Train.png")
