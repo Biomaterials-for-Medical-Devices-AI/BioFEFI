@@ -71,15 +71,15 @@ def plot_options_box():
             index=1,
         )
         if save:
-            """ Here we show a preview of plots with the selected colour style
+            """Here we show a preview of plots with the selected colour style
             colour map, font size and style, etc"""
 
-            plt.rcParams['image.cmap'] = cm     # default colour map
-            plt.rcParams['axes.titlesize'] = tfs       
-            plt.rcParams['axes.labelsize'] = afs        
-            plt.rcParams['font.family'] = font
-            plt.rcParams['xtick.labelsize'] = ats
-            plt.rcParams['ytick.labelsize'] = ats
+            plt.rcParams["image.cmap"] = cm  # default colour map
+            plt.rcParams["axes.titlesize"] = tfs
+            plt.rcParams["axes.labelsize"] = afs
+            plt.rcParams["font.family"] = font
+            plt.rcParams["xtick.labelsize"] = ats
+            plt.rcParams["ytick.labelsize"] = ats
 
             st.write("### Preview of the selected styles")
             plt.style.use(cs)
@@ -97,17 +97,18 @@ def plot_options_box():
             ax.set_yticklabels(ax.get_yticklabels(), rotation=rotate_y)
             st.pyplot(fig, clear_figure=True)
             fig.clear()
-            #Create a figure and axis (object-oriented approach)
+            # Create a figure and axis (object-oriented approach)
             fig_cmap = plt.figure()
             ax_cmap = fig_cmap.add_subplot(111)
 
             # Create a scatter plot to show how the colour map is applied
-            scatter_plot = ax_cmap.scatter(arr, arr/2, c=arr)
+            scatter_plot = ax_cmap.scatter(arr, arr / 2, c=arr)
             fig_cmap.colorbar(scatter_plot, ax=ax_cmap, label="Mapped Values")
             ax_cmap.set_title("Colour Map Preview")
             # Display the figure
             st.pyplot(fig_cmap, clear_figure=True)
             fig.clear()
+
 
 @st.experimental_fragment
 def execution_options_box_manual():

@@ -571,7 +571,12 @@ def tSNE_plot_form(
 
         # Plot 2: Original Data
         sns.scatterplot(
-            data=df, x="x", y="y", hue="target", palette=plot_opts.plot_colour_map, ax=axes[1]
+            data=df,
+            x="x",
+            y="y",
+            hue="target",
+            palette=plot_opts.plot_colour_map,
+            ax=axes[1],
         )
         axes[1].set_title(
             "t-SNE Plot (Original Features)",

@@ -83,7 +83,12 @@ def plot_local_shap_importance(
         family=plot_opts.plot_font_family,
         wrap=True,
     )
-    shap.plots.beeswarm(shap_values, max_display=num_features_to_plot, show=False, color=plot_opts.plot_colour_map)
+    shap.plots.beeswarm(
+        shap_values,
+        max_display=num_features_to_plot,
+        show=False,
+        color=plot_opts.plot_colour_map,
+    )
     ax.set_xlabel(ax.get_xlabel(), family=plot_opts.plot_font_family)
     ax.set_ylabel(ax.get_ylabel(), family=plot_opts.plot_font_family)
     ax.set_xticklabels(
