@@ -4,7 +4,7 @@ from sklearn.svm import SVC, SVR
 class BioFefiSVC(SVC):
     """A BioFEFI implementation of scikit-learn's SVC.
 
-    Is exactly the same, except it always sets `probability` to `True`
+    It is exactly the same, except it always sets `probability` to `True`
     to get access to the `predict_proba` method, and `max_iter` to 1000, similar
     to `LinearSVC`, to avoid hanging on infinte iterations.
     """
@@ -44,4 +44,41 @@ class BioFefiSVC(SVC):
             decision_function_shape=decision_function_shape,
             break_ties=break_ties,
             random_state=random_state,
+        )
+
+
+class BioFefiSVR(SVR):
+    """A BioFEFI implementation of scikit-learn's SVR.
+
+    It is exactly the same, except it always sets `max_iter` to 1000, similar
+    to `LinearSVR`, to avoid hanging on infinte iterations.
+    """
+
+    def __init__(
+        self,
+        *,
+        kernel="rbf",
+        degree=3,
+        gamma="scale",
+        coef0=0,
+        tol=0.001,
+        C=1,
+        epsilon=0.1,
+        shrinking=True,
+        cache_size=200,
+        verbose=False,
+        max_iter=1000  # set max_iter to 1000 to avoid infinite fitting loop
+    ):
+        super().__init__(
+            kernel=kernel,
+            degree=degree,
+            gamma=gamma,
+            coef0=coef0,
+            tol=tol,
+            C=C,
+            epsilon=epsilon,
+            shrinking=shrinking,
+            cache_size=cache_size,
+            verbose=verbose,
+            max_iter=max_iter,
         )

@@ -1,13 +1,12 @@
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.svm import SVR
 from xgboost import XGBClassifier, XGBRegressor
 
 from biofefi.machine_learning.nn_models import (
     BayesianRegularisedNNClassifier,
     BayesianRegularisedNNRegressor,
 )
-from biofefi.machine_learning.models.svm import BioFefiSVC
+from biofefi.machine_learning.models.svm import BioFefiSVC, BioFefiSVR
 from biofefi.options.enums import ModelNames
 
 CLASSIFIERS = {
@@ -22,6 +21,6 @@ REGRESSORS = {
     ModelNames.LinearModel: LinearRegression,
     ModelNames.RandomForest: RandomForestRegressor,
     ModelNames.XGBoost: XGBRegressor,
-    ModelNames.SVM: SVR,
+    ModelNames.SVM: BioFefiSVR,
     ModelNames.BRNNClassifier: BayesianRegularisedNNRegressor,
 }
