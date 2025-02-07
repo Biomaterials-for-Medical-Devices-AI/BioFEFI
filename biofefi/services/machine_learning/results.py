@@ -80,7 +80,7 @@ def save_actual_pred_plots(
 
                 # Plotting the training and test results
                 if opt.problem_type == ProblemTypes.Regression:
-                    plot_scatter(
+                    test_plot = plot_scatter(
                         y_test[i],
                         y_pred_test,
                         ml_metric_results[model_name][i]["R2"]["test"],
@@ -90,7 +90,8 @@ def save_actual_pred_plots(
                         directory,
                         plot_opts=plot_opts,
                     )
-                    plot_scatter(
+                    test_plot.savefig(directory / f"{model_name}-{i}-Test.png")
+                    train_plot = plot_scatter(
                         y_train[i],
                         y_pred_train,
                         ml_metric_results[model_name][i]["R2"]["train"],
@@ -100,6 +101,7 @@ def save_actual_pred_plots(
                         directory,
                         plot_opts=plot_opts,
                     )
+                    train_plot.savefig(directory / f"{model_name}-{i}-Train.png")
 
                 else:
 
