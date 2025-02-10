@@ -1,4 +1,5 @@
-from sklearn.svm import SVC as SkLeanSVC, SVR as SkLearnSVR
+from sklearn.svm import SVC as SkLeanSVC
+from sklearn.svm import SVR as SkLearnSVR
 
 
 class SVC(SkLeanSVC):
