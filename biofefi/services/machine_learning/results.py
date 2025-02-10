@@ -104,7 +104,7 @@ def save_actual_pred_plots(
                 else:
 
                     model = trained_models[model_name][i]
-                    y_score_train = model.predict_proba(data.X_train[i])
+                    y_score_train = ml_results[i][model_name]["y_pred_train_proba"]
                     encoder = OneHotEncoder()
                     encoder.fit(y_train[i].reshape(-1, 1))
                     y_train_labels = encoder.transform(
@@ -130,7 +130,7 @@ def save_actual_pred_plots(
                         plot_opts=plot_opts,
                     )
 
-                    y_score_test = model.predict_proba(data.X_test[i])
+                    y_score_test = ml_results[i][model_name]["y_pred_test_proba"]
                     y_test_labels = encoder.transform(
                         y_test[i].reshape(-1, 1)
                     ).toarray()
