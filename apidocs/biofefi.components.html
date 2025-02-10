@@ -134,8 +134,47 @@ to allow the user to select multiple models to explain using the FI pipeline.</p
 </dd></dl>
 
 </section>
-<section id="biofefi-components-forms-module">
-<h2>biofefi.components.forms module<a class="headerlink" href="#biofefi-components-forms-module" title="Link to this heading">¶</a></h2>
+<section id="module-biofefi.components.forms">
+<span id="biofefi-components-forms-module"></span><h2>biofefi.components.forms module<a class="headerlink" href="#module-biofefi.components.forms" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.components.forms.correlation_heatmap_form">
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">correlation_heatmap_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_analysis_plot_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.correlation_heatmap_form" title="Link to this definition">¶</a></dt>
+<dd><p>Form to create the correlation heatmap plot.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.components.forms.fi_options_form">
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">fi_options_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.fi_options_form" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.components.forms.ml_options_form">
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">ml_options_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_hyperparam_search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.ml_options_form" title="Link to this definition">¶</a></dt>
+<dd><p>The form for setting up the machine learning pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>use_hyperparam_search</strong> (<em>bool</em>) – Is the user using hyper-parameter search?</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.components.forms.pairplot_form">
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">pairplot_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_analysis_plot_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.pairplot_form" title="Link to this definition">¶</a></dt>
+<dd><p>Form to create the pairplot plot.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.components.forms.tSNE_plot_form">
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">tSNE_plot_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_analysis_plot_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.enums.Normalisations" title="biofefi.options.enums.Normalisations"><span class="pre">Normalisations</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.tSNE_plot_form" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.components.forms.target_variable_dist_form">
+<span class="sig-prename descclassname"><span class="pre">biofefi.components.forms.</span></span><span class="sig-name descname"><span class="pre">target_variable_dist_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_var_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_analysis_plot_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.components.forms.target_variable_dist_form" title="Link to this definition">¶</a></dt>
+<dd><p>Form to create the target variable distribution plot.</p>
+</dd></dl>
+
 </section>
 <section id="module-biofefi.components.logs">
 <span id="biofefi-components-logs-module"></span><h2>biofefi.components.logs module<a class="headerlink" href="#module-biofefi.components.logs" title="Link to this heading">¶</a></h2>
