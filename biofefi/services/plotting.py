@@ -167,6 +167,9 @@ def plot_auc_roc(
     num_classes = y_score_probs.shape[1]
     start_index = 1 if num_classes == 2 else 0
 
+    # Set colour scheme
+    plt.style.use(plot_opts.plot_colour_scheme)
+
     for i in range(start_index, num_classes):
 
         auroc = RocCurveDisplay.from_predictions(
