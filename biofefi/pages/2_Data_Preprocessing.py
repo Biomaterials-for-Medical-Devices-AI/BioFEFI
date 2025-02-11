@@ -94,44 +94,48 @@ if experiment_name:
         st.warning("Your data are already preprocessed. Would you like to start again?")
         preproc_again = st.checkbox("Redo preprocessing", value=False)
     else:
-        preproc_again = False
+        # allow the user to perform preprocessing if the data are unprocessed
+        preproc_again = True
 
-    if preproc_again:
-        # remove preprocessed suffix
+    if not preproc_again:
+        data = pd.read_csv(exec_opt.data_path)
+        preprocessed_view(data)
+
+    else:
+        # remove preprocessed suffix to point to original data file
         exec_opt.data_path = exec_opt.data_path.replace("_preprocessed", "")
         # set data_is_preprocessed to False
         exec_opt.data_is_preprocessed = False
 
-    data = pd.read_csv(exec_opt.data_path)
+        data = pd.read_csv(exec_opt.data_path)
 
-    path_to_preprocessed_data = preprocessed_data_path(
-        Path(exec_opt.data_path).name,
-        biofefi_base_dir / experiment_name,
-    )
+        plot_opt = load_plot_options(path_to_plot_opts)
 
-    plot_opt = load_plot_options(path_to_plot_opts)
+        original_view(data)
 
-    original_view(data)
+        preprocessing_opts_form(data)
 
-    preprocessing_opts_form(data)
+        if st.button("Run Data Preprocessing", type="primary"):
 
-    if st.button("Run Data Preprocessing", type="primary"):
+            config = build_config()
 
-        config = build_config()
+            processed_data = run_preprocessing(
+                data,
+                biofefi_base_dir / experiment_name,
+                config,
+            )
 
-        processed_data = run_preprocessing(
-            data,
-            biofefi_base_dir / experiment_name,
-            config,
-        )
+            path_to_preprocessed_data = preprocessed_data_path(
+                Path(exec_opt.data_path).name,
+                biofefi_base_dir / experiment_name,
+            )
+            processed_data.to_csv(path_to_preprocessed_data, index=False)
 
-        processed_data.to_csv(path_to_preprocessed_data, index=False)
+            # Update exec opts to point to the pre-processed data
+            exec_opt.data_path = str(path_to_preprocessed_data)
+            # Set data_is_preprocessed to True
+            exec_opt.data_is_preprocessed = True
+            save_options(path_to_exec_opts, exec_opt)
 
-        # Update exec opts to point to the pre-processed data
-        exec_opt.data_path = str(path_to_preprocessed_data)
-        # Set data_is_preprocessed to True
-        exec_opt.data_is_preprocessed = True
-        save_options(path_to_exec_opts, exec_opt)
-
-        st.success("Data Preprocessing Complete")
-        preprocessed_view(processed_data)
+            st.success("Data Preprocessing Complete")
+            preprocessed_view(processed_data)
