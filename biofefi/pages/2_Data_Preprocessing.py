@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import streamlit as st
 
@@ -16,7 +17,11 @@ from biofefi.options.file_paths import (
     preprocessed_data_path,
 )
 from biofefi.options.preprocessing import PreprocessingOptions
-from biofefi.services.configuration import load_execution_options, load_plot_options
+from biofefi.services.configuration import (
+    load_execution_options,
+    load_plot_options,
+    save_options,
+)
 from biofefi.services.experiments import get_experiments
 from biofefi.services.preprocessing import run_preprocessing
 
@@ -84,15 +89,30 @@ if experiment_name:
 
     path_to_plot_opts = plot_options_path(biofefi_base_dir / experiment_name)
 
-    path_to_raw_data = preprocessed_data_path(
-        exec_opt.data_path.split("/")[-1],
+    # Check if the user has already preprocessed their data
+    if exec_opt.data_is_preprocessed:
+        st.warning("Your data are already preprocessed. Would you like to start again?")
+        preproc_again = st.checkbox("Redo preprocessing", value=False)
+    else:
+        preproc_again = False
+
+    if preproc_again:
+        # remove preprocessed suffix
+        exec_opt.data_path = exec_opt.data_path.replace("_preprocessed", "")
+        # set data_is_preprocessed to False
+        exec_opt.data_is_preprocessed = False
+
+    data = pd.read_csv(exec_opt.data_path)
+
+    path_to_preprocessed_data = preprocessed_data_path(
+        Path(exec_opt.data_path).name,
         biofefi_base_dir / experiment_name,
     )
 
-    if path_to_raw_data.exists():
-        data = pd.read_csv(path_to_raw_data)
-    else:
-        data = pd.read_csv(exec_opt.data_path)
+    # if path_to_preprocessed_data.exists():
+    #     data = pd.read_csv(path_to_preprocessed_data)
+    # else:
+    #     data = pd.read_csv(exec_opt.data_path)
 
     plot_opt = load_plot_options(path_to_plot_opts)
 
@@ -210,8 +230,6 @@ if experiment_name:
 
     if st.button("Run Data Preprocessing", type="primary"):
 
-        data.to_csv(path_to_raw_data, index=False)
-
         config = build_config()
 
         processed_data = run_preprocessing(
@@ -220,7 +238,13 @@ if experiment_name:
             config,
         )
 
-        processed_data.to_csv(exec_opt.data_path, index=False)
+        processed_data.to_csv(path_to_preprocessed_data, index=False)
+
+        # Update exec opts to point to the pre-processed data
+        exec_opt.data_path = str(path_to_preprocessed_data)
+        # Set data_is_preprocessed to True
+        exec_opt.data_is_preprocessed = True
+        save_options(path_to_exec_opts, exec_opt)
 
         st.success("Data Preprocessing Complete")
 
