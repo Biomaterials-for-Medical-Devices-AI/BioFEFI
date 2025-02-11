@@ -13,7 +13,7 @@ from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     execution_options_path,
     plot_options_path,
-    raw_data_path,
+    preprocessed_data_path,
 )
 from biofefi.options.preprocessing import PreprocessingOptions
 from biofefi.services.configuration import load_execution_options, load_plot_options
@@ -84,7 +84,7 @@ if experiment_name:
 
     path_to_plot_opts = plot_options_path(biofefi_base_dir / experiment_name)
 
-    path_to_raw_data = raw_data_path(
+    path_to_raw_data = preprocessed_data_path(
         exec_opt.data_path.split("/")[-1],
         biofefi_base_dir / experiment_name,
     )
