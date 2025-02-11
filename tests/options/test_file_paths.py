@@ -33,7 +33,7 @@ def test_raw_data_path():
     # Arrange
     experiment_path = fp.biofefi_experiments_base_dir() / "TestExperiment"
     file_name = "test_data.csv"
-    expected_output = experiment_path / "test_data_raw.csv"
+    expected_output = experiment_path / "test_data_preprocessed.csv"
 
     # Act
     actual_output = fp.preprocessed_data_path(file_name, experiment_path)
