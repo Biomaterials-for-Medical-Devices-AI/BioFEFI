@@ -9,6 +9,7 @@ from biofefi.options.choices.ui import DATA_SPLITS
 from biofefi.options.execution import ExecutionOptions
 from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.file_paths import (
+    data_preprocessing_options_path,
     execution_options_path,
     fi_options_dir,
     fi_options_path,
@@ -20,7 +21,6 @@ from biofefi.options.file_paths import (
     log_dir,
     ml_options_path,
     plot_options_path,
-    data_preprocessing_options_path,
 )
 from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.ml import MachineLearningOptions

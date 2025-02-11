@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import pandas as pd
 import streamlit as st
 
@@ -6,10 +7,7 @@ from biofefi.components.experiments import experiment_selector
 from biofefi.components.forms import preprocessing_opts_form
 from biofefi.components.images.logos import sidebar_logo
 from biofefi.components.preprocessing import original_view, preprocessed_view
-from biofefi.options.enums import (
-    DataPreprocessingStateKeys,
-    ExecutionStateKeys,
-)
+from biofefi.options.enums import DataPreprocessingStateKeys, ExecutionStateKeys
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
     data_preprocessing_options_path,

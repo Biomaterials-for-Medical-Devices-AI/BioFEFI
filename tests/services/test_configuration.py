@@ -6,10 +6,10 @@ from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
 from biofefi.services.configuration import (
+    load_data_preprocessing_options,
     load_execution_options,
     load_fi_options,
     load_plot_options,
-    load_data_preprocessing_options,
     save_options,
 )
 
