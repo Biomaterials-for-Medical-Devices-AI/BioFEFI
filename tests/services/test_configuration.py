@@ -5,6 +5,7 @@ from biofefi.options.fi import FeatureImportanceOptions
 from biofefi.options.fuzzy import FuzzyOptions
 from biofefi.options.ml import MachineLearningOptions
 from biofefi.options.plotting import PlottingOptions
+from biofefi.options.preprocessing import PreprocessingOptions
 from biofefi.services.configuration import (
     load_data_preprocessing_options,
     load_execution_options,
