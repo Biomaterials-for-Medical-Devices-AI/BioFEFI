@@ -329,9 +329,9 @@ class GridSearchLearner:
             y_pred_test = gs.predict(X_test)
             res[0][model_name]["y_pred_test"] = y_pred_test
             if self._problem_type == ProblemTypes.Classification:
-                y_pred_probs_train = model.predict_proba(X_train)
+                y_pred_probs_train = gs.predict_proba(X_train)
                 res[0][model_name]["y_pred_train_proba"] = y_pred_probs_train
-                y_pred_probs_test = model.predict_proba(X_test)
+                y_pred_probs_test = gs.predict_proba(X_test)
                 res[0][model_name]["y_pred_test_proba"] = y_pred_probs_test
             else:
                 y_pred_probs_train = None
