@@ -14,4 +14,3 @@ class ExecutionOptions:
     normalization: Normalisations = Normalisations.NoNormalisation
     n_bootstraps: int = 3
     use_hyperparam_search: bool = True
-    data_is_preprocessed: bool = False

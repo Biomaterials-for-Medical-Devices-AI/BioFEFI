@@ -12,12 +12,14 @@ from biofefi.options.enums import (
 )
 from biofefi.options.file_paths import (
     biofefi_experiments_base_dir,
+    data_preprocessing_options_path,
     execution_options_path,
     plot_options_path,
     preprocessed_data_path,
 )
 from biofefi.options.preprocessing import PreprocessingOptions
 from biofefi.services.configuration import (
+    load_data_preprocessing_options,
     load_execution_options,
     load_plot_options,
     save_options,
@@ -89,8 +91,17 @@ if experiment_name:
 
     path_to_plot_opts = plot_options_path(biofefi_base_dir / experiment_name)
 
+    path_to_preproc_opts = data_preprocessing_options_path(
+        biofefi_base_dir / experiment_name
+    )
+
+    data_is_preprocessed = False
+    if path_to_preproc_opts.exists():
+        preproc_opts = load_data_preprocessing_options(path_to_preproc_opts)
+        data_is_preprocessed = preproc_opts.data_is_preprocessed
+
     # Check if the user has already preprocessed their data
-    if exec_opt.data_is_preprocessed:
+    if data_is_preprocessed:
         st.warning("Your data are already preprocessed. Would you like to start again?")
         preproc_again = st.checkbox("Redo preprocessing", value=False)
     else:
@@ -104,8 +115,6 @@ if experiment_name:
     else:
         # remove preprocessed suffix to point to original data file
         exec_opt.data_path = exec_opt.data_path.replace("_preprocessed", "")
-        # set data_is_preprocessed to False
-        exec_opt.data_is_preprocessed = False
 
         data = pd.read_csv(exec_opt.data_path)
 
@@ -133,8 +142,6 @@ if experiment_name:
 
             # Update exec opts to point to the pre-processed data
             exec_opt.data_path = str(path_to_preprocessed_data)
-            # Set data_is_preprocessed to True
-            exec_opt.data_is_preprocessed = True
             save_options(path_to_exec_opts, exec_opt)
 
             st.success("Data Preprocessing Complete")
