@@ -250,7 +250,7 @@ def plot_confusion_matrix(
         y=y,
         normalize=None,
         colorbar=False,
-        cmap=color=plot_opts.plot_colour_map,
+        cmap=plot_opts.plot_colour_map,
     )
 
     disp.ax_.set_xlabel(
