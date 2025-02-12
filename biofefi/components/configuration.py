@@ -62,6 +62,7 @@ def plot_options_box():
             "Colour map",
             options=plt.colormaps(),
             key=PlotOptionKeys.ColourMap,
+            index=3,
             disabled=not save,
         )
         font = st.selectbox(
