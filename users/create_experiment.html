@@ -14,8 +14,8 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Training models" href="train_models.html" />
-    <link rel="prev" title="Data Visualisation" href="data_visualisation.html" />
+    <link rel="next" title="Preprocessing your data" href="data_preprocessing.html" />
+    <link rel="prev" title="Installation and running" href="installation.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -55,15 +55,10 @@
 <p>If your dependent variable is categorical (e.g. cat 🐱 or dog 🐶), choose <strong>“Classification”</strong>.</p>
 <p>If your dependent variable is continuous (e.g. stock prices 📈), choose <strong>“Regression”</strong>.</p>
 </li>
-<li><p>Select how you wish to normalise your data.</p>
-<p>If you select <strong>“Standardization”</strong>, your data will be normalised by subtracting the mean and dividing by the standard deviation for each feature. The resulting transformation has a mean of 0 and values are between -1 and 1.</p>
-<p>If you select <strong>“Minmax”</strong>, your data will be scaled based on the minimum and maximum value of each feature. The resulting transformation will have values between 0 and 1.</p>
-<p>If you select <strong>“None”</strong>, the data will not be normalised.</p>
-</li>
 <li><p>Select your data split method</p>
+<p><strong>Data split methods are not available if using automatic hyper-parameter search.</strong></p>
 <p><strong>“Holdout”</strong> will create a train-test split with a portion of the data randomly held out to test the model, which will be trained on the remaining portion of the data.</p>
 <p><strong>“K-fold”</strong> stands for <em>K-fold cross validation</em>. The test data is split from the training data, then the training data is split into <em>k</em>-folds. The folds are used to find the model parameters and the test set is used to evaluate the models.</p>
-<p><strong>Data split methods are not available if using automatic hyper-parameter search.</strong></p>
 </li>
 <li><p>Specify a test split size. This is a number between 0 and 1. The default is 0.20, i.e. 20% of the data will be used is the test data and 80% for training.</p>
 <p><strong>Test split is replaced by n splits when using K-fold as the Data split method.</strong></p>
@@ -120,6 +115,12 @@
 <li><p>tableau-colorblind10</p></li>
 </ul>
 </li>
+<li><p>Colour map. Defaults to “viridis”</p>
+<p>Options:</p>
+<ul class="simple">
+<li><p>The list is very long but the full reference can be viewed <a class="reference external" href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">here</a>.</p></li>
+</ul>
+</li>
 <li><p>Font. Defaults to “sans-serif”.</p>
 <p>Options:</p>
 <ul class="simple">
@@ -170,7 +171,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Welcome to the BioFEFI user documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation and running</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_visualisation.html">Data Visualisation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating an experiment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#create-a-new-experiment">Create a new experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#configure-data-options">Configure data options</a></li>
@@ -178,6 +178,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#press-create">Press Create</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="data_preprocessing.html">Preprocessing your data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_visualisation.html">Data Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_models.html">Training models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feature_importance.html">Feature importance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="view_experiments.html">View experiments</a></li>
@@ -194,8 +196,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="data_visualisation.html" title="previous chapter">Data Visualisation</a></li>
-      <li>Next: <a href="train_models.html" title="next chapter">Training models</a></li>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation and running</a></li>
+      <li>Next: <a href="data_preprocessing.html" title="next chapter">Preprocessing your data</a></li>
   </ul></li>
 </ul>
 </div>
