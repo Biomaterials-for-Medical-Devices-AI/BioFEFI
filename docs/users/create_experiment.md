@@ -91,6 +91,11 @@ In BioFEFI, you must create an experiment before you can train models and perfor
   - seaborn-v0_8-whitegrid
   - tableau-colorblind10
 
+- Colour map. Defaults to "viridis"
+
+  Options:
+  - The list is very long but the full reference can be viewed [here](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
+
 - Font. Defaults to "sans-serif".
 
   Options:
