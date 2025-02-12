@@ -180,6 +180,7 @@ def execution_options_box_auto():
         "Problem type",
         PROBLEM_TYPES,
         key=ExecutionStateKeys.ProblemType,
+        index=1,
     )
     test_split = st.number_input(
         "Test split",
