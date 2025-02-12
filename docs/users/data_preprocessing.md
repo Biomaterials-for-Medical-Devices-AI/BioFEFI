@@ -1,7 +1,7 @@
 # Preprocessing your data
 BioFEFI allows you preprocess your data before training any models. This includes normalising your data, removing low variance features or highly correlated features.
 
-![New experiment page](../_static/data-preprocessing-page.png)
+![Data preprocessing page](../_static/data-preprocessing-page.png)
 
 ## Normalisation
 - Normalisation Method for Independent Variables
@@ -38,4 +38,6 @@ BioFEFI allows you preprocess your data before training any models. This include
 ## Run feature selection
 Once you have configured your preprocessing measures, click **"Run Data Preprocessing"**. You will see a summary of your preprocessed data below.
 
-![New experiment page](../_static/preprocessing-results.png)
+After preprocessing is completed, a copy of your preprocessed data is save to your experiment with the name `<data file>_preprocessed.csv`. E.g. `BacterialAttachment.csv` would produce a file called `BacterialAttachment_preprocessed.csv`. This data will be used for model training, feature importance.
+
+![Data preprocessing page](../_static/preprocessing-results.png)
