@@ -84,6 +84,24 @@
 <section id="module-biofefi.services.configuration">
 <span id="biofefi-services-configuration-module"></span><h2>biofefi.services.configuration module<a class="headerlink" href="#module-biofefi.services.configuration" title="Link to this heading">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.configuration.load_data_preprocessing_options">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.configuration.</span></span><span class="sig-name descname"><span class="pre">load_data_preprocessing_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions" title="biofefi.options.preprocessing.PreprocessingOptions"><span class="pre">PreprocessingOptions</span></a></span></span><a class="headerlink" href="#biofefi.services.configuration.load_data_preprocessing_options" title="Link to this definition">¶</a></dt>
+<dd><p>Load data preprocessing options from the given path.
+The path will be to a <cite>json</cite> file containing the options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Path</em>) – The path the <cite>json</cite> file containing the options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The data preprocessing options.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions" title="biofefi.options.preprocessing.PreprocessingOptions">PreprocessingOptions</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="biofefi.services.configuration.load_execution_options">
 <span class="sig-prename descclassname"><span class="pre">biofefi.services.configuration.</span></span><span class="sig-name descname"><span class="pre">load_execution_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="biofefi.options.html#biofefi.options.execution.ExecutionOptions" title="biofefi.options.execution.ExecutionOptions"><span class="pre">ExecutionOptions</span></a></span></span><a class="headerlink" href="#biofefi.services.configuration.load_execution_options" title="Link to this definition">¶</a></dt>
 <dd><p>Load experiment execution options from the given path.
@@ -93,7 +111,7 @@ The path will be to a <cite>json</cite> file containing the options.</p>
 <dd class="field-odd"><p><strong>path</strong> (<em>Path</em>) – The path the <cite>json</cite> file containing the options.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The plotting options.</p>
+<dd class="field-even"><p>The execution options.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="biofefi.options.html#biofefi.options.execution.ExecutionOptions" title="biofefi.options.execution.ExecutionOptions">ExecutionOptions</a></p>
@@ -534,7 +552,7 @@ of the corresponding models.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="biofefi.services.preprocessing.run_feature_selection">
-<span class="sig-prename descclassname"><span class="pre">biofefi.services.preprocessing.</span></span><span class="sig-name descname"><span class="pre">run_feature_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocessing_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions" title="biofefi.options.preprocessing.PreprocessingOptions"><span class="pre">PreprocessingOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#biofefi.services.preprocessing.run_feature_selection" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.preprocessing.</span></span><span class="sig-name descname"><span class="pre">run_feature_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocessing_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions" title="biofefi.options.preprocessing.PreprocessingOptions"><span class="pre">PreprocessingOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#biofefi.services.preprocessing.run_feature_selection" title="Link to this definition">¶</a></dt>
 <dd><p>Run feature selection on the data based on the selected methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -554,7 +572,7 @@ of the corresponding models.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="biofefi.services.preprocessing.run_preprocessing">
-<span class="sig-prename descclassname"><span class="pre">biofefi.services.preprocessing.</span></span><span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions" title="biofefi.options.preprocessing.PreprocessingOptions"><span class="pre">PreprocessingOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#biofefi.services.preprocessing.run_preprocessing" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.preprocessing.</span></span><span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions" title="biofefi.options.preprocessing.PreprocessingOptions"><span class="pre">PreprocessingOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#biofefi.services.preprocessing.run_preprocessing" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">

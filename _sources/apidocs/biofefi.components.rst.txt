@@ -52,6 +52,14 @@ biofefi.components.plots module
    :undoc-members:
    :show-inheritance:
 
+biofefi.components.preprocessing module
+---------------------------------------
+
+.. automodule:: biofefi.components.preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

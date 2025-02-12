@@ -150,6 +150,13 @@
 </li>
       </ul></li>
       <li>
+    biofefi.components.preprocessing
+
+      <ul>
+        <li><a href="apidocs/biofefi.components.html#module-biofefi.components.preprocessing">module</a>
+</li>
+      </ul></li>
+      <li>
     biofefi.Home
 
       <ul>
@@ -492,6 +499,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.file_paths.data_analysis_plots_dir">data_analysis_plots_dir() (in module biofefi.options.file_paths)</a>
 </li>
+      <li><a href="apidocs/biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions.data_is_preprocessed">data_is_preprocessed (biofefi.options.preprocessing.PreprocessingOptions attribute)</a>
+</li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.execution.ExecutionOptions.data_path">data_path (biofefi.options.execution.ExecutionOptions attribute)</a>
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.file_paths.data_preprocessing_options_path">data_preprocessing_options_path() (in module biofefi.options.file_paths)</a>
@@ -694,14 +703,16 @@
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.enums.ModelNames.LinearModel">LinearModel (biofefi.options.enums.ModelNames attribute)</a>
 </li>
+      <li><a href="apidocs/biofefi.services.html#biofefi.services.configuration.load_data_preprocessing_options">load_data_preprocessing_options() (in module biofefi.services.configuration)</a>
+</li>
       <li><a href="apidocs/biofefi.services.html#biofefi.services.configuration.load_execution_options">load_execution_options() (in module biofefi.services.configuration)</a>
 </li>
       <li><a href="apidocs/biofefi.services.html#biofefi.services.configuration.load_fi_options">load_fi_options() (in module biofefi.services.configuration)</a>
 </li>
-      <li><a href="apidocs/biofefi.services.html#biofefi.services.ml_models.load_models">load_models() (in module biofefi.services.ml_models)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="apidocs/biofefi.services.html#biofefi.services.ml_models.load_models">load_models() (in module biofefi.services.ml_models)</a>
+</li>
       <li><a href="apidocs/biofefi.services.html#biofefi.services.ml_models.load_models_to_explain">load_models_to_explain() (in module biofefi.services.ml_models)</a>
 </li>
       <li><a href="apidocs/biofefi.services.html#biofefi.services.configuration.load_plot_options">load_plot_options() (in module biofefi.services.configuration)</a>
@@ -785,6 +796,8 @@
         <li><a href="apidocs/biofefi.components.html#module-biofefi.components.logs">biofefi.components.logs</a>
 </li>
         <li><a href="apidocs/biofefi.components.html#module-biofefi.components.plots">biofefi.components.plots</a>
+</li>
+        <li><a href="apidocs/biofefi.components.html#module-biofefi.components.preprocessing">biofefi.components.preprocessing</a>
 </li>
         <li><a href="apidocs/biofefi.html#module-biofefi.Home">biofefi.Home</a>
 </li>
@@ -927,6 +940,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="apidocs/biofefi.components.html#biofefi.components.preprocessing.original_view">original_view() (in module biofefi.components.preprocessing)</a>
+</li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.ml.BrnnOptions.output_dim">output_dim (biofefi.options.ml.BrnnOptions attribute)</a>
 </li>
   </ul></td>
@@ -971,10 +986,10 @@
 </li>
       <li><a href="apidocs/biofefi.services.html#biofefi.services.plotting.plot_lime_importance">plot_lime_importance() (in module biofefi.services.plotting)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="apidocs/biofefi.services.html#biofefi.services.plotting.plot_local_shap_importance">plot_local_shap_importance() (in module biofefi.services.plotting)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="apidocs/biofefi.components.html#biofefi.components.configuration.plot_options_box">plot_options_box() (in module biofefi.components.configuration)</a>
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.file_paths.plot_options_path">plot_options_path() (in module biofefi.options.file_paths)</a>
@@ -992,6 +1007,12 @@
       <li><a href="apidocs/biofefi.options.html#biofefi.options.enums.Metrics.Precision">Precision (biofefi.options.enums.Metrics attribute)</a>
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.enums.SvmKernels.Precomputed">Precomputed (biofefi.options.enums.SvmKernels attribute)</a>
+</li>
+      <li><a href="apidocs/biofefi.options.html#biofefi.options.file_paths.preprocessed_data_path">preprocessed_data_path() (in module biofefi.options.file_paths)</a>
+</li>
+      <li><a href="apidocs/biofefi.components.html#biofefi.components.preprocessing.preprocessed_view">preprocessed_view() (in module biofefi.components.preprocessing)</a>
+</li>
+      <li><a href="apidocs/biofefi.components.html#biofefi.components.forms.preprocessing_opts_form">preprocessing_opts_form() (in module biofefi.components.forms)</a>
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions">PreprocessingOptions (class in biofefi.options.preprocessing)</a>
 </li>
@@ -1020,8 +1041,6 @@
       <li><a href="apidocs/biofefi.options.html#biofefi.options.enums.ModelNames.RandomForest">RandomForest (biofefi.options.enums.ModelNames attribute)</a>
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.enums.ExecutionStateKeys.RandomSeed">RandomSeed (biofefi.options.enums.ExecutionStateKeys attribute)</a>
-</li>
-      <li><a href="apidocs/biofefi.options.html#biofefi.options.file_paths.raw_data_path">raw_data_path() (in module biofefi.options.file_paths)</a>
 </li>
       <li><a href="apidocs/biofefi.options.html#biofefi.options.enums.SvmKernels.RBF">RBF (biofefi.options.enums.SvmKernels attribute)</a>
 </li>

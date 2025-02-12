@@ -67,6 +67,7 @@
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.forms.fi_options_form"><code class="docutils literal notranslate"><span class="pre">fi_options_form()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.forms.ml_options_form"><code class="docutils literal notranslate"><span class="pre">ml_options_form()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.forms.pairplot_form"><code class="docutils literal notranslate"><span class="pre">pairplot_form()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.forms.preprocessing_opts_form"><code class="docutils literal notranslate"><span class="pre">preprocessing_opts_form()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.forms.tSNE_plot_form"><code class="docutils literal notranslate"><span class="pre">tSNE_plot_form()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.forms.target_variable_dist_form"><code class="docutils literal notranslate"><span class="pre">target_variable_dist_form()</span></code></a></li>
 </ul>
@@ -78,6 +79,11 @@
 <li class="toctree-l2"><a class="reference internal" href="biofefi.components.html#module-biofefi.components.plots">biofefi.components.plots module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.plots.display_metrics_table"><code class="docutils literal notranslate"><span class="pre">display_metrics_table()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.plots.plot_box"><code class="docutils literal notranslate"><span class="pre">plot_box()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="biofefi.components.html#module-biofefi.components.preprocessing">biofefi.components.preprocessing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.preprocessing.original_view"><code class="docutils literal notranslate"><span class="pre">original_view()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="biofefi.components.html#biofefi.components.preprocessing.preprocessed_view"><code class="docutils literal notranslate"><span class="pre">preprocessed_view()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="biofefi.components.html#module-biofefi.components">Module contents</a></li>
@@ -303,7 +309,7 @@
 <li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.file_paths.ml_options_path"><code class="docutils literal notranslate"><span class="pre">ml_options_path()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.file_paths.ml_plot_dir"><code class="docutils literal notranslate"><span class="pre">ml_plot_dir()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.file_paths.plot_options_path"><code class="docutils literal notranslate"><span class="pre">plot_options_path()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.file_paths.raw_data_path"><code class="docutils literal notranslate"><span class="pre">raw_data_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.file_paths.preprocessed_data_path"><code class="docutils literal notranslate"><span class="pre">preprocessed_data_path()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.file_paths.uploaded_file_path"><code class="docutils literal notranslate"><span class="pre">uploaded_file_path()</span></code></a></li>
 </ul>
 </li>
@@ -362,6 +368,7 @@
 <li class="toctree-l2"><a class="reference internal" href="biofefi.options.html#module-biofefi.options.preprocessing">biofefi.options.preprocessing module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions"><code class="docutils literal notranslate"><span class="pre">PreprocessingOptions</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions.correlation_threshold"><code class="docutils literal notranslate"><span class="pre">PreprocessingOptions.correlation_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions.data_is_preprocessed"><code class="docutils literal notranslate"><span class="pre">PreprocessingOptions.data_is_preprocessed</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions.dependent_variable_transformation"><code class="docutils literal notranslate"><span class="pre">PreprocessingOptions.dependent_variable_transformation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions.feature_selection_methods"><code class="docutils literal notranslate"><span class="pre">PreprocessingOptions.feature_selection_methods</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="biofefi.options.html#biofefi.options.preprocessing.PreprocessingOptions.independent_variable_normalisation"><code class="docutils literal notranslate"><span class="pre">PreprocessingOptions.independent_variable_normalisation</span></code></a></li>
@@ -418,6 +425,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="biofefi.services.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biofefi.services.html#module-biofefi.services.configuration">biofefi.services.configuration module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="biofefi.services.html#biofefi.services.configuration.load_data_preprocessing_options"><code class="docutils literal notranslate"><span class="pre">load_data_preprocessing_options()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.services.html#biofefi.services.configuration.load_execution_options"><code class="docutils literal notranslate"><span class="pre">load_execution_options()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.services.html#biofefi.services.configuration.load_fi_options"><code class="docutils literal notranslate"><span class="pre">load_fi_options()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="biofefi.services.html#biofefi.services.configuration.load_plot_options"><code class="docutils literal notranslate"><span class="pre">load_plot_options()</span></code></a></li>
