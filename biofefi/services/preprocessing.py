@@ -174,8 +174,8 @@ def run_preprocessing(
         columns_to_drop = find_non_numeric_columns(X)
         if columns_to_drop:
             X = X.drop(columns=columns_to_drop)
-    except TypeError:
-        pass
+    except TypeError as e:
+        raise e
 
     try:
         convert_y = find_non_numeric_columns(y)
@@ -183,8 +183,8 @@ def run_preprocessing(
             le = LabelEncoder()
             y = le.fit_transform(y)
             y = pd.Series(y, name=convert_y)
-    except TypeError:
-        pass
+    except TypeError as e:
+        raise e
 
     save_options(data_preprocessing_options_path(experiment_path), config)
     X = normalise_independent_variables(config.independent_variable_normalisation, X)
