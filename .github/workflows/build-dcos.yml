@@ -1,7 +1,7 @@
 name: Check docs build
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
