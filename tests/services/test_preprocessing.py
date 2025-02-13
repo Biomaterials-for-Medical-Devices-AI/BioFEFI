@@ -34,10 +34,10 @@ def test_find_non_numeric_columns():
     # Assert
     assert result_df_mixed == ["A"], "Failed: Should detect column 'A' as non-numeric"
     assert (
-        result_df_all_numeric is None
+        result_df_all_numeric == []
     ), "Failed: Should return empty list for all numeric DataFrame"
     assert (
-        result_series_numeric is None
+        result_series_numeric == []
     ), "Failed: Should return None for fully numeric Series"
     assert (
         result_series_non_numeric == "NonNumericSeries"
