@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Union
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ from biofefi.options.preprocessing import PreprocessingOptions
 from biofefi.services.configuration import save_options
 
 
-def find_non_numeric_columns(data: Union[pd.DataFrame, pd.Series]) -> List[str]:
+def find_non_numeric_columns(data: pd.DataFrame | pd.Series) -> List[str]:
     """
     Find non-numeric columns in a DataFrame or check if a Series contains non-numeric values.
 
@@ -30,9 +30,9 @@ def find_non_numeric_columns(data: Union[pd.DataFrame, pd.Series]) -> List[str]:
     """
     if isinstance(data, pd.Series):  # If input is a Series
         return (
-            ["Series"]
+            data.name
             if data.apply(lambda x: pd.to_numeric(x, errors="coerce")).isna().any()
-            else []
+            else None
         )
 
     elif isinstance(data, pd.DataFrame):  # If input is a DataFrame
@@ -170,17 +170,21 @@ def run_preprocessing(
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
 
-    columns_to_drop = find_non_numeric_columns(X)
-    if columns_to_drop:
-        X = X.drop(columns=columns_to_drop)
+    try:
+        columns_to_drop = find_non_numeric_columns(X)
+        if columns_to_drop:
+            X = X.drop(columns=columns_to_drop)
+    except TypeError:
+        pass
 
-    convert_y = find_non_numeric_columns(y)
-
-    if convert_y:
-        name = y.name
-        le = LabelEncoder()
-        y = le.fit_transform(y)
-        y = pd.Series(y, name=name)
+    try:
+        convert_y = find_non_numeric_columns(y)
+        if convert_y:
+            le = LabelEncoder()
+            y = le.fit_transform(y)
+            y = pd.Series(y, name=convert_y)
+    except TypeError:
+        pass
 
     save_options(data_preprocessing_options_path(experiment_path), config)
     X = normalise_independent_variables(config.independent_variable_normalisation, X)
