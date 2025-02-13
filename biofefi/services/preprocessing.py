@@ -1,10 +1,11 @@
 from pathlib import Path
+from typing import List, Union
 
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.linear_model import Lasso
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler
 
 from biofefi.options.enums import (
     DataPreprocessingStateKeys,
@@ -14,6 +15,35 @@ from biofefi.options.enums import (
 from biofefi.options.file_paths import data_preprocessing_options_path
 from biofefi.options.preprocessing import PreprocessingOptions
 from biofefi.services.configuration import save_options
+
+
+def find_non_numeric_columns(data: Union[pd.DataFrame, pd.Series]) -> List[str]:
+    """
+    Find non-numeric columns in a DataFrame or check if a Series contains non-numeric values.
+
+    Args:
+        data (Union[pd.DataFrame, pd.Series]): The DataFrame or Series to check.
+
+    Returns:
+        List[str]: If `data` is a DataFrame, returns a list of non-numeric column names.
+                   If `data` is a Series, returns ["Series"] if it contains non-numeric values, else an empty list.
+    """
+    if isinstance(data, pd.Series):  # If input is a Series
+        return (
+            ["Series"]
+            if data.apply(lambda x: pd.to_numeric(x, errors="coerce")).isna().any()
+            else []
+        )
+
+    elif isinstance(data, pd.DataFrame):  # If input is a DataFrame
+        return [
+            col
+            for col in data.columns
+            if data[col].apply(lambda x: pd.to_numeric(x, errors="coerce")).isna().any()
+        ]
+
+    else:
+        raise TypeError("Input must be a pandas DataFrame or Series.")
 
 
 def normalise_independent_variables(normalisation_method: str, X):
@@ -139,6 +169,18 @@ def run_preprocessing(
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
+
+    columns_to_drop = find_non_numeric_columns(X)
+    if columns_to_drop:
+        X = X.drop(columns=columns_to_drop)
+
+    convert_y = find_non_numeric_columns(y)
+
+    if convert_y:
+        name = y.name
+        le = LabelEncoder()
+        y = le.fit_transform(y)
+        y = pd.Series(y, name=name)
 
     save_options(data_preprocessing_options_path(experiment_path), config)
     X = normalise_independent_variables(config.independent_variable_normalisation, X)
