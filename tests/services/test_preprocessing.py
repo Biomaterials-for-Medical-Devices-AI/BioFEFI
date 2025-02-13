@@ -30,7 +30,6 @@ def test_find_non_numeric_columns():
     result_df_all_numeric = find_non_numeric_columns(df_all_numeric)
     result_series_numeric = find_non_numeric_columns(series_numeric)
     result_series_non_numeric = find_non_numeric_columns(series_non_numeric)
-    result_list = find_non_numeric_columns(other_type)
 
     # Assert
     assert result_df_mixed == ["A"], "Failed: Should detect column 'A' as non-numeric"
