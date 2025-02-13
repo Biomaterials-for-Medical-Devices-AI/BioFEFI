@@ -32,7 +32,7 @@ def find_non_numeric_columns(data: pd.DataFrame | pd.Series) -> List[str]:
         return (
             data.name
             if data.apply(lambda x: pd.to_numeric(x, errors="coerce")).isna().any()
-            else None
+            else []
         )
 
     elif isinstance(data, pd.DataFrame):  # If input is a DataFrame
