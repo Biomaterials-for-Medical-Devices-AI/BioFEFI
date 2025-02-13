@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from biofefi.services.preprocessing import find_non_numeric_columns
 
@@ -8,7 +9,7 @@ def test_find_non_numeric_columns():
     Test the find_non_numeric_columns function with both DataFrame and Series inputs.
     """
 
-    # **Arrange**: Create test DataFrames and Series
+    # Arrange
     df_mixed = pd.DataFrame(
         {
             "A": ["1", "2", "x"],  # Contains a non-numeric value
@@ -22,16 +23,19 @@ def test_find_non_numeric_columns():
     series_numeric = pd.Series([1, 2, 3], name="NumericSeries")
     series_non_numeric = pd.Series(["1", "2", "x"], name="NonNumericSeries")
 
-    # **Act**: Call the function with test cases
+    other_type = [1, 2, 3]
+
+    # Act
     result_df_mixed = find_non_numeric_columns(df_mixed)
     result_df_all_numeric = find_non_numeric_columns(df_all_numeric)
     result_series_numeric = find_non_numeric_columns(series_numeric)
     result_series_non_numeric = find_non_numeric_columns(series_non_numeric)
+    result_list = find_non_numeric_columns(other_type)
 
-    # **Assert**: Verify expected outputs
+    # Assert
     assert result_df_mixed == ["A"], "Failed: Should detect column 'A' as non-numeric"
     assert (
-        result_df_all_numeric == []
+        result_df_all_numeric is None
     ), "Failed: Should return empty list for all numeric DataFrame"
     assert (
         result_series_numeric is None
@@ -39,3 +43,6 @@ def test_find_non_numeric_columns():
     assert (
         result_series_non_numeric == "NonNumericSeries"
     ), "Failed: Should return the series name for non-numeric values"
+
+    with pytest.raises(TypeError, match="Input must be a pandas DataFrame or Series."):
+        find_non_numeric_columns(other_type)
