@@ -2,10 +2,15 @@ import json
 import os
 from pathlib import Path
 from pickle import UnpicklingError, dump, load
+from typing import TypeVar
+
+from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 
 from biofefi.options.choices.ml_models import CLASSIFIERS, REGRESSORS
 from biofefi.options.enums import ProblemTypes
 from biofefi.utils.utils import create_directory
+
+MlModel = TypeVar("MlModel", BaseEstimator, ClassifierMixin, RegressorMixin)
 
 
 def save_models_metrics(metrics: dict, path: Path):
@@ -121,17 +126,26 @@ def models_exist(path: Path) -> bool:
         return False
 
 
-# if problem_type.lower() == ProblemTypes.Classification:
-#     model_class = CLASSIFIERS.get(model.lower())
-#     model_params["class_weight"] = (
-#         ["balanced"] if use_grid_search else "balanced"
-#     )
-# elif problem_type.lower() == ProblemTypes.Regression:
-#     model_class = REGRESSORS.get(model.lower())
+def get_model(
+    model_type: type,
+    model_params: dict | None = None,
+) -> MlModel:
+    """Produce a machine learning model with the provided parameters, configured for the
+    given problem type.
 
-# models[model] = model_class(**model_params) if use_params else model_class()
-# logger.info(
-#     f"Using model {model_class.__name__} with parameters {model_params}"
-# )
-# if not model_class:
-#     raise ValueError(f"Model type {model} not recognized")
+    If the model is to be used in a grid search, specify `model_params=None` and
+    `use_grid_search=True`.
+
+    Args:
+        model_type (type): The Python type (constructor) of the model to instantiate.
+        model_params (dict, optional): The parameters to pass to the model constructor. Defaults to None.
+
+    Returns:
+        MlModel: A new instance of the requested machine learning model.
+    """
+
+    # TODO: move this to the outer scope
+    # if problem_type.lower() == ProblemTypes.Classification:
+    #     model_params["class_weight"] = ["balanced"] if use_grid_search else "balanced"
+
+    return model_type(**model_params) if model_params is not None else model_type()
