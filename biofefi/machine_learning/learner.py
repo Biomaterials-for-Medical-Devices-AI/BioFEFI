@@ -251,7 +251,6 @@ class GridSearchLearner:
         self._data_split = data_split
         self._normalization = normalization
         self._metrics = get_metrics(self._problem_type, logger=self._logger)
-        self._models: dict = {}
 
     def fit(self, data: TabularData) -> tuple[dict, dict, dict, dict]:
         """Fit models to the data using Grid Search with cross validation. Evaluates them
@@ -271,13 +270,7 @@ class GridSearchLearner:
             trained models for each model type.
         """
         self._logger.info("Fitting models using Grid Search...")
-        self._models = get_model_type(
-            self._model_types,
-            self._problem_type,
-            logger=self._logger,
-            use_params=False,
-            use_grid_search=True,
-        )
+
         # Extract the data
         X_train = data.X_train[0]
         X_test = data.X_test[0]
@@ -295,24 +288,19 @@ class GridSearchLearner:
         # Fit models
         res = {0: {}}
         metric_res = {}
-        trained_models = {model_name: [] for model_name in self._models.keys()}
-        metric_res_stats = {model_name: {} for model_name in self._models.keys()}
-        models = get_model_type(
-            self._model_types,
-            self._problem_type,
-            logger=self._logger,
-            use_params=False,  # params will be passed to models by GridSearchCV
-            use_grid_search=True,
-        )
-        for model_name, model in models.items():
+        trained_models = {model_name: [] for model_name in self._model_types.keys()}
+        metric_res_stats = {model_name: {} for model_name in self._model_types.keys()}
+
+        for model_name, params in self._model_types.items():
             res[0][model_name] = {}
             # Set up grid search
             refit = (
                 "R2" if self._problem_type == ProblemTypes.Regression else "accuracy"
             )
+            model = get_model_type(model_name, self._problem_type)
             gs = GridSearchCV(
-                estimator=model,
-                param_grid=self._model_types[model_name]["params"],
+                estimator=model(),
+                param_grid=params["params"],
                 scoring=scorers,
                 refit=refit,
                 cv=self._data_split["n_splits"],
