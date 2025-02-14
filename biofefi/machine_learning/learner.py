@@ -299,8 +299,9 @@ class GridSearchLearner:
                 if metric_name == Metrics.Accuracy:
                     scorers[metric_name] = make_scorer(metric)
                 elif metric_name == Metrics.ROC_AUC:
-                    pass
-                    #scorers[metric_name] = make_scorer(metric, multi_class="ovr")
+                    scorers[metric_name] = make_scorer(
+                        metric, multi_class="ovr", needs_proba=True
+                    )
                 else:
                     scorers[metric_name] = make_scorer(metric, average="micro")
             cv = StratifiedKFold(n_splits=self._data_split["n_splits"], shuffle=True)
