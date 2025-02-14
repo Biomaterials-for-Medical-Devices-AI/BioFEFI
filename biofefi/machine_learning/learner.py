@@ -14,7 +14,7 @@ from biofefi.options.enums import (
     ProblemTypes,
 )
 from biofefi.services.metrics import get_metrics
-from biofefi.services.ml_models import get_model_type
+from biofefi.services.ml_models import get_model, get_model_type
 from biofefi.utils.logging_utils import Logger
 
 
@@ -112,9 +112,9 @@ class Learner:
             - trained_models (Dict): Dictionary containing
             trained models for each model type.
         """
-        self._models = get_model_type(
-            self._model_types, self._problem_type, logger=self._logger
-        )
+        # self._models = get_model_type(
+        #     self._model_types, self._problem_type, logger=self._logger
+        # )
         if self._data_split["type"] == DataSplitMethods.Holdout:
             res, metric_res, metric_res_stats, trained_models = self._fit_holdout(data)
             return res, metric_res, metric_res_stats, trained_models
@@ -144,15 +144,20 @@ class Learner:
         self._logger.info("Fitting holdout with bootstrapped datasets...")
         res = {}
         metric_res = {}
-        trained_models = {model_name: [] for model_name in self._models.keys()}
+        trained_models = {model_name: [] for model_name in self._model_types.keys()}
 
         for i in range(self._n_bootstraps):
             self._logger.info(f"Processing bootstrap sample {i+1}...")
             X_train, X_test, y_train, y_test = self._process_data_for_bootstrap(data, i)
 
             res[i] = {}
-            for model_name, model in self._models.items():
+            for model_name, params in self._model_types.items():
+                # Add class_weight for classification problem
+                if self._problem_type.lower() == ProblemTypes.Classification:
+                    params["params"]["class_weight"] = "balanced"
                 res[i][model_name] = {}
+                model_type = get_model_type(model_name, self._problem_type)
+                model = model_type(**params["params"])
                 self._logger.info(f"Fitting {model_name} for bootstrap sample {i+1}...")
                 model.fit(X_train, y_train)
                 y_pred_train = model.predict(X_train)
@@ -191,7 +196,7 @@ class Learner:
         self._logger.info("Fitting cross validation datasets...")
         res = {}
         metric_res = {}
-        trained_models = {model_name: [] for model_name in self._models.keys()}
+        trained_models = {model_name: [] for model_name in self._model_types.keys()}
 
         for i in range(self._data_split["n_splits"]):
             self._logger.info(f"Processing test fold sample {i+1}...")
@@ -199,9 +204,14 @@ class Learner:
             y_train, y_test = data.y_train[i], data.y_test[i]
 
             res[i] = {}
-            for model_name, model in self._models.items():
+            for model_name, params in self._model_types.items():
+                # Add class_weight for classification problem
+                if self._problem_type.lower() == ProblemTypes.Classification:
+                    params["params"]["class_weight"] = "balanced"
                 res[i][model_name] = {}
                 self._logger.info(f"Fitting {model_name} for test fold sample {i+1}...")
+                model_type = get_model_type(model_name, self._problem_type)
+                model = model_type(**params["params"])
                 model.fit(X_train, y_train)
                 y_pred_train = model.predict(X_train)
                 res[i][model_name]["y_pred_train"] = y_pred_train
@@ -297,9 +307,13 @@ class GridSearchLearner:
             refit = (
                 "R2" if self._problem_type == ProblemTypes.Regression else "accuracy"
             )
-            model = get_model_type(model_name, self._problem_type)
+            model_type = get_model_type(model_name, self._problem_type)
+            model = get_model(model_type)
+            # Add class_weight for classification problem
+            if self._problem_type.lower() == ProblemTypes.Classification:
+                params["params"]["class_weight"] = ["balanced"]
             gs = GridSearchCV(
-                estimator=model(),
+                estimator=model,
                 param_grid=params["params"],
                 scoring=scorers,
                 refit=refit,
