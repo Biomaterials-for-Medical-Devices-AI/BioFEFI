@@ -133,8 +133,7 @@ def get_model(
     """Produce a machine learning model with the provided parameters, configured for the
     given problem type.
 
-    If the model is to be used in a grid search, specify `model_params=None` and
-    `use_grid_search=True`.
+    If the model is to be used in a grid search, specify `model_params=None`.
 
     Args:
         model_type (type): The Python type (constructor) of the model to instantiate.
