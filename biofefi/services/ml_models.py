@@ -90,7 +90,7 @@ def get_models(
     logger: object = None,
     use_params: bool = True,
     use_grid_search: bool = False,
-) -> dict:
+) -> dict[str, type]:
     """
     Constructs and initializes machine learning models
     based on the given configuration.
@@ -113,25 +113,32 @@ def get_models(
     """
     models = {}
     model_list = [
-        (model_type, model["params"])
-        for model_type, model in model_types.items()
-        if model["use"]
+        model_type for model_type, model in model_types.items() if model["use"]
     ]
-    for model, model_params in model_list:
+    for model in model_list:
+        # if problem_type.lower() == ProblemTypes.Classification:
+        #     model_class = CLASSIFIERS.get(model.lower())
+        #     model_params["class_weight"] = (
+        #         ["balanced"] if use_grid_search else "balanced"
+        #     )
+        # elif problem_type.lower() == ProblemTypes.Regression:
+        #     model_class = REGRESSORS.get(model.lower())
+
+        # models[model] = model_class(**model_params) if use_params else model_class()
+        # logger.info(
+        #     f"Using model {model_class.__name__} with parameters {model_params}"
+        # )
+        # if not model_class:
+        #     raise ValueError(f"Model type {model} not recognized")
         if problem_type.lower() == ProblemTypes.Classification:
             model_class = CLASSIFIERS.get(model.lower())
-            model_params["class_weight"] = (
-                ["balanced"] if use_grid_search else "balanced"
-            )
         elif problem_type.lower() == ProblemTypes.Regression:
             model_class = REGRESSORS.get(model.lower())
-
-        models[model] = model_class(**model_params) if use_params else model_class()
-        logger.info(
-            f"Using model {model_class.__name__} with parameters {model_params}"
-        )
         if not model_class:
             raise ValueError(f"Model type {model} not recognized")
+
+        models[model] = model_class
+
     return models
 
 
