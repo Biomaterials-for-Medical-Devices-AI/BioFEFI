@@ -84,62 +84,28 @@ def load_models_to_explain(path: Path, model_names: list) -> dict[str, list]:
     return models
 
 
-def get_models(
-    model_types: dict[str, dict],
-    problem_type: str,
-    logger: object = None,
-    use_params: bool = True,
-    use_grid_search: bool = False,
-) -> dict[str, type]:
+def get_model_type(model_type: str, problem_type: ProblemTypes) -> type:
     """
-    Constructs and initializes machine learning models
-    based on the given configuration.
+    Fetch the appropriate type for a given model name based on the problem type.
 
     Args:
-        model_types (dict): Dictionary containing model types
-        and their parameters.
-        problem_type (str): Type of problem (
-            classification or regression).
-        logger (object): Logger object to log messages.
-        use_params (bool, optional): Add the parameters to models or leave them blank. Defaults to True.
+        model_type (dict): The kind of model.
+        problem_type (ProblemTypes): Type of problem (classification or regression).
 
     Raises:
-        ValueError: If a model type is not recognized or unsupported
+        ValueError: If a model type is not recognised or unsupported.
 
     Returns:
-        dict: A dictionary of initialized models where the
-        keys are model names and the values are instances
-        of the corresponding models.
+        type: The constructor for a machine learning model class.
     """
-    models = {}
-    model_list = [
-        model_type for model_type, model in model_types.items() if model["use"]
-    ]
-    for model in model_list:
-        # if problem_type.lower() == ProblemTypes.Classification:
-        #     model_class = CLASSIFIERS.get(model.lower())
-        #     model_params["class_weight"] = (
-        #         ["balanced"] if use_grid_search else "balanced"
-        #     )
-        # elif problem_type.lower() == ProblemTypes.Regression:
-        #     model_class = REGRESSORS.get(model.lower())
+    if problem_type.lower() == ProblemTypes.Classification:
+        model_class = CLASSIFIERS.get(model_type.lower())
+    elif problem_type.lower() == ProblemTypes.Regression:
+        model_class = REGRESSORS.get(model_type.lower())
+    if not model_class:
+        raise ValueError(f"Model type {model_type} not recognised")
 
-        # models[model] = model_class(**model_params) if use_params else model_class()
-        # logger.info(
-        #     f"Using model {model_class.__name__} with parameters {model_params}"
-        # )
-        # if not model_class:
-        #     raise ValueError(f"Model type {model} not recognized")
-        if problem_type.lower() == ProblemTypes.Classification:
-            model_class = CLASSIFIERS.get(model.lower())
-        elif problem_type.lower() == ProblemTypes.Regression:
-            model_class = REGRESSORS.get(model.lower())
-        if not model_class:
-            raise ValueError(f"Model type {model} not recognized")
-
-        models[model] = model_class
-
-    return models
+    return model_class
 
 
 def models_exist(path: Path) -> bool:
@@ -153,3 +119,19 @@ def models_exist(path: Path) -> bool:
 
     except Exception:
         return False
+
+
+# if problem_type.lower() == ProblemTypes.Classification:
+#     model_class = CLASSIFIERS.get(model.lower())
+#     model_params["class_weight"] = (
+#         ["balanced"] if use_grid_search else "balanced"
+#     )
+# elif problem_type.lower() == ProblemTypes.Regression:
+#     model_class = REGRESSORS.get(model.lower())
+
+# models[model] = model_class(**model_params) if use_params else model_class()
+# logger.info(
+#     f"Using model {model_class.__name__} with parameters {model_params}"
+# )
+# if not model_class:
+#     raise ValueError(f"Model type {model} not recognized")

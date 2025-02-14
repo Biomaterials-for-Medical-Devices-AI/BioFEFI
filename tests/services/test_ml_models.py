@@ -2,50 +2,24 @@ import logging
 
 import pytest
 from biofefi.options.enums import ProblemTypes
-from biofefi.services.ml_models import get_models
+from biofefi.services.ml_models import get_model_type
 
 
-def test_get_models_returns_types():
+def test_get_model_type_returns_type():
     # Arrange
-    model_types = {
-        "Random Forest": {
-            "use": True,
-            "params": {
-                "n_estimators": 100,
-                "min_samples_split": 2,
-                "min_samples_leaf": 1,
-                "max_depth": None,
-            },
-        }
-    }
-    logger = logging.Logger("test_ml_models")
+    model_type = "Random Forest"
 
     # Act
-    models = get_models(
-        model_types=model_types, problem_type=ProblemTypes.Regression, logger=logger
-    )
+    model = get_model_type(model_type, ProblemTypes.Regression)
 
     # Assert
-    for model in models.values():
-        assert isinstance(model, type)
+    assert isinstance(model, type)
 
 
-def test_get_models_throws_value_error():
-    model_types = {
-        "Unknown": {
-            "use": True,
-            "params": {
-                "n_estimators": 100,
-                "min_samples_split": 2,
-                "min_samples_leaf": 1,
-                "max_depth": None,
-            },
-        }
-    }
-    logger = logging.Logger("test_ml_models")
+def test_get_model_type_throws_value_error():
+    # Arrange
+    model_types = "Unknown"
 
     # Act/Assert
     with pytest.raises(ValueError):
-        get_models(
-            model_types=model_types, problem_type=ProblemTypes.Regression, logger=logger
-        )
+        get_model_type(model_types, ProblemTypes.Regression)

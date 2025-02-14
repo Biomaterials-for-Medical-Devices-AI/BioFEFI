@@ -14,7 +14,7 @@ from biofefi.options.enums import (
     ProblemTypes,
 )
 from biofefi.services.metrics import get_metrics
-from biofefi.services.ml_models import get_models
+from biofefi.services.ml_models import get_model_type
 from biofefi.utils.logging_utils import Logger
 
 
@@ -112,7 +112,7 @@ class Learner:
             - trained_models (Dict): Dictionary containing
             trained models for each model type.
         """
-        self._models = get_models(
+        self._models = get_model_type(
             self._model_types, self._problem_type, logger=self._logger
         )
         if self._data_split["type"] == DataSplitMethods.Holdout:
@@ -271,7 +271,7 @@ class GridSearchLearner:
             trained models for each model type.
         """
         self._logger.info("Fitting models using Grid Search...")
-        self._models = get_models(
+        self._models = get_model_type(
             self._model_types,
             self._problem_type,
             logger=self._logger,
@@ -297,7 +297,7 @@ class GridSearchLearner:
         metric_res = {}
         trained_models = {model_name: [] for model_name in self._models.keys()}
         metric_res_stats = {model_name: {} for model_name in self._models.keys()}
-        models = get_models(
+        models = get_model_type(
             self._model_types,
             self._problem_type,
             logger=self._logger,
