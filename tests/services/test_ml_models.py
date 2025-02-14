@@ -1,5 +1,3 @@
-import logging
-
 import pytest
 from biofefi.options.enums import ProblemTypes
 from biofefi.services.ml_models import get_model_type
