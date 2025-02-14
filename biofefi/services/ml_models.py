@@ -143,8 +143,4 @@ def get_model(
         MlModel: A new instance of the requested machine learning model.
     """
 
-    # TODO: move this to the outer scope
-    # if problem_type.lower() == ProblemTypes.Classification:
-    #     model_params["class_weight"] = ["balanced"] if use_grid_search else "balanced"
-
     return model_type(**model_params) if model_params is not None else model_type()
