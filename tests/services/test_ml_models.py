@@ -1,4 +1,6 @@
 import logging
+
+import pytest
 from biofefi.options.enums import ProblemTypes
 from biofefi.services.ml_models import get_models
 
@@ -26,3 +28,24 @@ def test_get_models_returns_types():
     # Assert
     for model in models.values():
         assert isinstance(model, type)
+
+
+def test_get_models_throws_value_error():
+    model_types = {
+        "Unknown": {
+            "use": True,
+            "params": {
+                "n_estimators": 100,
+                "min_samples_split": 2,
+                "min_samples_leaf": 1,
+                "max_depth": None,
+            },
+        }
+    }
+    logger = logging.Logger("test_ml_models")
+
+    # Act/Assert
+    with pytest.raises(ValueError):
+        get_models(
+            model_types=model_types, problem_type=ProblemTypes.Regression, logger=logger
+        )
