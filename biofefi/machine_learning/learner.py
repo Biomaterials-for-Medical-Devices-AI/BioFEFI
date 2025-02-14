@@ -112,9 +112,6 @@ class Learner:
             - trained_models (Dict): Dictionary containing
             trained models for each model type.
         """
-        # self._models = get_model_type(
-        #     self._model_types, self._problem_type, logger=self._logger
-        # )
         if self._data_split["type"] == DataSplitMethods.Holdout:
             res, metric_res, metric_res_stats, trained_models = self._fit_holdout(data)
             return res, metric_res, metric_res_stats, trained_models
