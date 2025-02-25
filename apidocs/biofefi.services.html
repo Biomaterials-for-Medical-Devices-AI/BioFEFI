@@ -299,31 +299,46 @@ is used</p>
 <section id="module-biofefi.services.ml_models">
 <span id="biofefi-services-ml-models-module"></span><h2>biofefi.services.ml_models module<a class="headerlink" href="#module-biofefi.services.ml_models" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="biofefi.services.ml_models.get_models">
-<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">get_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid_search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#biofefi.services.ml_models.get_models" title="Link to this definition">¶</a></dt>
-<dd><p>Constructs and initializes machine learning models
-based on the given configuration.</p>
+<dt class="sig sig-object py" id="biofefi.services.ml_models.get_model">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MlModel</span></span></span><a class="headerlink" href="#biofefi.services.ml_models.get_model" title="Link to this definition">¶</a></dt>
+<dd><p>Produce a machine learning model with the provided parameters, configured for the
+given problem type.</p>
+<p>If the model is to be used in a grid search, specify <cite>model_params=None</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_types</strong> (<em>dict</em>) – Dictionary containing model types</p></li>
-<li><p><strong>parameters.</strong> (<em>and their</em>)</p></li>
-<li><p><strong>problem_type</strong> (<em>str</em>) – Type of problem (
-classification or regression).</p></li>
-<li><p><strong>logger</strong> (<em>object</em>) – Logger object to log messages.</p></li>
-<li><p><strong>use_params</strong> (<em>bool</em><em>, </em><em>optional</em>) – Add the parameters to models or leave them blank. Defaults to True.</p></li>
+<li><p><strong>model_type</strong> (<em>type</em>) – The Python type (constructor) of the model to instantiate.</p></li>
+<li><p><strong>model_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – The parameters to pass to the model constructor. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new instance of the requested machine learning model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MlModel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.ml_models.get_model_type">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.ml_models.</span></span><span class="sig-name descname"><span class="pre">get_model_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="biofefi.options.html#biofefi.options.enums.ProblemTypes" title="biofefi.options.enums.ProblemTypes"><span class="pre">ProblemTypes</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">type</span></span></span><a class="headerlink" href="#biofefi.services.ml_models.get_model_type" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the appropriate type for a given model name based on the problem type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_type</strong> (<em>dict</em>) – The kind of model.</p></li>
+<li><p><strong>problem_type</strong> (<a class="reference internal" href="biofefi.options.html#biofefi.options.enums.ProblemTypes" title="biofefi.options.enums.ProblemTypes"><em>ProblemTypes</em></a>) – Type of problem (classification or regression).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If a model type is not recognized or unsupported</p>
+<dd class="field-even"><p><strong>ValueError</strong> – If a model type is not recognised or unsupported.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary of initialized models where the
-keys are model names and the values are instances
-of the corresponding models.</p>
+<dd class="field-odd"><p>The constructor for a machine learning model class.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
+<dd class="field-even"><p>type</p>
 </dd>
 </dl>
 </dd></dl>
@@ -530,6 +545,27 @@ of the corresponding models.</p>
 </section>
 <section id="module-biofefi.services.preprocessing">
 <span id="biofefi-services-preprocessing-module"></span><h2>biofefi.services.preprocessing module<a class="headerlink" href="#module-biofefi.services.preprocessing" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="biofefi.services.preprocessing.find_non_numeric_columns">
+<span class="sig-prename descclassname"><span class="pre">biofefi.services.preprocessing.</span></span><span class="sig-name descname"><span class="pre">find_non_numeric_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#biofefi.services.preprocessing.find_non_numeric_columns" title="Link to this definition">¶</a></dt>
+<dd><p>Find non-numeric columns in a DataFrame or check if a Series contains non-numeric values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><em>pd.Series</em><em>]</em>) – The DataFrame or Series to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>If <cite>data</cite> is a DataFrame, returns a list of non-numeric column names.</dt><dd><p>If <cite>data</cite> is a Series, returns [“Series”] if it contains non-numeric values, else an empty list.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="biofefi.services.preprocessing.normalise_independent_variables">
 <span class="sig-prename descclassname"><span class="pre">biofefi.services.preprocessing.</span></span><span class="sig-name descname"><span class="pre">normalise_independent_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalisation_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#biofefi.services.preprocessing.normalise_independent_variables" title="Link to this definition">¶</a></dt>
